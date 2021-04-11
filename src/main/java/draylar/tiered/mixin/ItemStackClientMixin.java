@@ -1,22 +1,9 @@
 package draylar.tiered.mixin;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-import draylar.tiered.Tiered;
-import draylar.tiered.api.PotentialAttribute;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,36 +13,49 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
+
+import draylar.tiered.Tiered;
+import draylar.tiered.api.PotentialAttribute;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackClientMixin {
 
-    @Shadow public abstract CompoundTag getOrCreateSubTag(String key);
+    @Shadow public abstract CompoundNBT getOrCreateChildTag(String key);
 
     @Shadow public abstract boolean hasTag();
 
-    @Shadow public abstract CompoundTag getSubTag(String key);
+    @Shadow public abstract CompoundNBT getChildTag(String key);
 
     private boolean isTiered = false;
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/attribute/EntityAttributeModifier;getValue()D"), method = "getTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
-    private void storeAttributeModifier(PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List> cir, List list, int i, EquipmentSlot var6[], int var7, int var8, EquipmentSlot equipmentSlot, Multimap multimap, Iterator var11, Map.Entry entry, EntityAttributeModifier entityAttributeModifier) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "getTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
+    private void storeAttributeModifier(PlayerEntity player, ITooltipFlag context, CallbackInfoReturnable<List> cir, List list, IFormattableTextComponent component, int i , EquipmentSlotType var6[], int var7, int var8, EquipmentSlotType equipmentSlot, Multimap multimap, Iterator var11, Map.Entry entry, AttributeModifier entityAttributeModifier) {
         isTiered = entityAttributeModifier.getName().contains("tiered:");
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/text/TranslatableText;formatted(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/MutableText;", ordinal = 2), method = "getTooltip")
-    private MutableText getFormatting(TranslatableText translatableText, Formatting formatting) {
-        if(this.hasTag() && this.getSubTag(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
-            Identifier tier = new Identifier(this.getOrCreateSubTag(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/text/TranslationTextComponent;mergeStyle(Lnet/minecraft/util/text/TextFormatting;)Lnet/minecraft/util/text/IFormattableTextComponent;", ordinal = 2), method = "getTooltip")
+    private IFormattableTextComponent getTextFormatting(TranslationTextComponent translatableText, TextFormatting formatting) {
+        if(this.hasTag() && this.getChildTag(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
+            ResourceLocation tier = new ResourceLocation(this.getOrCreateChildTag(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
             PotentialAttribute attribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {
-            return translatableText.formatted(formatting);
+            return translatableText.mergeStyle(formatting);
         }
     }
 
@@ -64,9 +64,9 @@ public abstract class ItemStackClientMixin {
             at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;isEmpty()Z"),
             index = 10
     )
-    private Multimap<EntityAttribute, EntityAttributeModifier> sort(Multimap<EntityAttribute, EntityAttributeModifier> map) {
-        Multimap<EntityAttribute, EntityAttributeModifier> vanillaFirst = LinkedListMultimap.create();
-        Multimap<EntityAttribute, EntityAttributeModifier> remaining = LinkedListMultimap.create();
+    private Multimap<Attribute, AttributeModifier> sort(Multimap<Attribute, AttributeModifier> map) {
+        Multimap<Attribute, AttributeModifier> vanillaFirst = LinkedListMultimap.create();
+        Multimap<Attribute, AttributeModifier> remaining = LinkedListMultimap.create();
 
         map.forEach((entityAttribute, entityAttributeModifier) -> {
             if (!entityAttributeModifier.getName().contains("tiered")) {
@@ -81,19 +81,19 @@ public abstract class ItemStackClientMixin {
     }
 
     @Inject(
-            method = "getName",
+            method = "getDisplayName",
             at = @At("RETURN"),
             cancellable = true
     )
-    private void modifyName(CallbackInfoReturnable<Text> cir) {
-        if(this.hasTag() && this.getSubTag("display") == null && this.getSubTag(Tiered.NBT_SUBTAG_KEY) != null) {
-            Identifier tier = new Identifier(getOrCreateSubTag(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
+    private void modifyName(CallbackInfoReturnable<ITextComponent> cir) {
+        if(this.hasTag() && this.getChildTag("display") == null && this.getChildTag(Tiered.NBT_SUBTAG_KEY) != null) {
+            ResourceLocation tier = new ResourceLocation(getOrCreateChildTag(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
             // attempt to display attribute if it is valid
             PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
 
             if(potentialAttribute != null) {
-                cir.setReturnValue(new TranslatableText(potentialAttribute.getID() + ".label").append(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));
+                cir.setReturnValue(new TranslationTextComponent(potentialAttribute.getID() + ".label").appendString(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));
             }
         }
     }

@@ -2,10 +2,10 @@
   "id": "tiered:dull",
   "verifiers": [
     {
-      "tag": "fabric:swords"
+      "tag": "forge:swords"
     },
     {
-      "tag": "fabric:axes"
+      "tag": "forge:axes"
     }
   ],
   "style": {

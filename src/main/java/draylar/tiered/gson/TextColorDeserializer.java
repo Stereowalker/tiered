@@ -1,18 +1,19 @@
 package draylar.tiered.gson;
 
+import java.lang.reflect.Type;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
 
-import java.lang.reflect.Type;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.TextFormatting;
 
-public class TextColorDeserializer implements JsonDeserializer<TextColor> {
+public class TextColorDeserializer implements JsonDeserializer<Color> {
 
     @Override
-    public TextColor deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return TextColor.fromFormatting(Formatting.byName(json.getAsString().toUpperCase()));
+    public Color deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return Color.fromTextFormatting(TextFormatting.getValueByName(json.getAsString().toUpperCase()));
     }
 }

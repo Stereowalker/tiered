@@ -1,19 +1,20 @@
 package draylar.tiered.mixin;
 
-import draylar.tiered.api.CustomEntityAttributes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import draylar.tiered.api.CustomEntityAttributes;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -23,40 +24,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(
-            method = "createPlayerAttributes",
+            method = "func_234570_el_",
             at = @At("RETURN")
     )
-    private static void initAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> ci) {
-        ci.getReturnValue().add(CustomEntityAttributes.CRIT_CHANCE);
-        ci.getReturnValue().add(CustomEntityAttributes.DIG_SPEED);
+    private static void initAttributes(CallbackInfoReturnable<AttributeModifierMap.MutableAttribute> ci) {
+        ci.getReturnValue().createMutableAttribute(CustomEntityAttributes.CRIT_CHANCE);
     }
 
     @ModifyVariable(
-            method = "getBlockBreakingSpeed",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/effect/StatusEffectUtil;hasHaste(Lnet/minecraft/entity/LivingEntity;)Z"
-            ),
-            index = 2
-    )
-    private float getBlockBreakingSpeed(float f) {
-        EntityAttributeInstance instance = this.getAttributeInstance(CustomEntityAttributes.DIG_SPEED);
-
-        for (EntityAttributeModifier modifier : instance.getModifiers()) {
-            float amount = (float) modifier.getValue();
-
-            if (modifier.getOperation() == EntityAttributeModifier.Operation.ADDITION) {
-                f += amount;
-            } else {
-                f *= (amount + 1);
-            }
-        }
-
-        return f;
-    }
-
-    @ModifyVariable(
-            method = "attack",
+            method = "attackTargetEntityWithCurrentItem",
             at = @At(
                     value = "JUMP",
                     ordinal = 2
@@ -73,13 +49,13 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private boolean attack(boolean bl3) {
         float customChance = 0;
 
-        EntityAttributeInstance instance = this.getAttributeInstance(CustomEntityAttributes.CRIT_CHANCE);
+        ModifiableAttributeInstance instance = this.getAttribute(CustomEntityAttributes.CRIT_CHANCE);
 
-        for (EntityAttributeModifier modifier : instance.getModifiers()) {
-            float amount = (float) modifier.getValue();
+        for (AttributeModifier modifier : instance.getModifierListCopy()) {
+            float amount = (float) modifier.getAmount();
             customChance += amount;
         }
 
-        return bl3 || world.random.nextDouble() < customChance;
+        return bl3 || world.rand.nextDouble() < customChance;
     }
 }

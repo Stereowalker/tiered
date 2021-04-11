@@ -1,34 +1,35 @@
 package draylar.tiered.data;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import com.google.gson.*;
-import draylar.tiered.api.PotentialAttribute;
-import draylar.tiered.gson.EntityAttributeModifierDeserializer;
-import draylar.tiered.gson.EquipmentSlotDeserializer;
-import draylar.tiered.gson.FormattingDeserializer;
-import draylar.tiered.gson.TextColorDeserializer;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.resource.JsonDataLoader;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.text.Style;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.profiler.Profiler;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
-public class AttributeDataLoader extends JsonDataLoader {
+import draylar.tiered.api.PotentialAttribute;
+import draylar.tiered.gson.EntityAttributeModifierDeserializer;
+import draylar.tiered.gson.EquipmentSlotDeserializer;
+import net.minecraft.client.resources.JsonReloadListener;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Style;
+
+public class AttributeDataLoader extends JsonReloadListener {
 
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
-            .registerTypeAdapter(EntityAttributeModifier.class, new EntityAttributeModifierDeserializer())
-            .registerTypeAdapter(EquipmentSlot.class, new EquipmentSlotDeserializer())
+            .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
+            .registerTypeAdapter(EquipmentSlotType.class, new EquipmentSlotDeserializer())
             .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
             .create();
 
@@ -36,22 +37,22 @@ public class AttributeDataLoader extends JsonDataLoader {
     private static final String LOADED_RECIPES_MESSAGE = "Loaded {} recipes";
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Map<Identifier, PotentialAttribute> itemAttributes = ImmutableMap.of();
+    private Map<ResourceLocation, PotentialAttribute> itemAttributes = ImmutableMap.of();
 
     public AttributeDataLoader() {
         super(GSON, "item_attributes");
     }
 
     @Override
-    protected void apply(Map<Identifier, JsonElement> loader, ResourceManager manager, Profiler profiler) {
-        Map<Identifier, PotentialAttribute> readItemAttributes = Maps.newHashMap();
+    protected void apply(Map<ResourceLocation, JsonElement> loader, IResourceManager manager, IProfiler profiler) {
+        Map<ResourceLocation, PotentialAttribute> readItemAttributes = Maps.newHashMap();
 
-        for (Map.Entry<Identifier, JsonElement> entry : loader.entrySet()) {
-            Identifier identifier = entry.getKey();
+        for (Map.Entry<ResourceLocation, JsonElement> entry : loader.entrySet()) {
+            ResourceLocation identifier = entry.getKey();
 
             try {
                 PotentialAttribute itemAttribute = GSON.fromJson(entry.getValue(), PotentialAttribute.class);
-                readItemAttributes.put(new Identifier(itemAttribute.getID()), itemAttribute);
+                readItemAttributes.put(new ResourceLocation(itemAttribute.getID()), itemAttribute);
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
             }
@@ -66,7 +67,7 @@ public class AttributeDataLoader extends JsonDataLoader {
      *
      * @return  list of potential read item attributes
      */
-    public Map<Identifier, PotentialAttribute> getItemAttributes() {
+    public Map<ResourceLocation, PotentialAttribute> getItemAttributes() {
         return itemAttributes;
     }
 }

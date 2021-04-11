@@ -1,26 +1,36 @@
 package draylar.tiered;
 
-import draylar.tiered.api.CustomEntityAttributes;
-import draylar.tiered.api.FabricArmorTags;
-import draylar.tiered.api.PotentialAttribute;
-import draylar.tiered.data.AttributeDataLoader;
-import draylar.tiered.mixin.ServerResourceManagerMixin;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.client.ItemTooltipCallback;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.UUID;
+import com.stereowalker.unionlib.mod.UnionMod;
 
-public class Tiered implements ModInitializer {
+import draylar.tiered.api.CustomEntityAttributes;
+import draylar.tiered.api.ForgeArmorTags;
+import draylar.tiered.api.ForgeToolTags;
+import draylar.tiered.api.PotentialAttribute;
+import draylar.tiered.data.AttributeDataLoader;
+import draylar.tiered.mixin.ServerResourceManagerMixin;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+@Mod("tiered")
+public class Tiered extends UnionMod {
 
     /**
      * Attribute Data Loader instance which handles loading attribute .json files from "data/modid/item_attributes".
@@ -42,53 +52,66 @@ public class Tiered implements ModInitializer {
     public static final String NBT_SUBTAG_KEY = "Tiered";
     public static final String NBT_SUBTAG_DATA_KEY = "Tier";
 
-    @Override
-    public void onInitialize() {
-        FabricArmorTags.init();
-        CustomEntityAttributes.init();
+    public Tiered() 
+	{
+    	super("tiered", new ResourceLocation("tiered", "textures/icon.png"), LoadType.BOTH);
+		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::setup);
+		modEventBus.addListener(this::clientSetup);
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-//            setupModifierLabel();
-        }
-    }
+	private void setup(final FMLCommonSetupEvent event)
+	{
+		ForgeArmorTags.init();
+		ForgeToolTags.init();
+        CustomEntityAttributes.init();
+	}
+
+	private void clientSetup(final FMLClientSetupEvent event) {
+	}
 
     /**
-     * Returns an {@link Identifier} namespaced with this mod's modid ("tiered").
+     * Returns an {@link ResourceLocation} namespaced with this mod's modid ("tiered").
      *
      * @param path  path of identifier (eg. apple in "minecraft:apple")
-     * @return  Identifier created with a namespace of this mod's modid ("tiered") and provided path
+     * @return  ResourceLocation created with a namespace of this mod's modid ("tiered") and provided path
      */
-    public static Identifier id(String path) {
-        return new Identifier("tiered", path);
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation("tiered", path);
     }
 
     /**
      * Creates an {@link ItemTooltipCallback} listener that adds the modifier name at the top of an Item tooltip.
      * <p>A tool name is only displayed if the item has a modifier.
      */
-    private void setupModifierLabel() {
-        ItemTooltipCallback.EVENT.register((stack, tooltipContext, lines) -> {
+    @SubscribeEvent
+    public static void setupModifierLabel(ItemTooltipEvent event) {
+    	ItemStack stack = event.getItemStack();
+//    	tooltipContext, 
+    	List<ITextComponent> lines = event.getToolTip();
+//        ItemTooltipCallback.EVENT.register((stack, tooltipContext, lines) -> {
             // has tier
-            if(stack.getSubTag(NBT_SUBTAG_KEY) != null) {
+            if(stack.getChildTag(NBT_SUBTAG_KEY) != null) {
                 // get tier
-                Identifier tier = new Identifier(stack.getOrCreateSubTag(NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
+                ResourceLocation tier = new ResourceLocation(stack.getOrCreateChildTag(NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
                 // attempt to display attribute if it is valid
                 PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
 
                 if(potentialAttribute != null) {
-                    lines.add(1, new TranslatableText(potentialAttribute.getID() + ".label").setStyle(potentialAttribute.getStyle()));
+                    lines.add(1, new TranslationTextComponent(potentialAttribute.getID() + ".label").setStyle(potentialAttribute.getStyle()));
                 }
             }
-        });
+//        });
     }
 
-    public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlot slot) {
+    public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlotType slot) {
         if(stack.getItem() instanceof ArmorItem) {
             ArmorItem item = (ArmorItem) stack.getItem();
-            return item.getSlotType().equals(slot);
+            return item.getEquipmentSlot().equals(slot);
         }
 
-        return slot == EquipmentSlot.MAINHAND;
+        return slot == EquipmentSlotType.MAINHAND;
     }
 }

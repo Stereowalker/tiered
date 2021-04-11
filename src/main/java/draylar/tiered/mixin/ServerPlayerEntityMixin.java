@@ -1,25 +1,27 @@
 package draylar.tiered.mixin;
 
-import com.mojang.authlib.GameProfile;
-import draylar.tiered.Tiered;
-import draylar.tiered.api.ModifierUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.mojang.authlib.GameProfile;
+
+import draylar.tiered.Tiered;
+import draylar.tiered.api.ModifierUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
-    private DefaultedList<ItemStack> mainCopy = null;
+    private NonNullList<ItemStack> mainCopy = null;
 
     private ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
@@ -27,22 +29,22 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
-        // if main copy is null, set it to player inventory and check each stack
+        // if mainInventory copy is null, set it to player inventory and check each stack
         if(mainCopy == null) {
-            mainCopy = copyDefaultedList(inventory.main);
+            mainCopy = copyDefaultedList(inventory.mainInventory);
             runCheck();
         }
 
-        // if main copy =/= inventory, run check and set mainCopy to inventory
-        if (!inventory.main.equals(mainCopy)) {
-            mainCopy = copyDefaultedList(inventory.main);
+        // if mainInventory copy =/= inventory, run check and set mainCopy to inventory
+        if (!inventory.mainInventory.equals(mainCopy)) {
+            mainCopy = copyDefaultedList(inventory.mainInventory);
             runCheck();
         }
     }
 
     @Unique
-    private DefaultedList<ItemStack> copyDefaultedList(DefaultedList<ItemStack> list) {
-        DefaultedList<ItemStack> newList = DefaultedList.ofSize(36, ItemStack.EMPTY);
+    private NonNullList<ItemStack> copyDefaultedList(NonNullList<ItemStack> list) {
+        NonNullList<ItemStack> newList = NonNullList.withSize(36, ItemStack.EMPTY);
 
         for (int i = 0; i < list.size(); i++) {
             newList.set(i, list.get(i));
@@ -53,15 +55,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Unique
     private void runCheck() {
-        inventory.main.forEach(itemStack -> {
+        inventory.mainInventory.forEach(itemStack -> {
             // no tier on item
-            if(itemStack.getSubTag(Tiered.NBT_SUBTAG_KEY) == null) {
+            if(itemStack.getChildTag(Tiered.NBT_SUBTAG_KEY) == null) {
                 // attempt to get a random tier
-                Identifier potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(itemStack.getItem());
+                ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(itemStack.getItem());
 
                 // found an ID
                 if(potentialAttributeID != null) {
-                    itemStack.getOrCreateSubTag(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+                    itemStack.getOrCreateChildTag(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
                 }
             }
         });

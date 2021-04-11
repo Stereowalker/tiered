@@ -1,0 +1,44 @@
+
+modLoader="javafml"
+loaderVersion="[35,)"
+license="CC0-1.0"
+issueTrackerURL="https://github.com/Stereowalker/tiered/issues"
+logoFile="icon.png"
+[[mods]]
+modId="tiered"
+version="${version}"
+displayName="Tiered"
+updateJSONURL=""
+displayURL="https://www.curseforge.com/minecraft/mc-mods/tiered-forge"
+credits="I'd like to thank my Obsidian Patreon, Komorebi, and you for downloading this mod"
+authors="Draylar, Stereowalker"
+description='''
+Adds tiers to tools.
+This is a forge port of the fabric mod. Here is the link https://www.curseforge.com/minecraft/mc-mods/tiered
+'''
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.tiered]] #optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[35.1.7,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.tiered]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16,)"
+    ordering="NONE"
+    side="BOTH"
+    
+[[dependencies.tiered]]
+    modId="unionlib"
+    mandatory=true
+    versionRange="[3.3.0, 3.3.999)"
+    ordering="NONE"
+    side="BOTH"

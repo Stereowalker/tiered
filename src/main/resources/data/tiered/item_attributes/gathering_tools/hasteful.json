@@ -2,13 +2,13 @@
   "id": "tiered:hasteful",
   "verifiers": [
     {
-      "tag": "fabric:pickaxes"
+      "tag": "forge:pickaxes"
     },
     {
-      "tag": "fabric:shovels"
+      "tag": "forge:shovels"
     },
     {
-      "tag": "fabric:axes"
+      "tag": "forge:axes"
     }
   ],
   "style": {
@@ -16,7 +16,7 @@
   },
   "attributes": [
     {
-      "type": "tiered:generic.dig_speed",
+      "type": "unionlib:generic.dig_speed",
       "modifier": {
         "name": "tiered:hasteful",
         "operation": "MULTIPLY_TOTAL",

@@ -2,16 +2,16 @@
   "id": "tiered:dented",
   "verifiers": [
     {
-      "tag": "fabric:helmets"
+      "tag": "forge:helmets"
     },
     {
-      "tag": "fabric:chestplates"
+      "tag": "forge:chestplates"
     },
     {
-      "tag": "fabric:leggings"
+      "tag": "forge:leggings"
     },
     {
-      "tag": "fabric:boots"
+      "tag": "forge:boots"
     }
   ],
   "style": {

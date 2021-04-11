@@ -1,9 +1,9 @@
 package draylar.tiered.api;
 
-import net.minecraft.text.Style;
-import net.minecraft.util.Identifier;
-
 import java.util.List;
+
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Style;
 
 public class PotentialAttribute {
 
@@ -27,7 +27,7 @@ public class PotentialAttribute {
         return verifiers;
     }
 
-    public boolean isValid(Identifier id) {
+    public boolean isValid(ResourceLocation id) {
         for(ItemVerifier verifier : verifiers) {
             if(verifier.isValid(id)) {
                 return true;

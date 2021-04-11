@@ -2,19 +2,19 @@
   "id": "tiered:extended",
   "verifiers": [
     {
-      "tag": "fabric:swords"
+      "tag": "forge:swords"
     },
     {
-      "tag": "fabric:axes"
+      "tag": "forge:axes"
     },
     {
-      "tag": "fabric:pickaxes"
+      "tag": "forge:pickaxes"
     },
     {
-      "tag": "fabric:shovels"
+      "tag": "forge:shovels"
     },
     {
-      "tag": "fabric:hoes"
+      "tag": "forge:hoes"
     }
   ],
   "style": {

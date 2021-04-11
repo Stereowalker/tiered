@@ -2,31 +2,31 @@
   "id": "tiered:legendary",
   "verifiers": [
     {
-      "tag": "fabric:helmets"
+      "tag": "forge:helmets"
     },
     {
-      "tag": "fabric:chestplates"
+      "tag": "forge:chestplates"
     },
     {
-      "tag": "fabric:leggings"
+      "tag": "forge:leggings"
     },
     {
-      "tag": "fabric:boots"
+      "tag": "forge:boots"
     },
     {
-      "tag": "fabric:swords"
+      "tag": "forge:swords"
     },
     {
-      "tag": "fabric:shovels"
+      "tag": "forge:shovels"
     },
     {
-      "tag": "fabric:pickaxes"
+      "tag": "forge:pickaxes"
     },
     {
-      "tag": "fabric:hoes"
+      "tag": "forge:hoes"
     },
     {
-      "tag": "fabric:axes"
+      "tag": "forge:axes"
     }
   ],
   "style": {
