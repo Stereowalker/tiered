@@ -1,6 +1,5 @@
 package draylar.tiered;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,19 +10,14 @@ import com.stereowalker.unionlib.mod.UnionMod;
 import draylar.tiered.api.CustomEntityAttributes;
 import draylar.tiered.api.ForgeArmorTags;
 import draylar.tiered.api.ForgeToolTags;
-import draylar.tiered.api.PotentialAttribute;
 import draylar.tiered.data.AttributeDataLoader;
 import draylar.tiered.mixin.ServerResourceManagerMixin;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -58,7 +52,7 @@ public class Tiered extends UnionMod {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
-		MinecraftForge.EVENT_BUS.register(this);
+		//MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	private void setup(final FMLCommonSetupEvent event)
@@ -79,31 +73,6 @@ public class Tiered extends UnionMod {
      */
     public static ResourceLocation id(String path) {
         return new ResourceLocation("tiered", path);
-    }
-
-    /**
-     * Creates an {@link ItemTooltipCallback} listener that adds the modifier name at the top of an Item tooltip.
-     * <p>A tool name is only displayed if the item has a modifier.
-     */
-    @SubscribeEvent
-    public static void setupModifierLabel(ItemTooltipEvent event) {
-    	ItemStack stack = event.getItemStack();
-//    	tooltipContext, 
-    	List<ITextComponent> lines = event.getToolTip();
-//        ItemTooltipCallback.EVENT.register((stack, tooltipContext, lines) -> {
-            // has tier
-            if(stack.getChildTag(NBT_SUBTAG_KEY) != null) {
-                // get tier
-                ResourceLocation tier = new ResourceLocation(stack.getOrCreateChildTag(NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-
-                // attempt to display attribute if it is valid
-                PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
-
-                if(potentialAttribute != null) {
-                    lines.add(1, new TranslationTextComponent(potentialAttribute.getID() + ".label").setStyle(potentialAttribute.getStyle()));
-                }
-            }
-//        });
     }
 
     public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlotType slot) {
