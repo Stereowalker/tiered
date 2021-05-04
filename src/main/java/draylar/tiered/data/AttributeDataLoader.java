@@ -1,11 +1,11 @@
 package draylar.tiered.data;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +14,7 @@ import com.google.gson.JsonParseException;
 
 import draylar.tiered.api.PotentialAttribute;
 import draylar.tiered.gson.EntityAttributeModifierDeserializer;
+import draylar.tiered.gson.EntityAttributeModifierSerializer;
 import draylar.tiered.gson.EquipmentSlotDeserializer;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -25,10 +26,11 @@ import net.minecraft.util.text.Style;
 
 public class AttributeDataLoader extends JsonReloadListener {
 
-    private static final Gson GSON = new GsonBuilder()
+    public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
+            .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierSerializer())
             .registerTypeAdapter(EquipmentSlotType.class, new EquipmentSlotDeserializer())
             .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
             .create();
@@ -37,7 +39,7 @@ public class AttributeDataLoader extends JsonReloadListener {
     private static final String LOADED_RECIPES_MESSAGE = "Loaded {} recipes";
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Map<ResourceLocation, PotentialAttribute> itemAttributes = ImmutableMap.of();
+    private Map<ResourceLocation, PotentialAttribute> itemAttributes = new HashMap<>();
 
     public AttributeDataLoader() {
         super(GSON, "item_attributes");
@@ -69,5 +71,11 @@ public class AttributeDataLoader extends JsonReloadListener {
      */
     public Map<ResourceLocation, PotentialAttribute> getItemAttributes() {
         return itemAttributes;
+    }
+    public void clear() {
+        itemAttributes.clear();
+    }
+    public void replace(Map<ResourceLocation, PotentialAttribute> i){
+        itemAttributes = i;
     }
 }

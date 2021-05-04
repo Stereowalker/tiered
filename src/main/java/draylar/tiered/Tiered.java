@@ -2,6 +2,8 @@ package draylar.tiered;
 
 import java.util.UUID;
 
+
+import draylar.tiered.network.AttributeSyncer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +18,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -43,6 +46,13 @@ public class Tiered extends UnionMod {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
+    private static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation("tiered", "attribute_sync"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );
     public static final String NBT_SUBTAG_KEY = "Tiered";
     public static final String NBT_SUBTAG_DATA_KEY = "Tier";
 
@@ -60,6 +70,7 @@ public class Tiered extends UnionMod {
 		ForgeArmorTags.init();
 		ForgeToolTags.init();
         CustomEntityAttributes.init();
+        registerAttributeSyncer();
 	}
 
 	private void clientSetup(final FMLClientSetupEvent event) {
@@ -82,5 +93,8 @@ public class Tiered extends UnionMod {
         }
 
         return slot == EquipmentSlotType.MAINHAND;
+    }
+    public static void registerAttributeSyncer() {
+        HANDLER.registerMessage(0, AttributeSyncer.class, AttributeSyncer::encode, AttributeSyncer::decode, AttributeSyncer::handlePacket);
     }
 }
