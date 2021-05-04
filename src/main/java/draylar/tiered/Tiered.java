@@ -4,6 +4,8 @@ import java.util.UUID;
 
 
 import draylar.tiered.network.AttributeSyncer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.stereowalker.unionlib.mod.UnionMod;
 
@@ -42,6 +44,7 @@ public class Tiered extends UnionMod {
             UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7a")
     };
 
+    public static final Logger LOGGER = LogManager.getLogger();
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(
