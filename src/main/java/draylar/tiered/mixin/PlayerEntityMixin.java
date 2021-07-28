@@ -51,9 +51,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
         ModifiableAttributeInstance instance = this.getAttribute(CustomEntityAttributes.CRIT_CHANCE);
 
-        for (AttributeModifier modifier : instance.getModifierListCopy()) {
-            float amount = (float) modifier.getAmount();
-            customChance += amount;
+        if(instance != null) {
+        	for (AttributeModifier modifier : instance.getModifierListCopy()) {
+        		float amount = (float) modifier.getAmount();
+        		customChance += amount;
+        	}
         }
 
         return bl3 || world.rand.nextDouble() < customChance;
