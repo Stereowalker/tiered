@@ -12,6 +12,7 @@ public class ForgeArmorTags {
     public static final ITag<Item> CHESTPLATES = register("chestplates");
     public static final ITag<Item> LEGGINGS = register("leggings");
     public static final ITag<Item> BOOTS = register("boots");
+    public static final ITag<Item> SHIELDS = register("shields");
 
     private ForgeArmorTags() { }
 
