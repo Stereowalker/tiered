@@ -1,12 +1,12 @@
 
 modLoader="javafml"
-loaderVersion="[35,)"
+loaderVersion="[37,)"
 license="CC0-1.0"
 issueTrackerURL="https://github.com/Stereowalker/tiered/issues"
 logoFile="icon.png"
 [[mods]]
 modId="tiered"
-version="${version}"
+version="${file.jarVersion}"
 displayName="Tiered"
 updateJSONURL=""
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tiered-forge"
@@ -23,7 +23,7 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[35.1.7,)" #mandatory
+    versionRange="[37,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -32,13 +32,13 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16,)"
+    versionRange="[1.17.1,1.18)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[3.3.0, 3.3.999)"
+    versionRange="[4.1.0, 4.2.0)"
     ordering="NONE"
     side="BOTH"
