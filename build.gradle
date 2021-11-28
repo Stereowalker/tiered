@@ -131,7 +131,7 @@ jar {
 
 curseforge {
     project {
-    	id = '453889'
+    	id = modCurseId
 		apiKey = "$System.env.CURSEFORGEKEY"
 		changelog = file('changelog.md')
 		releaseType = 'release'
