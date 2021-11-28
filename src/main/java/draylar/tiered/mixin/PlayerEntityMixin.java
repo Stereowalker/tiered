@@ -8,31 +8,31 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import draylar.tiered.api.CustomEntityAttributes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
-@Mixin(PlayerEntity.class)
+@Mixin(Player.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
 
-    private PlayerEntityMixin(EntityType<? extends LivingEntity> type, World world) {
+    private PlayerEntityMixin(EntityType<? extends LivingEntity> type, Level world) {
         super(type, world);
     }
 
     @Inject(
-            method = "func_234570_el_",
+            method = "createAttributes",
             at = @At("RETURN")
     )
-    private static void initAttributes(CallbackInfoReturnable<AttributeModifierMap.MutableAttribute> ci) {
-        ci.getReturnValue().createMutableAttribute(CustomEntityAttributes.CRIT_CHANCE);
+    private static void initAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> ci) {
+        ci.getReturnValue().add(CustomEntityAttributes.CRIT_CHANCE);
     }
 
     @ModifyVariable(
-            method = "attackTargetEntityWithCurrentItem",
+            method = "attack",
             at = @At(
                     value = "JUMP",
                     ordinal = 2
@@ -40,7 +40,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             slice = @Slice(
                     from = @At(
                             value = "INVOKE",
-                            target = "Lnet/minecraft/entity/player/PlayerEntity;isSprinting()Z",
+                            target = "Lnet/minecraft/world/entity/player/Player;isSprinting()Z",
                             ordinal = 1
                     )
             ),
@@ -49,15 +49,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private boolean attack(boolean bl3) {
         float customChance = 0;
 
-        ModifiableAttributeInstance instance = this.getAttribute(CustomEntityAttributes.CRIT_CHANCE);
+        AttributeInstance instance = this.getAttribute(CustomEntityAttributes.CRIT_CHANCE);
 
         if(instance != null) {
-        	for (AttributeModifier modifier : instance.getModifierListCopy()) {
+        	for (AttributeModifier modifier : instance.getModifiers()) {
         		float amount = (float) modifier.getAmount();
         		customChance += amount;
         	}
         }
 
-        return bl3 || world.rand.nextDouble() < customChance;
+        return bl3 || level.random.nextDouble() < customChance;
     }
 }

@@ -7,13 +7,13 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextColor;
 
-public class TextColorDeserializer implements JsonDeserializer<Color> {
+public class TextColorDeserializer implements JsonDeserializer<TextColor> {
 
     @Override
-    public Color deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return Color.fromTextFormatting(TextFormatting.getValueByName(json.getAsString().toUpperCase()));
+    public TextColor deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return TextColor.fromLegacyFormat(ChatFormatting.getByName(json.getAsString().toUpperCase()));
     }
 }

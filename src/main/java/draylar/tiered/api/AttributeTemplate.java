@@ -4,11 +4,11 @@ import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
 
 import draylar.tiered.Tiered;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 /**
  * Stores information on an AttributeModifier template applied to an ItemStack.
@@ -20,7 +20,7 @@ import net.minecraft.util.registry.Registry;
  *   - an amount, which is used in combination with the operation to modify the final relevant value
  *   - a modifier, which can be something such as addition or subtraction
  *
- * The EquipmentSlotType is used to only apply this template to certain items.
+ * The EquipmentSlot is used to only apply this template to certain items.
  */
 public class AttributeTemplate {
 
@@ -31,23 +31,23 @@ public class AttributeTemplate {
     private final AttributeModifier attributeModifier;
 
     @SerializedName("required_equipment_slots")
-    private final EquipmentSlotType[] requiredEquipmentSlotTypes;
+    private final EquipmentSlot[] requiredEquipmentSlotTypes;
 
     @SerializedName("optional_equipment_slots")
-    private final EquipmentSlotType[] optionalEquipmentSlotTypes;
+    private final EquipmentSlot[] optionalEquipmentSlotTypes;
 
-    public AttributeTemplate(String attributeTypeID, AttributeModifier AttributeModifier, EquipmentSlotType[]  requiredEquipmentSlotTypes, EquipmentSlotType[]  optionalEquipmentSlotTypes) {
+    public AttributeTemplate(String attributeTypeID, AttributeModifier AttributeModifier, EquipmentSlot[]  requiredEquipmentSlotTypes, EquipmentSlot[]  optionalEquipmentSlotTypes) {
         this.attributeTypeID = attributeTypeID;
         this.attributeModifier = AttributeModifier;
         this.requiredEquipmentSlotTypes = requiredEquipmentSlotTypes;
         this.optionalEquipmentSlotTypes = optionalEquipmentSlotTypes;
     }
 
-    public EquipmentSlotType[]  getRequiredEquipmentSlot() {
+    public EquipmentSlot[]  getRequiredEquipmentSlot() {
         return requiredEquipmentSlotTypes;
     }
 
-    public EquipmentSlotType[]  getOptionalEquipmentSlot() {
+    public EquipmentSlot[]  getOptionalEquipmentSlot() {
         return optionalEquipmentSlotTypes;
     }
 
@@ -58,15 +58,15 @@ public class AttributeTemplate {
      * @param multimap  map to add {@link AttributeTemplate}
      * @param slot
      */
-    public void realize(Multimap<Attribute, AttributeModifier> multimap, EquipmentSlotType slot) {
+    public void realize(Multimap<Attribute, AttributeModifier> multimap, EquipmentSlot slot) {
         AttributeModifier cloneModifier = new AttributeModifier(
-                Tiered.MODIFIERS[slot.getSlotIndex()],
+                Tiered.MODIFIERS[slot.getFilterFlag()],
                 attributeModifier.getName() + "_" + slot.getName(),
                 attributeModifier.getAmount(),
                 attributeModifier.getOperation()
         );
 
-        Attribute key = Registry.ATTRIBUTE.getOrDefault(new ResourceLocation(attributeTypeID));
+        Attribute key = Registry.ATTRIBUTE.get(new ResourceLocation(attributeTypeID));
         if(key == null) {
             Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {

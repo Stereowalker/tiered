@@ -16,22 +16,22 @@ import draylar.tiered.api.PotentialAttribute;
 import draylar.tiered.gson.EntityAttributeModifierDeserializer;
 import draylar.tiered.gson.EntityAttributeModifierSerializer;
 import draylar.tiered.gson.EquipmentSlotDeserializer;
-import net.minecraft.client.resources.JsonReloadListener;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Style;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public class AttributeDataLoader extends JsonReloadListener {
+public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierSerializer())
-            .registerTypeAdapter(EquipmentSlotType.class, new EquipmentSlotDeserializer())
+            .registerTypeAdapter(EquipmentSlot.class, new EquipmentSlotDeserializer())
             .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
             .create();
 
@@ -46,7 +46,7 @@ public class AttributeDataLoader extends JsonReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> loader, IResourceManager manager, IProfiler profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> loader, ResourceManager manager, ProfilerFiller profiler) {
         Map<ResourceLocation, PotentialAttribute> readItemAttributes = Maps.newHashMap();
 
         for (Map.Entry<ResourceLocation, JsonElement> entry : loader.entrySet()) {

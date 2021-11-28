@@ -2,8 +2,8 @@ package draylar.tiered.api;
 
 import java.util.List;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Style;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 
 public class PotentialAttribute {
 

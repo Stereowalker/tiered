@@ -1,11 +1,11 @@
 package draylar.tiered.api;
 
 import draylar.tiered.Tiered;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
 
 public class ItemVerifier {
 
@@ -39,10 +39,10 @@ public class ItemVerifier {
         if(id != null) {
             return itemID.equals(id);
         } else if(tag != null) {
-            ITag<Item> itemTag = ItemTags.getCollection().get(new ResourceLocation(tag));
+            Tag<Item> itemTag = ItemTags.getAllTags().getTag(new ResourceLocation(tag));
 
             if(itemTag != null) {
-                return itemTag.contains(Registry.ITEM.getOrDefault(new ResourceLocation(itemID)));
+                return itemTag.contains(Registry.ITEM.get(new ResourceLocation(itemID)));
             } else {
                 Tiered.LOGGER.error(tag + " was specified as an item verifier tag, but it does not exist!");
             }

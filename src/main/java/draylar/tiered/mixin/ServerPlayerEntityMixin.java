@@ -10,34 +10,34 @@ import com.mojang.authlib.GameProfile;
 
 import draylar.tiered.Tiered;
 import draylar.tiered.api.ModifierUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
-@Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity {
+@Mixin(ServerPlayer.class)
+public abstract class ServerPlayerEntityMixin extends Player {
 
     private NonNullList<ItemStack> mainCopy = null;
 
-    private ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
+    private ServerPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
-        // if mainInventory copy is null, set it to player inventory and check each stack
+        // if items copy is null, set it to player inventory and check each stack
         if(mainCopy == null) {
-            mainCopy = copyDefaultedList(inventory.mainInventory);
+            mainCopy = copyDefaultedList(inventory.items);
             runCheck();
         }
 
-        // if mainInventory copy =/= inventory, run check and set mainCopy to inventory
-        if (!inventory.mainInventory.equals(mainCopy)) {
-            mainCopy = copyDefaultedList(inventory.mainInventory);
+        // if items copy =/= inventory, run check and set mainCopy to inventory
+        if (!inventory.items.equals(mainCopy)) {
+            mainCopy = copyDefaultedList(inventory.items);
             runCheck();
         }
     }
@@ -55,15 +55,15 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
     @Unique
     private void runCheck() {
-        inventory.mainInventory.forEach(itemStack -> {
+        inventory.items.forEach(itemStack -> {
             // no tier on item
-            if(itemStack.getChildTag(Tiered.NBT_SUBTAG_KEY) == null) {
+            if(itemStack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null) {
                 // attempt to get a random tier
                 ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(itemStack.getItem());
 
                 // found an ID
                 if(potentialAttributeID != null) {
-                    itemStack.getOrCreateChildTag(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+                    itemStack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
                 }
             }
         });

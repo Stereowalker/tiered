@@ -2,9 +2,9 @@ package draylar.tiered.network;
 
 import draylar.tiered.api.PotentialAttribute;
 import draylar.tiered.data.AttributeDataLoader;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,28 +23,28 @@ public class AttributeSyncer {
         this.attribute = ATTRIBUTE_DATA_LOADER.getItemAttributes();
     }
 
-    public static AttributeSyncer decode( PacketBuffer buf )
+    public static AttributeSyncer decode( FriendlyByteBuf buf )
     {
         AttributeSyncer packet = new AttributeSyncer();
 
         packet.size = buf.readInt();
         for (int i = 0; i < packet.size; i++) {
-            ResourceLocation id = new ResourceLocation(buf.readString());
-            PotentialAttribute pa = AttributeDataLoader.GSON.fromJson(buf.readString(), PotentialAttribute.class);
+            ResourceLocation id = new ResourceLocation(buf.readUtf());
+            PotentialAttribute pa = AttributeDataLoader.GSON.fromJson(buf.readUtf(), PotentialAttribute.class);
             packet.attribute.put(id, pa);
         }
         return packet;
     }
 
-    public static void encode( AttributeSyncer packet, PacketBuffer buf )
+    public static void encode( AttributeSyncer packet, FriendlyByteBuf buf )
     {
         // serialize each attribute file as a string to the packet
         buf.writeInt(packet.size);
 
         // write each value
         packet.attribute.forEach((id, attribute) -> {
-            buf.writeString(id.toString());
-            buf.writeString(AttributeDataLoader.GSON.toJson(attribute));
+            buf.writeUtf(id.toString());
+            buf.writeUtf(AttributeDataLoader.GSON.toJson(attribute));
         });
     }
 

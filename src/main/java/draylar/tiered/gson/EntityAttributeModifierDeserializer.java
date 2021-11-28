@@ -8,7 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+
 
 public class EntityAttributeModifierDeserializer implements JsonDeserializer<AttributeModifier> {
 

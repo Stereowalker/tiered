@@ -4,7 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.lang.reflect.Type;
 

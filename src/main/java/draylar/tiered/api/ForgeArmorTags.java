@@ -1,18 +1,18 @@
 package draylar.tiered.api;
 
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeTagHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForgeArmorTags {
 
-    public static final ITag<Item> HELMETS = register("helmets");
-    public static final ITag<Item> CHESTPLATES = register("chestplates");
-    public static final ITag<Item> LEGGINGS = register("leggings");
-    public static final ITag<Item> BOOTS = register("boots");
-    public static final ITag<Item> SHIELDS = register("shields");
+    public static final Tag<Item> HELMETS = register("helmets");
+    public static final Tag<Item> CHESTPLATES = register("chestplates");
+    public static final Tag<Item> LEGGINGS = register("leggings");
+    public static final Tag<Item> BOOTS = register("boots");
+    public static final Tag<Item> SHIELDS = register("shields");
 
     private ForgeArmorTags() { }
 
@@ -20,7 +20,7 @@ public class ForgeArmorTags {
 
     }
 
-    private static ITag<Item> register(String id) {
+    private static Tag<Item> register(String id) {
         return ForgeTagHandler.makeWrapperTag(ForgeRegistries.ITEMS, new ResourceLocation("forge", id));
     }
 }

@@ -1,13 +1,5 @@
 package draylar.tiered.forge;
 
-import java.util.List;
-
-import draylar.tiered.Tiered;
-import draylar.tiered.api.PotentialAttribute;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

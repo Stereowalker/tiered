@@ -1,11 +1,11 @@
 package draylar.tiered.forge;
 
 import draylar.tiered.network.AttributeSyncer;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 import static draylar.tiered.Tiered.HANDLER;
 
@@ -13,7 +13,7 @@ import static draylar.tiered.Tiered.HANDLER;
 public class ForgeEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(final PlayerEvent.PlayerLoggedInEvent par0){
-        if(par0.getPlayer().world.isRemote) return;
-        HANDLER.sendTo(new AttributeSyncer(), ((ServerPlayerEntity)par0.getPlayer()).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+        if(par0.getPlayer().level.isClientSide) return;
+        HANDLER.sendTo(new AttributeSyncer(), ((ServerPlayer)par0.getPlayer()).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 }

@@ -8,17 +8,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import draylar.tiered.Tiered;
-import net.minecraft.command.Commands;
-import net.minecraft.resources.DataPackRegistries;
-import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.ServerResources;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 
-@Mixin(DataPackRegistries.class)
+@Mixin(ServerResources.class)
 public class ServerResourceManagerMixin {
 
-    @Shadow @Final private IReloadableResourceManager resourceManager;
+    @Shadow @Final private ReloadableResourceManager resources;
 
     @Inject(at = @At("RETURN"), method = "<init>")
-    private void onInit(Commands.EnvironmentType registrationEnvironment, int i, CallbackInfo ci) {
-        this.resourceManager.addReloadListener(Tiered.ATTRIBUTE_DATA_LOADER);
+    private void onInit(RegistryAccess p_180002_, Commands.CommandSelection registrationEnvironment, int i, CallbackInfo ci) {
+        this.resources.registerReloadListener(Tiered.ATTRIBUTE_DATA_LOADER);
     }
 }

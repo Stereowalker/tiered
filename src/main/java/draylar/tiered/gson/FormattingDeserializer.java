@@ -7,12 +7,13 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
-public class FormattingDeserializer implements JsonDeserializer<TextFormatting> {
+
+public class FormattingDeserializer implements JsonDeserializer<ChatFormatting> {
 
     @Override
-    public TextFormatting deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return TextFormatting.getValueByName(json.getAsString().toUpperCase());
+    public ChatFormatting deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return ChatFormatting.getByName(json.getAsString().toUpperCase());
     }
 }
