@@ -1,5 +1,6 @@
 {
   "id": "tiered:lucky",
+  "weight": 3,
   "verifiers": [
     {
       "id": "minecraft:fishing_rod"

@@ -1,5 +1,6 @@
 {
   "id": "tiered:dull",
+  "weight": 3,
   "verifiers": [
     {
       "tag": "forge:swords"

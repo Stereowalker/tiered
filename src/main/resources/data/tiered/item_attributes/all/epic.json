@@ -1,5 +1,6 @@
 {
   "id": "tiered:epic",
+  "weight": 2,
   "verifiers": [
     {
       "tag": "forge:helmets"

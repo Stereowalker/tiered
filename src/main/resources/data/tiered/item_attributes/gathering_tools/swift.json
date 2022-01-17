@@ -1,5 +1,6 @@
 {
   "id": "tiered:swift",
+  "weight": 3,
   "verifiers": [
     {
       "tag": "forge:pickaxes"
