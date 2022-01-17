@@ -8,12 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 public class PotentialAttribute {
 
     private final String id;
+    private final int weight;
     private final List<ItemVerifier> verifiers;
     private final Style style;
     private final List<AttributeTemplate> attributes;
 
-    public PotentialAttribute(String id, List<ItemVerifier> verifiers, Style style, List<AttributeTemplate> attributes) {
+    public PotentialAttribute(String id, int weight, List<ItemVerifier> verifiers, Style style, List<AttributeTemplate> attributes) {
         this.id = id;
+        this.weight = weight;
         this.verifiers = verifiers;
         this.style = style;
         this.attributes = attributes;
@@ -22,6 +24,10 @@ public class PotentialAttribute {
     public String getID() {
         return id;
     }
+    
+    public int getWeight() {
+		return weight;
+	}
 
     public List<ItemVerifier> getVerifiers() {
         return verifiers;
