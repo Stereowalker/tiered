@@ -4,7 +4,7 @@ import draylar.tiered.api.PotentialAttribute;
 import draylar.tiered.data.AttributeDataLoader;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class AttributeSyncer {
 
         packet.size = buf.readInt();
         for (int i = 0; i < packet.size; i++) {
-            ResourceLocation id = new ResourceLocation(buf.readUtf());
+            ResourceLocation id = buf.readResourceLocation();
             PotentialAttribute pa = AttributeDataLoader.GSON.fromJson(buf.readUtf(), PotentialAttribute.class);
             packet.attribute.put(id, pa);
         }
@@ -43,7 +43,7 @@ public class AttributeSyncer {
 
         // write each value
         packet.attribute.forEach((id, attribute) -> {
-            buf.writeUtf(id.toString());
+            buf.writeResourceLocation(id);
             buf.writeUtf(AttributeDataLoader.GSON.toJson(attribute));
         });
     }
