@@ -1,6 +1,6 @@
 {
   "id": "tiered:common",
-  "weight": 8,
+  "weight": 10,
   "verifiers": [
     {
       "tag": "forge:helmets"
