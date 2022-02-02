@@ -1,5 +1,6 @@
 {
   "id": "tiered:unchained",
+  "weight": 3,
   "verifiers": [
     {
       "tag": "forge:helmets"

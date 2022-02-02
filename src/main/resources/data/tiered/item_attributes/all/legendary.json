@@ -1,5 +1,6 @@
 {
   "id": "tiered:legendary",
+  "weight": 1,
   "verifiers": [
     {
       "tag": "forge:helmets"

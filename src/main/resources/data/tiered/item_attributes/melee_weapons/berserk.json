@@ -1,5 +1,6 @@
 {
   "id": "tiered:berserk",
+  "weight": 3,
   "verifiers": [
     {
       "tag": "forge:swords"
