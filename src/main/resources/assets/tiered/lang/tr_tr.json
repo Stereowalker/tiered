@@ -1,10 +1,15 @@
 {
   "generic.crit_chance": "Kritikal şansı",
 
-  "tiered:common.label": "Yaygın",
-  "tiered:rare.label": "Nadir",
-  "tiered:epic.label": "Epik",
-  "tiered:legendary.label": "Efsanevi",
+  "tiered:common_armor.label": "Yaygın",
+  "tiered:rare_armor.label": "Nadir",
+  "tiered:epic_armor.label": "Epik",
+  "tiered:legendary_armor.label": "Efsanevi",
+
+  "tiered:common_tool.label": "Yaygın",
+  "tiered:rare_tool.label": "Nadir",
+  "tiered:epic_tool.label": "Epik",
+  "tiered:legendary_tool.label": "Efsanevi",
 
   "tiered:dented.label": "Girintili",
   "tiered:fortified.label": "Takviye edilmiş",

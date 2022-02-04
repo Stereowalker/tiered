@@ -1,0 +1,37 @@
+{
+  "id": "tiered:common_tool",
+  "weight": 8,
+  "verifiers": [
+    {
+      "tag": "forge:swords"
+    },
+    {
+      "tag": "forge:shovels"
+    },
+    {
+      "tag": "forge:pickaxes"
+    },
+    {
+      "tag": "forge:hoes"
+    },
+    {
+      "tag": "forge:axes"
+    }
+  ],
+  "style": {
+    "color": "gray"
+  },
+  "attributes": [
+    {
+      "type": "generic.attack_damage",
+      "modifier": {
+        "name": "tiered:common_tool",
+        "operation": "ADDITION",
+        "amount": 0.1
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    }
+  ]
+}

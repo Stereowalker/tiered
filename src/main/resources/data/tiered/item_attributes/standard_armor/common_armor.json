@@ -1,0 +1,37 @@
+{
+  "id": "tiered:common_armor",
+  "weight": 8,
+  "verifiers": [
+    {
+      "tag": "forge:helmets"
+    },
+    {
+      "tag": "forge:chestplates"
+    },
+    {
+      "tag": "forge:leggings"
+    },
+    {
+      "tag": "forge:boots"
+    }
+  ],
+  "style": {
+    "color": "gray"
+  },
+  "attributes": [
+    {
+      "type": "generic.max_health",
+      "modifier": {
+        "name": "tiered:common_armor",
+        "operation": "ADDITION",
+        "amount": 2
+      },
+      "optional_equipment_slots": [
+        "FEET",
+        "LEGS",
+        "CHEST",
+        "HEAD"
+      ]
+    }
+  ]
+}
