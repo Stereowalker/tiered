@@ -1,6 +1,6 @@
 {
-  "id": "tiered:rare",
-  "weight": 4,
+  "id": "tiered:epic_armor",
+  "weight": 2,
   "verifiers": [
     {
       "tag": "forge:helmets"
@@ -13,36 +13,20 @@
     },
     {
       "tag": "forge:boots"
-    },
-    {
-      "tag": "forge:swords"
-    },
-    {
-      "tag": "forge:shovels"
-    },
-    {
-      "tag": "forge:pickaxes"
-    },
-    {
-      "tag": "forge:hoes"
-    },
-    {
-      "tag": "forge:axes"
     }
   ],
   "style": {
-    "color": "blue"
+    "color": "dark_purple"
   },
   "attributes": [
     {
       "type": "generic.max_health",
       "modifier": {
-        "name": "tiered:rare",
+        "name": "tiered:epic_armor",
         "operation": "ADDITION",
-        "amount": 4
+        "amount": 6
       },
       "optional_equipment_slots": [
-        "MAINHAND",
         "FEET",
         "LEGS",
         "CHEST",
@@ -52,12 +36,25 @@
     {
       "type": "generic.armor",
       "modifier": {
-        "name": "tiered:rare",
+        "name": "tiered:epic_armor",
+        "operation": "ADDITION",
+        "amount": 2
+      },
+      "optional_equipment_slots": [
+        "FEET",
+        "LEGS",
+        "CHEST",
+        "HEAD"
+      ]
+    },
+    {
+      "type": "generic.armor_toughness",
+      "modifier": {
+        "name": "tiered:legendary_armor",
         "operation": "ADDITION",
         "amount": 1
       },
       "optional_equipment_slots": [
-        "MAINHAND",
         "FEET",
         "LEGS",
         "CHEST",
