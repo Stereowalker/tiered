@@ -1,0 +1,48 @@
+{
+  "id": "tiered:rare_tool",
+  "weight": 4,
+  "verifiers": [
+    {
+      "tag": "forge:swords"
+    },
+    {
+      "tag": "forge:shovels"
+    },
+    {
+      "tag": "forge:pickaxes"
+    },
+    {
+      "tag": "forge:hoes"
+    },
+    {
+      "tag": "forge:axes"
+    }
+  ],
+  "style": {
+    "color": "blue"
+  },
+  "attributes": [
+    {
+      "type": "generic.attack_damage",
+      "modifier": {
+        "name": "tiered:rare_tool",
+        "operation": "ADDITION",
+        "amount": 0.2
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "generic.armor",
+      "modifier": {
+        "name": "tiered:rare_tool",
+        "operation": "ADDITION",
+        "amount": 1
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    }
+  ]
+}

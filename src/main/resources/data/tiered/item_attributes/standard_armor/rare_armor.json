@@ -1,6 +1,6 @@
 {
-  "id": "tiered:common",
-  "weight": 8,
+  "id": "tiered:rare_armor",
+  "weight": 4,
   "verifiers": [
     {
       "tag": "forge:helmets"
@@ -13,36 +13,34 @@
     },
     {
       "tag": "forge:boots"
-    },
-    {
-      "tag": "forge:swords"
-    },
-    {
-      "tag": "forge:shovels"
-    },
-    {
-      "tag": "forge:pickaxes"
-    },
-    {
-      "tag": "forge:hoes"
-    },
-    {
-      "tag": "forge:axes"
     }
   ],
   "style": {
-    "color": "gray"
+    "color": "blue"
   },
   "attributes": [
     {
       "type": "generic.max_health",
       "modifier": {
-        "name": "tiered:common",
+        "name": "tiered:rare_armor",
         "operation": "ADDITION",
-        "amount": 2
+        "amount": 4
       },
       "optional_equipment_slots": [
-        "MAINHAND",
+        "FEET",
+        "LEGS",
+        "CHEST",
+        "HEAD"
+      ]
+    },
+    {
+      "type": "generic.armor",
+      "modifier": {
+        "name": "tiered:rare_armor",
+        "operation": "ADDITION",
+        "amount": 1
+      },
+      "optional_equipment_slots": [
         "FEET",
         "LEGS",
         "CHEST",

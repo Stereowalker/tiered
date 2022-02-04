@@ -1,19 +1,7 @@
 {
-  "id": "tiered:epic",
+  "id": "tiered:epic_tool",
   "weight": 2,
   "verifiers": [
-    {
-      "tag": "forge:helmets"
-    },
-    {
-      "tag": "forge:chestplates"
-    },
-    {
-      "tag": "forge:leggings"
-    },
-    {
-      "tag": "forge:boots"
-    },
     {
       "tag": "forge:swords"
     },
@@ -35,48 +23,36 @@
   },
   "attributes": [
     {
-      "type": "generic.max_health",
+      "type": "generic.attack_damage",
       "modifier": {
-        "name": "tiered:epic",
+        "name": "tiered:epic_tool",
         "operation": "ADDITION",
-        "amount": 6
+        "amount": 0.3
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     },
     {
       "type": "generic.armor",
       "modifier": {
-        "name": "tiered:epic",
+        "name": "tiered:epic_tool",
         "operation": "ADDITION",
         "amount": 2
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     },
     {
       "type": "generic.armor_toughness",
       "modifier": {
-        "name": "tiered:legendary",
+        "name": "tiered:legendary_tool",
         "operation": "ADDITION",
         "amount": 1
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     }
   ]

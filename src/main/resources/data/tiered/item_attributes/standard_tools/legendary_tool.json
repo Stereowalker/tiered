@@ -1,19 +1,7 @@
 {
-  "id": "tiered:legendary",
+  "id": "tiered:legendary_tool",
   "weight": 1,
   "verifiers": [
-    {
-      "tag": "forge:helmets"
-    },
-    {
-      "tag": "forge:chestplates"
-    },
-    {
-      "tag": "forge:leggings"
-    },
-    {
-      "tag": "forge:boots"
-    },
     {
       "tag": "forge:swords"
     },
@@ -35,33 +23,25 @@
   },
   "attributes": [
     {
-      "type": "generic.max_health",
+      "type": "generic.attack_damage",
       "modifier": {
-        "name": "tiered:legendary",
+        "name": "tiered:legendary_tool",
         "operation": "ADDITION",
-        "amount": 10
+        "amount": 0.5
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     },
     {
       "type": "generic.armor",
       "modifier": {
-        "name": "tiered:legendary",
+        "name": "tiered:legendary_tool",
         "operation": "ADDITION",
         "amount": 4
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     },
     {
@@ -72,11 +52,7 @@
         "amount": 0.5
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     },
     {
@@ -87,11 +63,7 @@
         "amount": 2
       },
       "optional_equipment_slots": [
-        "MAINHAND",
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
+        "MAINHAND"
       ]
     }
   ]
