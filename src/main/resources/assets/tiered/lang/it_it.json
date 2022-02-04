@@ -1,0 +1,33 @@
+{
+  "generic.crit_chance": "Crit Chance",
+
+  "tiered:common_armor.label": "Comune",
+  "tiered:rare_armor.label": "Raro",
+  "tiered:epic_armor.label": "Epico",
+  "tiered:legendary_armor.label": "Leggendario",
+
+  "tiered:common_tool.label": "Comune",
+  "tiered:rare_tool.label": "Raro",
+  "tiered:epic_tool.label": "Epico",
+  "tiered:legendary_tool.label": "Leggendario",
+
+  "tiered:dented.label": "Dented",
+  "tiered:fortified.label": "Fortified",
+  "tiered:heavy.label": "Heavy",
+  "tiered:reinforced.label": "Reinforced",
+  "tiered:resilient.label": "Resiliente",
+  "tiered:unchained.label": "Unchained",
+
+  "tiered:extended.label": "Extended",
+
+  "tiered:lucky.label": "Lucky",
+
+  "tiered:hasteful.label": "Hasteful",
+  "tiered:swift.label": "Swift",
+
+  "tiered:berserk.label": "Berserk",
+  "tiered:critical.label": "Critico",
+  "tiered:dull.label": "Dull",
+  "tiered:keen.label": "Keen",
+  "tiered:sharp.label": "Affilato"
+}
