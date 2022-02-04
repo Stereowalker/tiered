@@ -1,5 +1,5 @@
 {
-  "generic.crit_chance": "Crit Chance",
+  "generic.crit_chance": "Possibilità critico",
 
   "tiered:common_armor.label": "Comune",
   "tiered:rare_armor.label": "Raro",
@@ -11,23 +11,23 @@
   "tiered:epic_tool.label": "Epico",
   "tiered:legendary_tool.label": "Leggendario",
 
-  "tiered:dented.label": "Dented",
-  "tiered:fortified.label": "Fortified",
-  "tiered:heavy.label": "Heavy",
-  "tiered:reinforced.label": "Reinforced",
+  "tiered:dented.label": "Ammaccato",
+  "tiered:fortified.label": "Fortificato",
+  "tiered:heavy.label": "Pesante",
+  "tiered:reinforced.label": "Rinforzato",
   "tiered:resilient.label": "Resiliente",
-  "tiered:unchained.label": "Unchained",
+  "tiered:unchained.label": "Scatenato",
 
-  "tiered:extended.label": "Extended",
+  "tiered:extended.label": "Esteso",
 
-  "tiered:lucky.label": "Lucky",
+  "tiered:lucky.label": "Fortunato",
 
-  "tiered:hasteful.label": "Hasteful",
-  "tiered:swift.label": "Swift",
+  "tiered:hasteful.label": "Frettoloso",
+  "tiered:swift.label": "Veloce",
 
   "tiered:berserk.label": "Berserk",
   "tiered:critical.label": "Critico",
-  "tiered:dull.label": "Dull",
-  "tiered:keen.label": "Keen",
+  "tiered:dull.label": "Ottuso",
+  "tiered:keen.label": "Pungente",
   "tiered:sharp.label": "Affilato"
 }
