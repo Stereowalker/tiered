@@ -1,3 +1,6 @@
+[2.1.1]
+- Swapped max health for attack damage on tools and weapons
+
 [2.1.0]
 - Added weights to make the common attribute more common and the rare attribute rarer
 
