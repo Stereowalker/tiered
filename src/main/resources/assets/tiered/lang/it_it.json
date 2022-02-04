@@ -1,0 +1,33 @@
+{
+  "generic.crit_chance": "Possibilità critico",
+
+  "tiered:common_armor.label": "Comune",
+  "tiered:rare_armor.label": "Raro",
+  "tiered:epic_armor.label": "Epico",
+  "tiered:legendary_armor.label": "Leggendario",
+
+  "tiered:common_tool.label": "Comune",
+  "tiered:rare_tool.label": "Raro",
+  "tiered:epic_tool.label": "Epico",
+  "tiered:legendary_tool.label": "Leggendario",
+
+  "tiered:dented.label": "Ammaccato",
+  "tiered:fortified.label": "Fortificato",
+  "tiered:heavy.label": "Pesante",
+  "tiered:reinforced.label": "Rinforzato",
+  "tiered:resilient.label": "Resiliente",
+  "tiered:unchained.label": "Scatenato",
+
+  "tiered:extended.label": "Esteso",
+
+  "tiered:lucky.label": "Fortunato",
+
+  "tiered:hasteful.label": "Frettoloso",
+  "tiered:swift.label": "Veloce",
+
+  "tiered:berserk.label": "Violento",
+  "tiered:critical.label": "Critico",
+  "tiered:dull.label": "Ottuso",
+  "tiered:keen.label": "Pungente",
+  "tiered:sharp.label": "Affilato"
+}
