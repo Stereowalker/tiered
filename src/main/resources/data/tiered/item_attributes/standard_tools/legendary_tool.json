@@ -27,7 +27,7 @@
       "modifier": {
         "name": "tiered:legendary_tool",
         "operation": "ADDITION",
-        "amount": 0.5
+        "amount": 0.625
       },
       "optional_equipment_slots": [
         "MAINHAND"

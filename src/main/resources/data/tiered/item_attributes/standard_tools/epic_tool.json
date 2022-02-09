@@ -27,7 +27,7 @@
       "modifier": {
         "name": "tiered:epic_tool",
         "operation": "ADDITION",
-        "amount": 0.3
+        "amount": 0.375
       },
       "optional_equipment_slots": [
         "MAINHAND"
