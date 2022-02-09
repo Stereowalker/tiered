@@ -19,19 +19,6 @@
     "color": "gray"
   },
   "attributes": [
-    {
-      "type": "generic.max_health",
-      "modifier": {
-        "name": "tiered:common_armor",
-        "operation": "ADDITION",
-        "amount": 2
-      },
-      "optional_equipment_slots": [
-        "FEET",
-        "LEGS",
-        "CHEST",
-        "HEAD"
-      ]
-    }
+	
   ]
 }

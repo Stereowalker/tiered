@@ -47,7 +47,7 @@
     {
       "type": "generic.luck",
       "modifier": {
-        "name": "tiered:legendary",
+        "name": "tiered:legendary_tool",
         "operation": "ADDITION",
         "amount": 0.5
       },
@@ -58,7 +58,7 @@
     {
       "type": "generic.armor_toughness",
       "modifier": {
-        "name": "tiered:legendary",
+        "name": "tiered:legendary_tool",
         "operation": "ADDITION",
         "amount": 2
       },
