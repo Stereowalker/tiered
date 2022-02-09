@@ -1,3 +1,7 @@
+[3.0.2]
+- Slightly raised attack damage in The Rare, Epic and Legendary Tool Tiers
+- Removed the attributes on the Common Tier
+
 [3.0.1]
 - Swapped max health for attack damage on tools and weapons
 
