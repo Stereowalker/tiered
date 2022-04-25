@@ -26,14 +26,14 @@ mixin {
     add sourceSets.main, modId+".refmap.json"
 }
 
-version = modMinecraftVersion + "-" +modVersion
+version = minecraftVersion + "-" +modVersion +"-"+modLoader
 group = modGroup // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = modFilename
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-println('Mod Name: ' + modFilename + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + modMinecraftVersion + ', Forge Version: ' + modForgeVersion)
+println('Mod Name: ' + modFilename + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + minecraftVersion + ', '+modLoader+' Version: ' + modLoaderVersion)
 
 minecraft {
     mappings channel: mappingsChannel, version: mappingsVersion
@@ -51,8 +51,6 @@ minecraft {
 			
             property 'mixin.env.remapRefMap', 'true'
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-			
-			args '--username', 'CodeHexIO', '--uuid', "$System.env.MINECRAFTUUIDSTEREOWALKER"
 
             mods {
                 modId {
@@ -104,11 +102,11 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:' + modMinecraftVersion + '-' + modForgeVersion
+	minecraft 'net.minecraftforge:forge:' + minecraftVersion + '-' + modLoaderVersion
 	annotationProcessor "org.spongepowered:mixin:"+modMixinVersion+":processor"
 	implementation "org.spongepowered:mixin:"+modMixinVersion+""
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation fg.deobf("curse.maven:unionlib-367806:"+unionLibID)
+	implementation fg.deobf("com.stereowalker.unionlib:UnionLib:"+minecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -133,7 +131,7 @@ curseforge {
 		apiKey = "$System.env.CURSEFORGEKEY"
 		changelog = file('changelog.md')
 		releaseType = 'release'
-		addGameVersion(modMinecraftVersion)
+		addGameVersion(minecraftVersion)
         addGameVersion("Forge")
 		relations {
       		requiredDependency 'unionlib'

@@ -9,8 +9,10 @@ import com.stereowalker.tiered.api.CustomEntityAttributes;
 import com.stereowalker.tiered.api.ForgeArmorTags;
 import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.data.AttributeDataLoader;
-import com.stereowalker.tiered.mixin.ServerResourceManagerMixin;
+import com.stereowalker.tiered.mixin.ReloadableServerResourcesMixin;
 import com.stereowalker.tiered.network.AttributeSyncer;
+import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.unionlib.mod.IPacketHolder;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 
 import net.minecraft.resources.ResourceLocation;
@@ -26,11 +28,11 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("tiered")
-public class Tiered extends MinecraftMod {
+public class Tiered extends MinecraftMod implements IPacketHolder {
 
     /**
      * Attribute Data Loader instance which handles loading attribute .json files from "data/modid/item_attributes".
-     * <p> This field is registered to the server's data manager in {@link ServerResourceManagerMixin}
+     * <p> This field is registered to the server's data manager in {@link ReloadableServerResourcesMixin}
      */
     public static final AttributeDataLoader ATTRIBUTE_DATA_LOADER = new AttributeDataLoader();
 
@@ -61,9 +63,9 @@ public class Tiered extends MinecraftMod {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
-		//MinecraftForge.EVENT_BUS.register(this);
+		
 	}
-
+    
 	private void setup(final FMLCommonSetupEvent event)
 	{
 		ForgeArmorTags.init();
@@ -96,4 +98,14 @@ public class Tiered extends MinecraftMod {
     public static void registerAttributeSyncer() {
         HANDLER.registerMessage(0, AttributeSyncer.class, AttributeSyncer::encode, AttributeSyncer::decode, AttributeSyncer::handlePacket);
     }
+
+	@Override
+	public void registerClientboundPackets(SimpleChannel arg0) {
+		
+	}
+
+	@Override
+	public void registerServerboundPackets(SimpleChannel arg0) {
+		
+	}
 }

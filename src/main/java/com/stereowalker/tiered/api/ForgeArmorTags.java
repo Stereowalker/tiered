@@ -1,18 +1,17 @@
 package com.stereowalker.tiered.api;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.ForgeTagHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ForgeArmorTags {
 
-    public static final Tag<Item> HELMETS = register("helmets");
-    public static final Tag<Item> CHESTPLATES = register("chestplates");
-    public static final Tag<Item> LEGGINGS = register("leggings");
-    public static final Tag<Item> BOOTS = register("boots");
-    public static final Tag<Item> SHIELDS = register("shields");
+    public static final TagKey<Item> HELMETS = register("helmets");
+    public static final TagKey<Item> CHESTPLATES = register("chestplates");
+    public static final TagKey<Item> LEGGINGS = register("leggings");
+    public static final TagKey<Item> BOOTS = register("boots");
+    public static final TagKey<Item> SHIELDS = register("shields");
 
     private ForgeArmorTags() { }
 
@@ -20,7 +19,7 @@ public class ForgeArmorTags {
 
     }
 
-    private static Tag<Item> register(String id) {
-        return ForgeTagHandler.makeWrapperTag(ForgeRegistries.ITEMS, new ResourceLocation("forge", id));
+    private static TagKey<Item> register(String id) {
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", id));
     }
 }

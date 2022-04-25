@@ -7,7 +7,7 @@
     "ItemStackMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
-    "ServerResourceManagerMixin"
+    "ReloadableServerResourcesMixin"
   ],
   "client": [
     "ItemStackClientMixin"

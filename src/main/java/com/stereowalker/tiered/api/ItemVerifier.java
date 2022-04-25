@@ -4,9 +4,9 @@ import com.stereowalker.tiered.Tiered;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemVerifier {
 
@@ -40,10 +40,10 @@ public class ItemVerifier {
         if(id != null) {
             return itemID.equals(id);
         } else if(tag != null) {
-            Tag<Item> itemTag = ItemTags.getAllTags().getTag(new ResourceLocation(tag));
+            TagKey<Item> itemTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(tag));
 
             if(itemTag != null) {
-                return itemTag.contains(Registry.ITEM.get(new ResourceLocation(itemID)));
+                return new ItemStack(Registry.ITEM.get(new ResourceLocation(itemID))).is(itemTag);
             } else {
                 Tiered.LOGGER.error(tag + " was specified as an item verifier tag, but it does not exist!");
             }
