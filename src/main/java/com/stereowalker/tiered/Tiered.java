@@ -10,10 +10,10 @@ import com.stereowalker.tiered.api.ForgeArmorTags;
 import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.mixin.ReloadableServerResourcesMixin;
-import com.stereowalker.tiered.network.AttributeSyncer;
-import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.unionlib.mod.IPacketHolder;
 import com.stereowalker.unionlib.mod.MinecraftMod;
+import com.stereowalker.unionlib.network.PacketRegistry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,7 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("tiered")
@@ -47,23 +46,18 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("tiered", "attribute_sync"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
     public static final String NBT_SUBTAG_KEY = "Tiered";
     public static final String NBT_SUBTAG_DATA_KEY = "Tier";
 
+    public static Tiered instance;
     public Tiered() 
 	{
     	super("tiered", new ResourceLocation("tiered", "textures/icon.png"), LoadType.BOTH);
+    	instance = this;
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
-		
+		new ResourceLocation("tiered", "attribute_sync");
 	}
     
 	private void setup(final FMLCommonSetupEvent event)
@@ -71,7 +65,6 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		ForgeArmorTags.init();
 		ForgeToolTags.init();
         CustomEntityAttributes.init();
-        registerAttributeSyncer();
 	}
 
 	private void clientSetup(final FMLClientSetupEvent event) {
@@ -95,13 +88,10 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 
         return slot == EquipmentSlot.MAINHAND;
     }
-    public static void registerAttributeSyncer() {
-        HANDLER.registerMessage(0, AttributeSyncer.class, AttributeSyncer::encode, AttributeSyncer::decode, AttributeSyncer::handlePacket);
-    }
 
 	@Override
 	public void registerClientboundPackets(SimpleChannel arg0) {
-		
+		PacketRegistry.registerMessage(channel, 0, ClientboundAttributeSyncerPacket.class, (packetBuffer) -> new ClientboundAttributeSyncerPacket(packetBuffer));
 	}
 
 	@Override
