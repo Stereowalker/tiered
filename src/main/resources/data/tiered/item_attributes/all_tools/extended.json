@@ -23,7 +23,7 @@
   },
   "attributes": [
     {
-      "type": "reach-entity-attributes:reach",
+      "type": "forge:reach_distance",
       "modifier": {
         "name": "tiered:extended",
         "operation": "ADDITION",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "type": "reach-entity-attributes:attack_range",
+      "type": "forge:attack_range",
       "modifier": {
         "name": "tiered:extended",
         "operation": "ADDITION",
