@@ -11,6 +11,8 @@ import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.mixin.ReloadableServerResourcesMixin;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
+import com.stereowalker.unionlib.core.registries.RegistryHolder;
+import com.stereowalker.unionlib.core.registries.RegistryObject;
 import com.stereowalker.unionlib.mod.IPacketHolder;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 import com.stereowalker.unionlib.network.PacketRegistry;
@@ -18,6 +20,8 @@ import com.stereowalker.unionlib.network.PacketRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -66,6 +70,19 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		ForgeToolTags.init();
         CustomEntityAttributes.init();
 	}
+	
+	@Override
+	public IRegistries getRegistries() {
+		return (reg) -> {
+			reg.add(ItemRegistries.class);
+		};
+	}
+	@RegistryHolder(registry = Item.class, namespace = "tiered")
+	public class ItemRegistries {
+		@RegistryObject("blacksmiths_hammer")
+		public static final Item BLACKSMITHS_HAMMER = new Item(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS));
+	}
+	
 
 	private void clientSetup(final FMLClientSetupEvent event) {
 	}

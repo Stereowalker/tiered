@@ -29,5 +29,7 @@
   "tiered:critical.label": "Critical",
   "tiered:dull.label": "Dull",
   "tiered:keen.label": "Keen",
-  "tiered:sharp.label": "Sharp"
+  "tiered:sharp.label": "Sharp",
+  
+  "item.tiered.blacksmiths_hammer": "Blacksminth Hammer"
 }
