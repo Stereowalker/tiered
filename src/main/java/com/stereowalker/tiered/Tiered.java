@@ -20,12 +20,15 @@ import com.stereowalker.unionlib.network.PacketRegistry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -79,16 +82,32 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		return (reg) -> {
 			reg.add(ItemRegistries.class);
 			MinecraftForge.EVENT_BUS.addListener(ItemRegistries::reforge);
+			MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
 		};
 	}
 	@RegistryHolder(registry = Item.class, namespace = "tiered")
 	public class ItemRegistries {
-		@RegistryObject("blacksmiths_hammer")
-		public static final Item BLACKSMITHS_HAMMER = new Item(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).defaultDurability(10));
+		@RegistryObject("armorers_hammer")
+		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).defaultDurability(10));
+		@RegistryObject("toolsmiths_hammer")
+		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).defaultDurability(10));
+		@RegistryObject("weaponsmiths_hammer")
+		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).defaultDurability(10));
+		public static void trade(VillagerTradesEvent event) {
+			if (event.getType() == VillagerProfession.ARMORER) {
+				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(ARMORERS_HAMMER, 64, 1, 1, 10));
+			}
+			if (event.getType() == VillagerProfession.TOOLSMITH) {
+				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(TOOLSMITHS_HAMMER, 64, 1, 1, 10));
+			}
+			if (event.getType() == VillagerProfession.WEAPONSMITH) {
+				event.getTrades().get(4).add(new VillagerTrades.ItemsForEmeralds(WEAPONSMITHS_HAMMER, 64, 1, 1, 10));
+			}
+		}
 		public static void reforge(AnvilUpdateEvent event) {
-			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null && event.getRight().getItem() == BLACKSMITHS_HAMMER) {
+			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
 				PotentialAttribute reforgedAttribute = ATTRIBUTE_DATA_LOADER.getItemAttributes().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
-				if ((event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
+				if (event.getRight().getItem().getRegistryName().equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 					ItemStack copy = event.getLeft().copy();
 					copy.removeTagKey(NBT_SUBTAG_KEY);
 					event.setOutput(copy);

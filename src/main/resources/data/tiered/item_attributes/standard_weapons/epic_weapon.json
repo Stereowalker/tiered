@@ -3,19 +3,10 @@
   "weight": 2,
   "reforge_experience_cost": 8,
   "reforge_durability_cost": 4,
-  "reforge_item": "tiered:toolsmiths_hammer",
+  "reforge_item": "tiered:weaponsmiths_hammer",
   "verifiers": [
     {
-      "tag": "forge:shovels"
-    },
-    {
-      "tag": "forge:pickaxes"
-    },
-    {
-      "tag": "forge:hoes"
-    },
-    {
-      "tag": "forge:axes"
+      "tag": "forge:swords"
     }
   ],
   "style": {

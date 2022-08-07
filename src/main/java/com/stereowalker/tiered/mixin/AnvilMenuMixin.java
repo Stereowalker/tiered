@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.ModifierUtils;
+import com.stereowalker.tiered.api.PotentialAttribute;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -35,24 +36,27 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
 	@Redirect(method = "onTake", at =@At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 3))
 	private void onTake_redirect(Container container, int pIndex, ItemStack pStack, Player p_150474_, ItemStack p_150475_) {
-		if (container.getItem(pIndex).getItem() == Tiered.ItemRegistries.BLACKSMITHS_HAMMER) {
-			ItemStack hammer = container.getItem(pIndex);
-			// attempt to get a random tier
-            ResourceLocation potentialAttributeID = this.reforgedAttribute;
-            int i = 0;
-            while (potentialAttributeID.equals(this.reforgedAttribute) && i < 2) {
-            	potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(p_150475_.getItem());
-            	i++;
-            }
-            // found an ID
-            if(potentialAttributeID != null) {
-            	p_150475_.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
-            }
-			
-			if ((hammer.getMaxDamage() - hammer.getDamageValue()) == 1)
-				container.setItem(pIndex, pStack);
-			else
-				hammer.setDamageValue(hammer.getDamageValue()+Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(this.reforgedAttribute).getReforgeDurabilityCost());
+		if (this.reforgedAttribute != null) {
+			PotentialAttribute potential = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(this.reforgedAttribute);
+			if (container.getItem(pIndex).getItem().getRegistryName().equals(new ResourceLocation(potential.getReforgeItem()))) {
+				ItemStack hammer = container.getItem(pIndex);
+				// attempt to get a random tier
+	            ResourceLocation potentialAttributeID = this.reforgedAttribute;
+	            int i = 0;
+	            while (potentialAttributeID.equals(this.reforgedAttribute) && i < 2) {
+	            	potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(p_150475_.getItem());
+	            	i++;
+	            }
+	            // found an ID
+	            if(potentialAttributeID != null) {
+	            	p_150475_.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+	            }
+				
+				if ((hammer.getMaxDamage() - hammer.getDamageValue()) == potential.getReforgeDurabilityCost())
+					container.setItem(pIndex, pStack);
+				else
+					hammer.setDamageValue(hammer.getDamageValue()+potential.getReforgeDurabilityCost());
+			}
 		}
 	}
 }

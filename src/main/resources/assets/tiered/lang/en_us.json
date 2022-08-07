@@ -31,5 +31,7 @@
   "tiered:keen.label": "Keen",
   "tiered:sharp.label": "Sharp",
   
-  "item.tiered.blacksmiths_hammer": "Blacksminth Hammer"
+  "item.tiered.weaponsmiths_hammer": "Weaponsmiths Hammer",
+  "item.tiered.toolsmiths_hammer": "Toolsmiths Hammer",
+  "item.tiered.armorers_hammer": "Armorers Hammer"
 }
