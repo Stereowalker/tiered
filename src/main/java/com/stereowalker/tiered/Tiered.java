@@ -26,6 +26,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -135,6 +136,10 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
         if(stack.getItem() instanceof ArmorItem) {
             ArmorItem item = (ArmorItem) stack.getItem();
             return item.getSlot().equals(slot);
+        }
+        
+        if(stack.getItem() instanceof ShieldItem) {
+            return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND;
         }
 
         return slot == EquipmentSlot.MAINHAND;
