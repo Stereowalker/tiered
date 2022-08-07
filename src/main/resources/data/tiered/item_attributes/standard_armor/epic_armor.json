@@ -1,6 +1,8 @@
 {
   "id": "tiered:epic_armor",
   "weight": 2,
+  "reforge_experience_cost": 8,
+  "reforge_durability_cost": 4,
   "verifiers": [
     {
       "tag": "forge:helmets"

@@ -9,24 +9,36 @@ public class PotentialAttribute {
 
     private final String id;
     private final int weight;
+    private final int reforge_durability_cost;
+    private final int reforge_experience_cost;
     private final List<ItemVerifier> verifiers;
     private final Style style;
     private final List<AttributeTemplate> attributes;
 
-    public PotentialAttribute(String id, int weight, List<ItemVerifier> verifiers, Style style, List<AttributeTemplate> attributes) {
+    public PotentialAttribute(String id, int weight, int reforge_durability_cost, int reforge_experience_cost, List<ItemVerifier> verifiers, Style style, List<AttributeTemplate> attributes) {
         this.id = id;
         this.weight = weight;
+        this.reforge_durability_cost = reforge_durability_cost;
+        this.reforge_experience_cost = reforge_experience_cost;
         this.verifiers = verifiers;
         this.style = style;
         this.attributes = attributes;
     }
-
+    
     public String getID() {
         return id;
     }
     
     public int getWeight() {
 		return weight;
+	}
+    
+    public int getReforgeDurabilityCost() {
+		return Math.max(reforge_durability_cost, 1);
+	}
+    
+    public int getReforgeExperienceCost() {
+		return Math.max(reforge_experience_cost, 1);
 	}
 
     public List<ItemVerifier> getVerifiers() {

@@ -1,6 +1,8 @@
 {
   "id": "tiered:legendary_armor",
   "weight": 1,
+  "reforge_experience_cost": 10,
+  "reforge_durability_cost": 5,
   "verifiers": [
     {
       "tag": "forge:helmets"
