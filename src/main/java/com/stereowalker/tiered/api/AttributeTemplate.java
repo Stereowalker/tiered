@@ -147,7 +147,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(Multimap<Attribute, AttributeModifier> multimap, String slot) {
-        realize(multimap, Tiered.CURIO_MODIFIERS.get(slot), slot);
+        realize(multimap, Tiered.CURIO_MODIFIERS.getOrDefault(slot, UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7c")), slot);
     }
 
     /**

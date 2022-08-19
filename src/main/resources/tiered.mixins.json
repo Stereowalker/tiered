@@ -8,7 +8,6 @@
     "ItemStackMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
-    "ReloadableServerResourcesMixin",
     "AnvilMenuMixin",
     "unionlib.AccessoryStackCallsMixin",
     "curios.CuriosHelperMixin"

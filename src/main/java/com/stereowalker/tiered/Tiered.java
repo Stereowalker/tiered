@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,6 @@ import com.stereowalker.tiered.api.ForgeArmorTags;
 import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.data.AttributeDataLoader;
-import com.stereowalker.tiered.mixin.ReloadableServerResourcesMixin;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
 import com.stereowalker.unionlib.core.registries.RegistryObject;
@@ -45,6 +45,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -57,10 +58,6 @@ import net.minecraftforge.network.simple.SimpleChannel;
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements IPacketHolder {
 
-	/**
-	 * Attribute Data Loader instance which handles loading attribute .json files from "data/modid/item_attributes".
-	 * <p> This field is registered to the server's data manager in {@link ReloadableServerResourcesMixin}
-	 */
 	public static final AttributeDataLoader ATTRIBUTE_DATA_LOADER = new AttributeDataLoader();
 
 	public static final UUID[] MODIFIERS = new UUID[] {
@@ -104,6 +101,7 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
+		MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>)event -> event.addListener(ATTRIBUTE_DATA_LOADER));
 		new ResourceLocation("tiered", "attribute_sync");
 	}
 
