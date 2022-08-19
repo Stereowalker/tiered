@@ -6,3 +6,7 @@
 - Fix Shield Item Attributes not working in off hand
 - Added support for Curios and UnionLib Accessories
 - Used the forge event to register reload resources
+
+[4.0.0]
+- Updated to 1.18.2
+- Properly sync attributes to the client when connecting to a server
