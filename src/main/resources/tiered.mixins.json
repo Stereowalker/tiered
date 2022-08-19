@@ -3,15 +3,20 @@
   "package": "com.stereowalker.tiered.mixin",
   "refmap": "tiered.refmap.json",
   "compatibilityLevel": "JAVA_17",
+	"plugin": "com.stereowalker.tiered.mixin.TieredMixinPlugin",
   "mixins": [
     "ItemStackMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "ReloadableServerResourcesMixin",
-    "AnvilMenuMixin"
+    "AnvilMenuMixin",
+    "unionlib.AccessoryStackCallsMixin",
+    "curios.CuriosHelperMixin"
   ],
   "client": [
-    "ItemStackClientMixin"
+    "ItemStackClientMixin",
+    "unionlib.AccessoryStackCallsClientMixin",
+    "curios.ClientEventHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

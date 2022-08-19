@@ -1,7 +1,7 @@
 package com.stereowalker.tiered.data;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,9 +12,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.stereowalker.tiered.api.PotentialAttribute;
+import com.stereowalker.tiered.gson.AccessoryGroupDeserializer;
+import com.stereowalker.tiered.gson.AccessorySlotDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierSerializer;
 import com.stereowalker.tiered.gson.EquipmentSlotDeserializer;
+import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +35,8 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierSerializer())
             .registerTypeAdapter(EquipmentSlot.class, new EquipmentSlotDeserializer())
+            .registerTypeAdapter(AccessorySlot.class, new AccessorySlotDeserializer())
+            .registerTypeAdapter(AccessorySlot.Group.class, new AccessoryGroupDeserializer())
             .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
             .create();
 
