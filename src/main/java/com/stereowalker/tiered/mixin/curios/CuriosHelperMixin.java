@@ -1,8 +1,5 @@
 package com.stereowalker.tiered.mixin.curios;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,10 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.Tiered;
-import com.stereowalker.tiered.api.PotentialAttribute;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +21,7 @@ import top.theillusivec4.curios.common.CuriosHelper;
 @Mixin(CuriosHelper.class)
 public abstract class CuriosHelperMixin implements ICuriosHelper {
 	
-    @Inject(
+    @Inject(remap = false,
             method = "getAttributeModifiers(Ltop/theillusivec4/curios/api/SlotContext;Ljava/util/UUID;Lnet/minecraft/world/item/ItemStack;)Lcom/google/common/collect/Multimap;",
             at = @At(value = "RETURN", ordinal = 1), cancellable = true
     )

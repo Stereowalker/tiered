@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 @Mixin(AccessoryStackCalls.class)
 public abstract class AccessoryStackCallsMixin {
-	@Redirect(
+	@Redirect(remap = false, 
 			method = "getAttributeModifiers",
 			at = @At(value = "INVOKE", target = "Lcom/stereowalker/unionlib/world/item/AccessoryItem;getAttributeModifiers(Lcom/stereowalker/unionlib/world/entity/AccessorySlot;Lnet/minecraft/world/item/ItemStack;)Lcom/google/common/collect/Multimap;")
 			)
@@ -27,7 +27,7 @@ public abstract class AccessoryStackCallsMixin {
 				(template, newMap) -> template.realize(newMap, slot));
 	}
 
-	@Redirect(
+	@Redirect(remap = false, 
 			method = "getAttributeModifiersForGroup",
 			at = @At(value = "INVOKE", target = "Lcom/stereowalker/unionlib/world/item/AccessoryItem;getAttributeModifiers(Lcom/stereowalker/unionlib/world/entity/AccessorySlot$Group;Lnet/minecraft/world/item/ItemStack;)Lcom/google/common/collect/Multimap;")
 			)
