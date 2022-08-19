@@ -42,3 +42,10 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
     versionRange="[7.2.0, 7.3.0)"
     ordering="NONE"
     side="BOTH"
+    
+[[dependencies.tiered]]
+    modId="curios"
+    mandatory=false
+    versionRange="[5.0.7.1,)"
+    ordering="NONE"
+    side="BOTH"

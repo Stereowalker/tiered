@@ -37,7 +37,7 @@ public abstract class ClientEventHandlerMixin {
     private static boolean isTiered = false;
 
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "onTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
-    private void storeAttributeModifier(ItemTooltipEvent evt, CallbackInfo ci, ItemStack stack, Player player, List tooltip, CompoundTag tag, int i, Set curioTags, List slots, List tagTooltips, MutableComponent slotsTooltip, LazyOptional optionalCurio, List attributeTooltip, Iterator var13, String identifier, Multimap multimap, Iterator var16, Map.Entry entry, AttributeModifier attributemodifier) {
+    private void storeAttributeModifier(ItemTooltipEvent evt, CallbackInfo ci, ItemStack stack, Player player, List tooltip, CompoundTag tag, int i, Set curioTags, List slots, List tagTooltips, MutableComponent slotsTooltip, LazyOptional optionalCurio, List attributeTooltip, Iterator var13, String identifier, Multimap multimap, boolean init, Iterator var17, Map.Entry entry, AttributeModifier attributemodifier) {
         isTiered = attributemodifier.getName().contains("tiered:");
     }
 
