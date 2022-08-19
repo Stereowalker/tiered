@@ -36,12 +36,12 @@ public abstract class ClientEventHandlerMixin {
 
     private static boolean isTiered = false;
 
-    @Inject(remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "onTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "onTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
     private void storeAttributeModifier(ItemTooltipEvent evt, CallbackInfo ci, ItemStack stack, Player player, List tooltip, CompoundTag tag, int i, Set curioTags, List slots, List tagTooltips, MutableComponent slotsTooltip, LazyOptional optionalCurio, List attributeTooltip, Iterator var13, String identifier, Multimap multimap, Iterator var16, Map.Entry entry, AttributeModifier attributemodifier) {
         isTiered = attributemodifier.getName().contains("tiered:");
     }
 
-    @Redirect(remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/TranslatableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 3), method = "onTooltip")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/TranslatableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 3), method = "onTooltip")
     private MutableComponent getTextFormatting(TranslatableComponent translatableText, ChatFormatting formatting, ItemTooltipEvent evt) {
         if(evt.getItemStack().hasTag() && evt.getItemStack().getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(evt.getItemStack().getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));

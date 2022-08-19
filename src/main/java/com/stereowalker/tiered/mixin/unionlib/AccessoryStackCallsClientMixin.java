@@ -34,12 +34,12 @@ import net.minecraft.world.item.ItemStack;
 public abstract class AccessoryStackCallsClientMixin {
 
     private static boolean isTiered = false;
-    @Inject(remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "gatherAttributes", locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "gatherAttributes", locals = LocalCapture.CAPTURE_FAILHARD)
     private static void storeAttributeModifier(ItemStack arg0, Player arg1, Multimap multimap, List list, String name, CallbackInfo ci, Iterator var5, Map.Entry entry, AttributeModifier attributemodifier) {
         isTiered = attributemodifier.getName().contains("tiered:");
     }
 
-    @Redirect(remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/TranslatableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "gatherAttributes")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/TranslatableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "gatherAttributes")
     private static MutableComponent getTextFormatting(TranslatableComponent translatableText, ChatFormatting formatting, ItemStack stack, @Nullable Player pPlayer, Multimap<Attribute, AttributeModifier> multimap, List<Component> list, String name) {
         if(stack.hasTag() && stack.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
