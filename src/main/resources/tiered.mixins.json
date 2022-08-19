@@ -6,7 +6,6 @@
 	"plugin": "com.stereowalker.tiered.mixin.TieredMixinPlugin",
   "mixins": [
     "ItemStackMixin",
-    "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
     "AnvilMenuMixin",
     "unionlib.AccessoryStackCallsMixin",

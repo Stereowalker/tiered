@@ -16,7 +16,6 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.api.AttributeTemplate;
-import com.stereowalker.tiered.api.CustomEntityAttributes;
 import com.stereowalker.tiered.api.ForgeArmorTags;
 import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.api.PotentialAttribute;
@@ -109,7 +108,6 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 	{
 		ForgeArmorTags.init();
 		ForgeToolTags.init();
-		CustomEntityAttributes.init();
 	}
 
 	@Override

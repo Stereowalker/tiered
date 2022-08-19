@@ -28,10 +28,10 @@
       ]
     },
     {
-      "type": "tiered:generic.crit_chance",
+      "type": "unionlib:generic.critical_rate",
       "modifier": {
         "name": "tiered:critical",
-        "operation": "MULTIPLY_TOTAL",
+        "operation": "ADDITION",
         "amount": 0.25
       },
       "optional_equipment_slots": [
