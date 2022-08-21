@@ -1,8 +1,4 @@
-[4.1.0]
-- Added Weaponmiths, Toolsmiths and Armorers Hammers which are sold by their respective villagers
-- Fixed the "Extended" Item Attribute not working
-- Fixed the "Berserk" Item Attribute not working
-- Item Attributes can be changed in an anvil if used with their respective hammer and has full durability
-- Fix Shield Item Attributes not working in off hand
-- Added support for Curios and UnionLib Accessories
-- Used the forge event to register reload resources
+[4.1.1]
+- Fix inability to run outside of Dev environments
+- Updated the mod to work with the latest version of Curios
+- Used the Critical Rate Attribute in UnionLib instead of Crit Chance

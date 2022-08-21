@@ -1,3 +1,8 @@
+[4.1.1]
+- Fix inability to run outside of Dev environments
+- Updated the mod to work with the latest version of Curios
+- Used the Critical Rate Attribute in UnionLib instead of Crit Chance
+
 [4.1.0]
 - Added Weaponmiths, Toolsmiths and Armorers Hammers which are sold by their respective villagers
 - Fixed the "Extended" Item Attribute not working
