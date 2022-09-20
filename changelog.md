@@ -1,4 +1,3 @@
-[4.1.1]
-- Fix inability to run outside of Dev environments
-- Updated the mod to work with the latest version of Curios
-- Used the Critical Rate Attribute in UnionLib instead of Crit Chance
+[4.1.2]
+- Hopefully prevented items missing reforging info from crashing when reforging them
+- Fix item duplication on the right side of the anvil when a reforge is not being performed
