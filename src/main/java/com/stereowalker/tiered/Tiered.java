@@ -137,11 +137,15 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		public static void reforge(AnvilUpdateEvent event) {
 			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
 				PotentialAttribute reforgedAttribute = ATTRIBUTE_DATA_LOADER.getItemAttributes().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
-				if (event.getRight().getItem().getRegistryName().equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
-					ItemStack copy = event.getLeft().copy();
-					copy.removeTagKey(NBT_SUBTAG_KEY);
-					event.setOutput(copy);
-					event.setCost(reforgedAttribute.getReforgeExperienceCost());
+				if (reforgedAttribute.getReforgeItem() != null) {
+					if (event.getRight().getItem().getRegistryName().equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
+						ItemStack copy = event.getLeft().copy();
+						copy.removeTagKey(NBT_SUBTAG_KEY);
+						event.setOutput(copy);
+						event.setCost(reforgedAttribute.getReforgeExperienceCost());
+					}
+				} else {
+					LOGGER.info(reforgedAttribute.getID()+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
 				}
 			}
 		}
