@@ -34,29 +34,36 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 		}
 	}
 
+	/**
+	 * This prevents the hammer from being deleted when a reforge is taking place
+	 */
 	@Redirect(method = "onTake", at =@At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 3))
 	private void onTake_redirect(Container container, int pIndex, ItemStack pStack, Player p_150474_, ItemStack p_150475_) {
+		boolean deleteItem = true;
 		if (this.reforgedAttribute != null) {
 			PotentialAttribute potential = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(this.reforgedAttribute);
 			if (container.getItem(pIndex).getItem().getRegistryName().equals(new ResourceLocation(potential.getReforgeItem()))) {
+				deleteItem = false;
 				ItemStack hammer = container.getItem(pIndex);
 				// attempt to get a random tier
-	            ResourceLocation potentialAttributeID = this.reforgedAttribute;
-	            int i = 0;
-	            while (potentialAttributeID.equals(this.reforgedAttribute) && i < 2) {
-	            	potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(p_150475_.getItem());
-	            	i++;
-	            }
-	            // found an ID
-	            if(potentialAttributeID != null) {
-	            	p_150475_.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
-	            }
-				
+				ResourceLocation potentialAttributeID = this.reforgedAttribute;
+				int i = 0;
+				while (potentialAttributeID.equals(this.reforgedAttribute) && i < 2) {
+					potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(p_150475_.getItem());
+					i++;
+				}
+				// found an ID
+				if(potentialAttributeID != null) {
+					p_150475_.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+				}
+
 				if ((hammer.getMaxDamage() - hammer.getDamageValue()) == potential.getReforgeDurabilityCost())
-					container.setItem(pIndex, pStack);
+					deleteItem = true;
 				else
 					hammer.setDamageValue(hammer.getDamageValue()+potential.getReforgeDurabilityCost());
 			}
 		}
+		if (deleteItem)
+			container.setItem(pIndex, pStack);
 	}
 }
