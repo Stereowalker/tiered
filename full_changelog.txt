@@ -1,21 +1,2 @@
-[4.1.2]
-- Hopefully prevented items missing reforging info from crashing when reforging them
-- Fix item duplication on the right side of the anvil when a reforge is not being performed
-
-[4.1.1]
-- Fix inability to run outside of Dev environments
-- Updated the mod to work with the latest version of Curios
-- Used the Critical Rate Attribute in UnionLib instead of Crit Chance
-
-[4.1.0]
-- Added Weaponmiths, Toolsmiths and Armorers Hammers which are sold by their respective villagers
-- Fixed the "Extended" Item Attribute not working
-- Fixed the "Berserk" Item Attribute not working
-- Item Attributes can be changed in an anvil if used with their respective hammer and has full durability
-- Fix Shield Item Attributes not working in off hand
-- Added support for Curios and UnionLib Accessories
-- Used the forge event to register reload resources
-
-[4.0.0]
-- Updated to 1.18.2
-- Properly sync attributes to the client when connecting to a server
+[5.0.0]
+- Ported to 1.19.3
