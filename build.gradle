@@ -1,19 +1,10 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-		maven { url = 'https://repo.spongepowered.org/maven' }
-        jcenter()
-        mavenCentral()
-    }
-	
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-		classpath 'org.parchmentmc:librarian:1.+'
-		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
 plugins {
-  id "com.matthewprenger.cursegradle" version "1.4.0"
+  	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -108,8 +99,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation fg.deobf("com.stereowalker.unionlib:UnionLib:"+modMinecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
 	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+":api")
-	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+"")
-	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+"")
+	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+"")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -145,6 +135,8 @@ curseforge {
 	}		
 }
 
+jar.finalizedBy('reobfJar')
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -156,6 +148,10 @@ publishing {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
 artifacts {

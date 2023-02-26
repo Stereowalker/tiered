@@ -1,7 +1,7 @@
 
 modLoader="javafml"
-loaderVersion="[39,)"
-license="CC0-1.0"
+loaderVersion="[44,)"
+license="All Rights Reserved"
 issueTrackerURL="https://github.com/Stereowalker/tiered/issues"
 logoFile="icon.png"
 [[mods]]
@@ -23,7 +23,7 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[39,)" #mandatory
+    versionRange="[44,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -32,20 +32,20 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.1,1.19)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[7.2.0, 7.3.0)"
+    versionRange="[8.0.5, 8.1.0)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.tiered]]
     modId="curios"
     mandatory=false
-    versionRange="[1.18.2-5.0.7.1,)"
+    versionRange="[1.19.3-5.1.3.1,)"
     ordering="NONE"
     side="BOTH"
