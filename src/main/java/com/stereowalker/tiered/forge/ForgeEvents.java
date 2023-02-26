@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeEvents {
     @SubscribeEvent
     public static void onPlayerLoggedIn(final PlayerEvent.PlayerLoggedInEvent par0){
-        if(par0.getPlayer().level.isClientSide) return;
-        new ClientboundAttributeSyncerPacket(ATTRIBUTE_DATA_LOADER.getItemAttributes()).send(((ServerPlayer)par0.getPlayer()));
+        if(par0.getEntity().level.isClientSide) return;
+        new ClientboundAttributeSyncerPacket(ATTRIBUTE_DATA_LOADER.getItemAttributes()).send(((ServerPlayer)par0.getEntity()));
     }
 }

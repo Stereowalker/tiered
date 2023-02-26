@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -165,7 +165,7 @@ public class AttributeTemplate {
                 attributeModifier.getOperation()
         );
 
-        Attribute key = Registry.ATTRIBUTE.get(new ResourceLocation(attributeTypeID));
+        Attribute key = BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(attributeTypeID));
         if(key == null) {
             Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {
