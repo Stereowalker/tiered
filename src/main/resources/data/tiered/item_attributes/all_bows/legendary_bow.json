@@ -1,0 +1,61 @@
+{
+  "id": "tiered:legendary_bow",
+  "weight": 1,
+  "reforge_experience_cost": 10,
+  "reforge_durability_cost": 5,
+  "reforge_item": "tiered:toolsmiths_hammer",
+  "verifiers": [
+    {
+      "tag": "forge:bows"
+    }
+  ],
+  "style": {
+    "color": "gold"
+  },
+  "attributes": [
+    {
+      "type": "unionlib:generic.draw_speed",
+      "modifier": {
+        "name": "tiered:legendary_bow",
+        "operation": "ADDITION",
+        "amount": 1.0
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "unionlib:generic.accuracy",
+      "modifier": {
+        "name": "tiered:legendary_bow",
+        "operation": "ADDITION",
+        "amount": 0.25
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "unionlib:generic.arrow_damage",
+      "modifier": {
+        "name": "tiered:legendary_bow",
+        "operation": "ADDITION",
+        "amount": 1.0
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "unionlib:generic.arrow_velocity",
+      "modifier": {
+        "name": "tiered:legendary_bow",
+        "operation": "ADDITION",
+        "amount": 1.0
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    }
+  ]
+}

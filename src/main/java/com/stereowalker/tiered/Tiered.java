@@ -21,6 +21,7 @@ import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
+import com.stereowalker.unionlib.UnionLib;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
 import com.stereowalker.unionlib.core.registries.RegistryObject;
 import com.stereowalker.unionlib.mod.IPacketHolder;
@@ -99,6 +100,7 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 	public Tiered() 
 	{
 		super("tiered", new ResourceLocation("tiered", "textures/icon.png"), LoadType.BOTH);
+		UnionLib.Modules.applyDefaultDrawSpeedToBows();
 		instance = this;
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);

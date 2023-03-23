@@ -10,6 +10,17 @@
   "tiered:rare_tool.label": "Rare",
   "tiered:epic_tool.label": "Epic",
   "tiered:legendary_tool.label": "Legendary",
+  
+  "tiered:common_bow.label": "Common",
+  "tiered:rare_bow.label": "Rare",
+  "tiered:epic_bow.label": "Epic",
+  "tiered:legendary_bow.label": "Legendary",
+  
+  "tiered:clumsy.label": "Clumsy",
+  "tiered:elastic.label": "Elastic",
+  "tiered:light.label": "Light",
+  "tiered:stiff.label": "Stiff",
+  "tiered:stretched.label": "Stretched",
 
   "tiered:dented.label": "Dented",
   "tiered:fortified.label": "Fortified",

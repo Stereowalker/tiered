@@ -1,0 +1,39 @@
+{
+  "id": "tiered:clumsy",
+  "weight": 3,
+  "reforge_experience_cost": 2,
+  "reforge_durability_cost": 2,
+  "reforge_item": "tiered:toolsmiths_hammer",
+  "verifiers": [
+    {
+      "tag": "forge:bows"
+    }
+  ],
+  "style": {
+    "color": "yellow"
+  },
+  "attributes": [
+    {
+      "type": "unionlib:generic.arrow_damage",
+      "modifier": {
+        "name": "tiered:clumsy",
+        "operation": "ADDITION",
+        "amount": -0.3
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "unionlib:generic.accuracy",
+      "modifier": {
+        "name": "tiered:clumsy",
+        "operation": "ADDITION",
+        "amount": -0.2
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    }
+  ]
+}

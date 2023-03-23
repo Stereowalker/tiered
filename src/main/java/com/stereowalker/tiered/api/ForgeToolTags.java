@@ -12,6 +12,7 @@ public class ForgeToolTags {
     public static final TagKey<Item> HOE = register("hoes");
     public static final TagKey<Item> SHOVEL = register("shovels");
     public static final TagKey<Item> PICKAXE = register("pickaxes");
+    public static final TagKey<Item> BOWS = register("bows");
 
     private ForgeToolTags() { }
 
