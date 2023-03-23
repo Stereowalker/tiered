@@ -1,36 +1,15 @@
 package com.stereowalker.tiered.forge;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import static com.stereowalker.tiered.Tiered.ATTRIBUTE_DATA_LOADER;
 
-@EventBusSubscriber(value = Dist.CLIENT)
+import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
+
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+
 public class Events {
-
-
-    /**
-     * Creates an {@link ItemTooltipCallback} listener that adds the modifier name at the top of an Item tooltip.
-     * <p>A tool name is only displayed if the item has a modifier.
-     */
-    @SubscribeEvent
-    public static void setupModifierLabel(ItemTooltipEvent event) {
-//    	ItemStack stack = event.getItemStack();
-////    	tooltipContext, 
-//    	List<ITextComponent> lines = event.getToolTip();
-////        ItemTooltipCallback.EVENT.register((stack, tooltipContext, lines) -> {
-//            // has tier
-//            if(stack.getChildTag(Tiered.NBT_SUBTAG_KEY) != null) {
-//                // get tier
-//                ResourceLocation tier = new ResourceLocation(stack.getOrCreateChildTag(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-//
-//                // attempt to display attribute if it is valid
-//                PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
-//
-//                if(potentialAttribute != null) {
-//                    lines.add(1, new TranslationTextComponent(potentialAttribute.getID() + ".label").setStyle(potentialAttribute.getStyle()));
-//                }
-//            }
-////        });
+	public static void onPlayerLoggedIn(Player player){
+        if(player.level.isClientSide) return;
+        new ClientboundAttributeSyncerPacket(ATTRIBUTE_DATA_LOADER.getItemAttributes()).send(((ServerPlayer)player));
     }
 }

@@ -20,10 +20,13 @@ import com.stereowalker.tiered.api.ForgeArmorTags;
 import com.stereowalker.tiered.api.ForgeToolTags;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.data.AttributeDataLoader;
+import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
 import com.stereowalker.unionlib.core.registries.RegistryObject;
+import com.stereowalker.unionlib.insert.InsertSystem.InsertCollector;
+import com.stereowalker.unionlib.insert.Inserts;
 import com.stereowalker.unionlib.mod.IPacketHolder;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 import com.stereowalker.unionlib.network.PacketRegistry;
@@ -31,7 +34,6 @@ import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
 
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +44,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -107,6 +108,11 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 		modEventBus.addListener(this::clientSetup);
 		MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>)event -> event.addListener(ATTRIBUTE_DATA_LOADER));
 		new ResourceLocation("tiered", "attribute_sync");
+	}
+	
+	@Override
+	public void registerInserts(InsertCollector collector) {
+		collector.getSystem().addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
 	}
 
 	private void setup(final FMLCommonSetupEvent event)
