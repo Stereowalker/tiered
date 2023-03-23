@@ -1,2 +1,8 @@
+[5.0.1]
+- Fixed tiered attribute tooltips not maintaining their color
+- Used the latest version of UnionLib
+- Added Tiers for Bows
+- Moved some events to UnionLib event system
+
 [5.0.0]
 - Ported to 1.19.3
