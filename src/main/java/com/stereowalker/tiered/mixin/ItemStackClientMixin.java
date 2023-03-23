@@ -46,7 +46,7 @@ public abstract class ItemStackClientMixin {
         isTiered = entityAttributeModifier.getName().contains("tiered:");
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 2), method = "getTooltipLines")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 5), method = "getTooltipLines")
     private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting) {
         if(this.hasTag() && this.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(this.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
