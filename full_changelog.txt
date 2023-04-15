@@ -1,3 +1,6 @@
+[5.0.2]
+- Used newest version of UnionLib
+
 [5.0.1]
 - Fixed tiered attribute tooltips not maintaining their color
 - Used the latest version of UnionLib
