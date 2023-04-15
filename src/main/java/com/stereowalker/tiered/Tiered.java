@@ -23,13 +23,15 @@ import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.unionlib.api.collectors.InsertCollector;
+import com.stereowalker.unionlib.api.collectors.PacketCollector;
+import com.stereowalker.unionlib.api.creativetabs.CreativeTabPopulator;
+import com.stereowalker.unionlib.api.registries.RegistryCollector;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
 import com.stereowalker.unionlib.core.registries.RegistryObject;
-import com.stereowalker.unionlib.insert.InsertSystem.InsertCollector;
 import com.stereowalker.unionlib.insert.Inserts;
-import com.stereowalker.unionlib.mod.IPacketHolder;
 import com.stereowalker.unionlib.mod.MinecraftMod;
-import com.stereowalker.unionlib.network.PacketRegistry;
+import com.stereowalker.unionlib.mod.PacketHolder;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
 
@@ -57,10 +59,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("tiered")
-public class Tiered extends MinecraftMod implements IPacketHolder {
+public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final AttributeDataLoader ATTRIBUTE_DATA_LOADER = new AttributeDataLoader();
 
@@ -112,7 +113,7 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 	
 	@Override
 	public void registerInserts(InsertCollector collector) {
-		collector.getSystem().addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
+		collector.addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
 	}
 
 	private void setup(final FMLCommonSetupEvent event)
@@ -122,20 +123,18 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 	}
 
 	@Override
-	public IRegistries getRegistries() {
-		return (reg) -> {
-			reg.add(ItemRegistries.class);
-			MinecraftForge.EVENT_BUS.addListener(ItemRegistries::reforge);
-			MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
-		};
+	public void setupRegistries(RegistryCollector collector) {
+		collector.addRegistryHolder(ItemRegistries.class);
+		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::reforge);
+		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
 	
 	@Override
 	public void populateCreativeTabs(CreativeTabPopulator populator) {
 		if (populator.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-			populator.getOutput().accept(ItemRegistries.ARMORERS_HAMMER);
-			populator.getOutput().accept(ItemRegistries.TOOLSMITHS_HAMMER);
-			populator.getOutput().accept(ItemRegistries.WEAPONSMITHS_HAMMER);
+			populator.addItems(ItemRegistries.ARMORERS_HAMMER);
+			populator.addItems(ItemRegistries.TOOLSMITHS_HAMMER);
+			populator.addItems(ItemRegistries.WEAPONSMITHS_HAMMER);
 		}
 	}
 	
@@ -222,12 +221,12 @@ public class Tiered extends MinecraftMod implements IPacketHolder {
 	}
 
 	@Override
-	public void registerClientboundPackets(SimpleChannel arg0) {
-		PacketRegistry.registerMessage(channel, 0, ClientboundAttributeSyncerPacket.class, (packetBuffer) -> new ClientboundAttributeSyncerPacket(packetBuffer));
+	public void registerClientboundPackets(PacketCollector collector) {
+		collector.registerPacket(ClientboundAttributeSyncerPacket.class, (packetBuffer) -> new ClientboundAttributeSyncerPacket(packetBuffer));
 	}
 
 	@Override
-	public void registerServerboundPackets(SimpleChannel arg0) {
+	public void registerServerboundPackets(PacketCollector collector) {
 
 	}
 

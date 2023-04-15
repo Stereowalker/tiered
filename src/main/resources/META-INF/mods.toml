@@ -1,7 +1,7 @@
 
 modLoader="javafml"
 loaderVersion="[44,)"
-license="All Rights Reserved"
+license="MIT"
 issueTrackerURL="https://github.com/Stereowalker/tiered/issues"
 logoFile="icon.png"
 [[mods]]
@@ -39,7 +39,7 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[8.0.9, 8.1.0)"
+    versionRange="[9.0.0, 9.1.0)"
     ordering="NONE"
     side="BOTH"
     
