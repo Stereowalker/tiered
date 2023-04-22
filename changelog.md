@@ -1,1 +1,2 @@
-- Used newest version of UnionLib
+- Use UnionLib registry helper to get registries to maintain version compatibility
+- Disabled the curios integration due to the event missing in 1.19.3
