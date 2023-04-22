@@ -8,8 +8,7 @@
     "ItemStackMixin",
     "ServerPlayerEntityMixin",
     "AnvilMenuMixin",
-    "unionlib.AccessoryStackCallsMixin",
-    "curios.CuriosHelperMixin"
+    "unionlib.AccessoryStackCallsMixin"
   ],
   "client": [
     "ItemStackClientMixin",

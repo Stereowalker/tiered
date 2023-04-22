@@ -1,6 +1,7 @@
 package com.stereowalker.tiered.api;
 
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
@@ -114,7 +115,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(Multimap<Attribute, AttributeModifier> multimap, EquipmentSlot slot) {
-        realize(multimap, Tiered.MODIFIERS[slot.getFilterFlag()], slot.getName());
+        realize(multimap::put, Tiered.MODIFIERS[slot.getFilterFlag()], slot.getName());
     }
 
     /**
@@ -125,7 +126,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(Multimap<Attribute, AttributeModifier> multimap, AccessorySlot slot) {
-        realize(multimap, Tiered.MODIFIERS[slot.getIndex()+6], slot.getName());
+        realize(multimap::put, Tiered.MODIFIERS[slot.getIndex()+6], slot.getName());
     }
 
     /**
@@ -136,7 +137,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(Multimap<Attribute, AttributeModifier> multimap, AccessorySlot.Group slot) {
-        realize(multimap, Tiered.MODIFIERS[slot.ordinal()+15], slot.getName());
+        realize(multimap::put, Tiered.MODIFIERS[slot.ordinal()+15], slot.getName());
     }
 
     /**
@@ -146,7 +147,7 @@ public class AttributeTemplate {
      * @param multimap  map to add {@link AttributeTemplate}
      * @param slot
      */
-    public void realize(Multimap<Attribute, AttributeModifier> multimap, String slot) {
+    public void realize(BiConsumer<Attribute, AttributeModifier> multimap, String slot) {
         realize(multimap, Tiered.CURIO_MODIFIERS.getOrDefault(slot, UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7c")), slot);
     }
 
@@ -157,7 +158,7 @@ public class AttributeTemplate {
      * @param multimap  map to add {@link AttributeTemplate}
      * @param slot
      */
-    private void realize(Multimap<Attribute, AttributeModifier> multimap, UUID id, String name) {
+    private void realize(BiConsumer<Attribute, AttributeModifier> multimap, UUID id, String name) {
         AttributeModifier cloneModifier = new AttributeModifier(
                 id,
                 attributeModifier.getName() + "_" + name,
@@ -169,7 +170,7 @@ public class AttributeTemplate {
         if(key == null) {
             Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {
-            multimap.put(key, cloneModifier);
+            multimap.accept(key, cloneModifier);
         }
     }
 }

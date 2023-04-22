@@ -32,6 +32,7 @@ import com.stereowalker.unionlib.core.registries.RegistryObject;
 import com.stereowalker.unionlib.insert.Inserts;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 import com.stereowalker.unionlib.mod.PacketHolder;
+import com.stereowalker.unionlib.util.ModHelper;
 import com.stereowalker.unionlib.util.RegistryHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
@@ -55,10 +56,15 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
+//import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -109,8 +115,17 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		modEventBus.addListener(this::clientSetup);
 		MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>)event -> event.addListener(ATTRIBUTE_DATA_LOADER));
 		new ResourceLocation("tiered", "attribute_sync");
+
+		if (ModHelper.isCuriosLoaded()) {
+//			MinecraftForge.EVENT_BUS.addListener((Consumer<CurioAttributeModifierEvent>)event -> {
+//				Tiered.AppendAttributesToOriginal(event.getItemStack(), event.getSlotContext().identifier(), Tiered.isPreferredCurioSlot(event.getItemStack(), event.getSlotContext().identifier()), "CurioAttributeModifiers", event.getModifiers(),
+//						template -> template.getRequiredCurioSlot(), 
+//						template -> template.getOptionalCurioSlot(), 
+//						(template, newMap) -> template.realize(event::addModifier, event.getSlotContext().identifier()));
+//			});
+		} 
 	}
-	
+
 	@Override
 	public void registerInserts(InsertCollector collector) {
 		collector.addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
@@ -128,7 +143,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::reforge);
 		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
-	
+
 	@Override
 	public void populateCreativeTabs(CreativeTabPopulator populator) {
 		if (populator.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
@@ -137,7 +152,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			populator.addItems(ItemRegistries.WEAPONSMITHS_HAMMER);
 		}
 	}
-	
+
 	@RegistryHolder(registry = Item.class, namespace = "tiered")
 	public class ItemRegistries {
 		@RegistryObject("armorers_hammer")
