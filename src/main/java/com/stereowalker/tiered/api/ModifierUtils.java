@@ -7,8 +7,8 @@ import java.util.Random;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.stereowalker.tiered.Tiered;
+import com.stereowalker.unionlib.util.RegistryHelper;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -29,7 +29,7 @@ public class ModifierUtils {
 		MutableInt totalWeight = new MutableInt();
 		// collect all valid attributes for the given item
 		Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
-			if(attribute.isValid(BuiltInRegistries.ITEM.getKey(item))) {
+			if(attribute.isValid(RegistryHelper.items().getKey(item))) {
 //				System.out.println("Adding Weights "+id+" "+attribute.getWeight()+" ("+totalWeight.getValue());
 				potentialAttributes.add(new ResourceLocation(attribute.getID()));
 				//Implementation of weighted system
@@ -43,7 +43,7 @@ public class ModifierUtils {
 			MutableInt randomAttribute = new MutableInt(new Random().nextInt(totalWeight.getValue())+1);
 			MutableInt i = new MutableInt();
 			Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
-				if(attribute.isValid(BuiltInRegistries.ITEM.getKey(item))) {
+				if(attribute.isValid(RegistryHelper.items().getKey(item))) {
 //					System.out.println("Checking Weights "+id+" "+attribute.getWeight()+" ("+i.getValue()+">"+totalWeight.getValue()+")");
 					i.add(attribute.getWeight());
 					if (i.getValue() >= randomAttribute.getValue()) {
