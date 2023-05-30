@@ -17,6 +17,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.api.AttributeTemplate;
 import com.stereowalker.tiered.api.ForgeTags;
+import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.AttributeDataLoader;
@@ -120,6 +121,9 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	@Override
 	public void registerInserts(InsertCollector collector) {
 		collector.addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
+		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
+			menu.getItems().forEach(Tiered::attemptToAffixTier);
+		});
 	}
 
 	private void setup(final FMLCommonSetupEvent event)
@@ -181,6 +185,15 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 
 	private void clientSetup(final FMLClientSetupEvent event) {
+	}
+	
+	public static void attemptToAffixTier(ItemStack stack) {
+		if(stack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null) {
+            ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(stack.getItem());
+            if(potentialAttributeID != null) {
+            	stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+            }
+        }
 	}
 
 	/**

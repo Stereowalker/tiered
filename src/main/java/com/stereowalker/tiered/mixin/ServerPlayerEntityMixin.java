@@ -8,11 +8,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
 import com.stereowalker.tiered.Tiered;
-import com.stereowalker.tiered.api.ModifierUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,13 +30,13 @@ public abstract class ServerPlayerEntityMixin extends Player {
         // if items copy is null, set it to player inventory and check each stack
         if(mainCopy == null) {
             mainCopy = copyDefaultedList(inventory.items);
-            runCheck();
+            inventory.items.forEach(Tiered::attemptToAffixTier);
         }
 
         // if items copy =/= inventory, run check and set mainCopy to inventory
         if (!inventory.items.equals(mainCopy)) {
             mainCopy = copyDefaultedList(inventory.items);
-            runCheck();
+            inventory.items.forEach(Tiered::attemptToAffixTier);
         }
     }
 
@@ -51,21 +49,5 @@ public abstract class ServerPlayerEntityMixin extends Player {
         }
 
         return newList;
-    }
-
-    @Unique
-    private void runCheck() {
-        inventory.items.forEach(itemStack -> {
-            // no tier on item
-            if(itemStack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null) {
-                // attempt to get a random tier
-                ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(itemStack.getItem());
-
-                // found an ID
-                if(potentialAttributeID != null) {
-                    itemStack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
-                }
-            }
-        });
     }
 }
