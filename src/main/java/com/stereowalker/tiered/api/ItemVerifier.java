@@ -4,7 +4,6 @@ import com.stereowalker.tiered.Tiered;
 import com.stereowalker.unionlib.util.RegistryHelper;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -42,7 +41,7 @@ public class ItemVerifier {
         if(id != null) {
             return itemID.equals(id);
         } else if(tag != null) {
-            TagKey<Item> itemTag = TagKey.create(Registries.ITEM, new ResourceLocation(tag));
+            TagKey<Item> itemTag = TagKey.create(RegistryHelper.itemKey(), new ResourceLocation(tag));
 
             if(itemTag != null) {
                 return new ItemStack(RegistryHelper.items().get(new ResourceLocation(itemID))).is(itemTag);

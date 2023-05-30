@@ -2,10 +2,12 @@ package com.stereowalker.tiered.api;
 
 import java.util.List;
 
+import com.stereowalker.unionlib.util.GeneralUtilities.WeightedObject;
+
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
-public class PotentialAttribute {
+public class PotentialAttribute implements WeightedObject {
 
     private final String id;
     private final int weight;

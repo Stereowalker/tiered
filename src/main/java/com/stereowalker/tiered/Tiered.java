@@ -16,9 +16,9 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.api.AttributeTemplate;
-import com.stereowalker.tiered.api.ForgeArmorTags;
-import com.stereowalker.tiered.api.ForgeToolTags;
+import com.stereowalker.tiered.api.ForgeTags;
 import com.stereowalker.tiered.api.PotentialAttribute;
+import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
@@ -38,7 +38,6 @@ import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
 
 import net.minecraft.Util;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -56,14 +55,10 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
-//import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -107,22 +102,19 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public Tiered() 
 	{
 		super("tiered", new ResourceLocation("tiered", "textures/icon.png"), LoadType.BOTH);
-		UnionLib.Modules.applyDefaultDrawSpeedToBows();
+		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 		instance = this;
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
 		MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>)event -> event.addListener(ATTRIBUTE_DATA_LOADER));
 		new ResourceLocation("tiered", "attribute_sync");
+ 
+	}
+	
+	@Override
+	public void onModStartup() {
 
-		if (ModHelper.isCuriosLoaded()) {
-//			MinecraftForge.EVENT_BUS.addListener((Consumer<CurioAttributeModifierEvent>)event -> {
-//				Tiered.AppendAttributesToOriginal(event.getItemStack(), event.getSlotContext().identifier(), Tiered.isPreferredCurioSlot(event.getItemStack(), event.getSlotContext().identifier()), "CurioAttributeModifiers", event.getModifiers(),
-//						template -> template.getRequiredCurioSlot(), 
-//						template -> template.getOptionalCurioSlot(), 
-//						(template, newMap) -> template.realize(event::addModifier, event.getSlotContext().identifier()));
-//			});
-		} 
 	}
 
 	@Override
@@ -132,8 +124,10 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	private void setup(final FMLCommonSetupEvent event)
 	{
-		ForgeArmorTags.init();
-		ForgeToolTags.init();
+		ForgeTags.init();
+		if (ModHelper.isCuriosLoaded()) {
+			CuriosCompat.load();
+		}
 	}
 
 	@Override
@@ -231,7 +225,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	}
 
 	public static boolean isPreferredCurioSlot(ItemStack stack, String slot) {
-		return stack.is(TagKey.create(Registries.ITEM, new ResourceLocation("curios", slot)));
+		return stack.is(TagKey.create(RegistryHelper.itemKey(), new ResourceLocation("curios", slot)));
 	}
 
 	@Override
