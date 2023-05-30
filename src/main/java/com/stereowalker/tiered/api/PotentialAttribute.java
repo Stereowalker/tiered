@@ -64,8 +64,9 @@ public class PotentialAttribute implements WeightedObject {
 		if (exclusions != null)
 			for(ItemVerifier exclusion : exclusions)
 				if(exclusion.isValid(id)) return false;
-		for(ItemVerifier verifier : verifiers)
-			if(verifier.isValid(id)) return true;
+		if (verifiers != null)
+			for(ItemVerifier verifier : verifiers)
+				if(verifier.isValid(id)) return true;
 		return false;
 	}
 

@@ -74,7 +74,7 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
      *
      * @return  list of potential read item attributes
      */
-    public Map<ResourceLocation, PotentialAttribute> getItemAttributes() {
+    public Map<ResourceLocation, PotentialAttribute> getTiers() {
         return itemAttributes;
     }
     public void clear() {

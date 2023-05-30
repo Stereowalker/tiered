@@ -1,6 +1,6 @@
 package com.stereowalker.tiered.network.protocol.game;
 
-import static com.stereowalker.tiered.Tiered.ATTRIBUTE_DATA_LOADER;
+import static com.stereowalker.tiered.Tiered.TIER_DATA;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,12 +49,12 @@ public class ClientboundAttributeSyncerPacket extends ClientboundUnionPacket {
 
 	@Override
 	public boolean handleOnClient(LocalPlayer player) {
-		CACHED_ATTRIBUTES.putAll(ATTRIBUTE_DATA_LOADER.getItemAttributes());
-        ATTRIBUTE_DATA_LOADER.clear();
+		CACHED_ATTRIBUTES.putAll(TIER_DATA.getTiers());
+        TIER_DATA.clear();
 
-        ATTRIBUTE_DATA_LOADER.replace(this.attribute);
-        if (ATTRIBUTE_DATA_LOADER.getItemAttributes().size() == 0) {
-            ATTRIBUTE_DATA_LOADER.replace(CACHED_ATTRIBUTES);
+        TIER_DATA.replace(this.attribute);
+        if (TIER_DATA.getTiers().size() == 0) {
+            TIER_DATA.replace(CACHED_ATTRIBUTES);
         }
 		return true;
 	}

@@ -1,0 +1,12 @@
+{
+  "id": "tiered:normal_fishing_rod",
+  "weight": 4,
+  "verifiers": [
+    {
+      "id": "minecraft:fishing_rod"
+    }
+  ],
+  "tiers": [
+    "tiered:common_tool"
+  ]
+}

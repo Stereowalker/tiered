@@ -50,7 +50,7 @@ public abstract class ItemStackClientMixin {
     private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting) {
         if(this.hasTag() && this.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(this.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-            PotentialAttribute attribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
+            PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {
@@ -89,7 +89,7 @@ public abstract class ItemStackClientMixin {
             ResourceLocation tier = new ResourceLocation(getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
             // attempt to display attribute if it is valid
-            PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
+            PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             if(potentialAttribute != null) {
                 cir.setReturnValue(Component.translatable(potentialAttribute.getID() + ".label").append(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));

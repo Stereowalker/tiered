@@ -20,17 +20,25 @@ public class ModifierUtils {
 	 * @return  id of random attribute for item in {@link ResourceLocation} form, or null if there are no valid options
 	 */
 	public static ResourceLocation getRandomAttributeIDFor(Item item) {
+		ResourceLocation itemKey = RegistryHelper.items().getKey(item);
+		//The main system
+		TierPool pool = GeneralUtilities.getRandomFrom(Tiered.POOL_DATA.getPools().values(), (p) -> p.isValid(itemKey));
+		PotentialAttribute chosen_tier;
+		if (pool == null)
+			chosen_tier = GeneralUtilities.getRandomFrom(Tiered.TIER_DATA.getTiers().values(), (a) -> a.isValid(itemKey));
+		else {
+			List<PotentialAttribute> attris = new ArrayList<>();
+			pool.getTiers().forEach((t) -> attris.add(Tiered.TIER_DATA.getTiers().get(new ResourceLocation(t))));
+			chosen_tier = GeneralUtilities.getRandomFrom(attris, null);
+		}
+		if (chosen_tier != null) return new ResourceLocation(chosen_tier.getID());
+		//Fallback if the main system fails
 		List<ResourceLocation> potentialAttributes = new ArrayList<>();
 		// collect all valid attributes for the given item
-		Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
-			if(attribute.isValid(RegistryHelper.items().getKey(item)))
-				potentialAttributes.add(new ResourceLocation(attribute.getID()));
+		Tiered.TIER_DATA.getTiers().forEach((id, attribute) -> {
+			if(attribute.isValid(itemKey)) potentialAttributes.add(new ResourceLocation(attribute.getID()));
 		});
-		PotentialAttribute attr = GeneralUtilities.getRandomFrom(Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().values(), 
-				(attribute) -> attribute.isValid(RegistryHelper.items().getKey(item)));
-		if (attr != null) return new ResourceLocation(attr.getID());
-		// This returns a random attr from the list if the weighting system fails
-		else if(potentialAttributes.size() > 0) return potentialAttributes.get(new Random().nextInt(potentialAttributes.size()));
+		if(potentialAttributes.size() > 0) return potentialAttributes.get(new Random().nextInt(potentialAttributes.size()));
 		else return null;
 	}
 

@@ -1,0 +1,12 @@
+{
+  "id": "tiered:good_fishing_rod",
+  "weight": 1,
+  "verifiers": [
+    {
+      "id": "minecraft:fishing_rod"
+    }
+  ],
+  "tiers": [
+    "tiered:lucky"
+  ]
+}

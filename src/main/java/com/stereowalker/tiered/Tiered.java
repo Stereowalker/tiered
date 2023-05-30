@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,11 +20,13 @@ import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.AttributeDataLoader;
+import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
 import com.stereowalker.unionlib.api.collectors.PacketCollector;
+import com.stereowalker.unionlib.api.collectors.ReloadListeners;
 import com.stereowalker.unionlib.api.creativetabs.CreativeTabPopulator;
 import com.stereowalker.unionlib.api.registries.RegistryCollector;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
@@ -52,7 +53,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -64,7 +64,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
 
-	public static final AttributeDataLoader ATTRIBUTE_DATA_LOADER = new AttributeDataLoader();
+	public static final AttributeDataLoader TIER_DATA = new AttributeDataLoader();
+	public static final PoolDataLoader POOL_DATA = new PoolDataLoader();
 
 	public static final UUID[] MODIFIERS = new UUID[] {
 			//Equipment
@@ -108,7 +109,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
-		MinecraftForge.EVENT_BUS.addListener((Consumer<AddReloadListenerEvent>)event -> event.addListener(ATTRIBUTE_DATA_LOADER));
 		new ResourceLocation("tiered", "attribute_sync");
  
 	}
@@ -116,6 +116,12 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	@Override
 	public void onModStartup() {
 
+	}
+	
+	@Override
+	public void registerServerRelaodableResources(ReloadListeners reloadListener) {
+		reloadListener.listenTo(TIER_DATA);
+		reloadListener.listenTo(POOL_DATA);
 	}
 
 	@Override
@@ -168,7 +174,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		}
 		public static void reforge(AnvilUpdateEvent event) {
 			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
-				PotentialAttribute reforgedAttribute = ATTRIBUTE_DATA_LOADER.getItemAttributes().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
+				PotentialAttribute reforgedAttribute = TIER_DATA.getTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.items().getKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = event.getLeft().copy();
@@ -261,7 +267,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
 			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
-				PotentialAttribute potentialAttribute = Tiered.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
+				PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
 
 				if(potentialAttribute != null) {
 					potentialAttribute.getAttributes().forEach(template -> {
