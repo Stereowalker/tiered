@@ -1,2 +1,7 @@
-- Use UnionLib registry helper to get registries to maintain version compatibility
-- Disabled the curios integration due to the event missing in 1.19.3
+- Used newer UnionLib methods
+- Fix tools not getting common, rare, epic or legendary tiers
+- Certain tags and items can now be excluded using "exclusions"
+- Added fishing rods to the common tier for tools
+- Tierless items now get tiers the moment the player opens a chest with one
+- Added a pool system for the tiers (beta)
+- Added an unlucky tier for fishing rods
