@@ -16,6 +16,9 @@
     },
     {
       "tag": "forge:axes"
+    },
+    {
+      "id": "minecraft:fishing_rod"
     }
   ],
   "style": {
