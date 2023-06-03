@@ -110,12 +110,19 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::clientSetup);
 		new ResourceLocation("tiered", "attribute_sync");
- 
 	}
-	
+	private void setup(final FMLCommonSetupEvent event) {}
+
 	@Override
 	public void onModStartup() {
-
+		ForgeTags.init();
+		if (ModHelper.isCuriosLoaded()) {
+			boolean useCurios = false;
+			try {Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
+			catch (Exception e) {System.err.println("Curios support was disabled because the modifier event was not present");}
+			System.out.println("Use curio "+useCurios);
+			if (useCurios) CuriosCompat.load();
+		}
 	}
 	
 	@Override
@@ -130,14 +137,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Tiered::attemptToAffixTier);
 		});
-	}
-
-	private void setup(final FMLCommonSetupEvent event)
-	{
-		ForgeTags.init();
-		if (ModHelper.isCuriosLoaded()) {
-			CuriosCompat.load();
-		}
 	}
 
 	@Override

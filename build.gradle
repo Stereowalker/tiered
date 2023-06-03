@@ -16,6 +16,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 mixin {
     add sourceSets.main, modId+".refmap.json"
+    config "${modId}.mixins.json"
 }
 
 version = modMinecraftVersion + "-" +modVersion +"-"+modLoader
