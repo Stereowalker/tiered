@@ -10,6 +10,11 @@
   "tiered:rare_tool.label": "Rare",
   "tiered:epic_tool.label": "Epic",
   "tiered:legendary_tool.label": "Legendary",
+
+  "tiered:common_weapon.label": "Common",
+  "tiered:rare_weapon.label": "Rare",
+  "tiered:epic_weapon.label": "Epic",
+  "tiered:legendary_weapon.label": "Legendary",
   
   "tiered:common_bow.label": "Common",
   "tiered:rare_bow.label": "Rare",
