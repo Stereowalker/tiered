@@ -27,7 +27,7 @@ public class PoolDataLoader extends SimpleJsonResourceReloadListener {
             .create();
 
     private static final String PARSING_ERROR_MESSAGE = "Parsing error loading recipe {}";
-    private static final String LOADED_RECIPES_MESSAGE = "Loaded {} item attributes";
+    private static final String LOADED_RECIPES_MESSAGE = "Loaded {} item pools";
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Map<ResourceLocation, TierPool> itemPools = new HashMap<>();

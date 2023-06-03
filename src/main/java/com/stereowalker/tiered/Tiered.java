@@ -21,8 +21,10 @@ import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.data.PoolDataLoader;
+import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
+import com.stereowalker.tiered.network.protocol.game.ClientboundTierSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
 import com.stereowalker.unionlib.api.collectors.PacketCollector;
@@ -48,7 +50,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -56,15 +57,28 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
 
-	public static final AttributeDataLoader TIER_DATA = new AttributeDataLoader();
+	public static final AttributeDataLoader ATTR_DATA = new AttributeDataLoader();
+    //Please Remove this later
+    @Deprecated
+    public static Map<ResourceLocation, PotentialAttribute> getAllTiers() {
+    	Map<ResourceLocation, PotentialAttribute> map = Maps.newHashMap();
+    	map.putAll(ATTR_DATA.getTiers());
+    	map.putAll(TIER_DATA.getTiers());
+        return map;
+    }
+	public static final TierDataLoader TIER_DATA = new TierDataLoader();
 	public static final PoolDataLoader POOL_DATA = new PoolDataLoader();
 
 	public static final UUID[] MODIFIERS = new UUID[] {
@@ -120,7 +134,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			boolean useCurios = false;
 			try {Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
 			catch (Exception e) {System.err.println("Curios support was disabled because the modifier event was not present");}
-			System.out.println("Use curio "+useCurios);
 			if (useCurios) CuriosCompat.load();
 		}
 	}
@@ -129,6 +142,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public void registerServerRelaodableResources(ReloadListeners reloadListener) {
 		reloadListener.listenTo(TIER_DATA);
 		reloadListener.listenTo(POOL_DATA);
+		reloadListener.listenTo(ATTR_DATA);
 	}
 
 	@Override
@@ -148,7 +162,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void populateCreativeTabs(CreativeTabPopulator populator) {
-		if (populator.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+		if (populator.getTab() == net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			populator.addItems(ItemRegistries.ARMORERS_HAMMER);
 			populator.addItems(ItemRegistries.TOOLSMITHS_HAMMER);
 			populator.addItems(ItemRegistries.WEAPONSMITHS_HAMMER);
@@ -173,7 +187,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		}
 		public static void reforge(AnvilUpdateEvent event) {
 			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
-				PotentialAttribute reforgedAttribute = TIER_DATA.getTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
+				PotentialAttribute reforgedAttribute = Tiered.getAllTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.items().getKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = event.getLeft().copy();
@@ -248,6 +262,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void registerClientboundPackets(PacketCollector collector) {
+		collector.registerPacket(ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
 		collector.registerPacket(ClientboundAttributeSyncerPacket.class, (packetBuffer) -> new ClientboundAttributeSyncerPacket(packetBuffer));
 	}
 
@@ -266,7 +281,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
 			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
-				PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
+				PotentialAttribute potentialAttribute = Tiered.getAllTiers().get(tier);
 
 				if(potentialAttribute != null) {
 					potentialAttribute.getAttributes().forEach(template -> {

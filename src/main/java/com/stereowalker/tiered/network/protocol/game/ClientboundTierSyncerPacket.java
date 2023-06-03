@@ -1,6 +1,6 @@
 package com.stereowalker.tiered.network.protocol.game;
 
-import static com.stereowalker.tiered.Tiered.ATTR_DATA;
+import static com.stereowalker.tiered.Tiered.TIER_DATA;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,18 +15,18 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class ClientboundAttributeSyncerPacket extends ClientboundUnionPacket {
+public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
     public int size;
     public Map<ResourceLocation, PotentialAttribute> attribute;
     public static final Map<ResourceLocation, PotentialAttribute> CACHED_ATTRIBUTES = new HashMap<>();
 
-    public ClientboundAttributeSyncerPacket(Map<ResourceLocation, PotentialAttribute> attribute) {
+    public ClientboundTierSyncerPacket(Map<ResourceLocation, PotentialAttribute> attribute) {
     	super(Tiered.instance.channel);
     	this.attribute = attribute;
         this.size = attribute.size();
     }
 
-	public ClientboundAttributeSyncerPacket(FriendlyByteBuf buf) {
+	public ClientboundTierSyncerPacket(FriendlyByteBuf buf) {
 		super(buf, Tiered.instance.channel);
 		this.size = buf.readInt();
 		this.attribute = Maps.newHashMap();
@@ -49,12 +49,12 @@ public class ClientboundAttributeSyncerPacket extends ClientboundUnionPacket {
 
 	@Override
 	public boolean handleOnClient(LocalPlayer player) {
-		CACHED_ATTRIBUTES.putAll(ATTR_DATA.getTiers());
-        ATTR_DATA.clear();
+		CACHED_ATTRIBUTES.putAll(TIER_DATA.getTiers());
+		TIER_DATA.clear();
 
-        ATTR_DATA.replace(this.attribute);
-        if (ATTR_DATA.getTiers().size() == 0) {
-            ATTR_DATA.replace(CACHED_ATTRIBUTES);
+		TIER_DATA.replace(this.attribute);
+        if (TIER_DATA.getTiers().size() == 0) {
+        	TIER_DATA.replace(CACHED_ATTRIBUTES);
         }
 		return true;
 	}

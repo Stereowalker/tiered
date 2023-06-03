@@ -27,8 +27,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-@Deprecated
-public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
+public class TierDataLoader extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
@@ -42,13 +41,13 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
             .create();
 
     private static final String PARSING_ERROR_MESSAGE = "Parsing error loading recipe {}";
-    private static final String LOADED_RECIPES_MESSAGE = "Loaded {} item attributes";
+    private static final String LOADED_RECIPES_MESSAGE = "Loaded {} item tiers";
     private static final Logger LOGGER = LogManager.getLogger();
 
     private Map<ResourceLocation, PotentialAttribute> itemAttributes = new HashMap<>();
 
-    public AttributeDataLoader() {
-        super(GSON, "item_attributes");
+    public TierDataLoader() {
+        super(GSON, "tiered_modifiers/tiers");
     }
 
     @Override
@@ -60,8 +59,7 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
 
             try {
                 PotentialAttribute itemAttribute = GSON.fromJson(entry.getValue(), PotentialAttribute.class);
-                itemAttribute.isOld = true;
-                readItemAttributes.put(new ResourceLocation(itemAttribute.getID()), itemAttribute);
+                readItemAttributes.put(identifier, itemAttribute);
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
             }
@@ -72,7 +70,7 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener {
     }
 
     /**
-     * Returns a list of potential item attributes ({@link PotentialAttribute}) read from "data/modid/item_attributes".
+     * Returns a list of potential item attributes ({@link PotentialAttribute}) read from "data/modid/tiered_modifiers/tiers".
      *
      * @return  list of potential read item attributes
      */

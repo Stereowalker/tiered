@@ -42,7 +42,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 	private void onTake_redirect(Container container, int pIndex, ItemStack pStack, Player p_150474_, ItemStack p_150475_) {
 		boolean deleteItem = true;
 		if (this.reforgedAttribute != null) {
-			PotentialAttribute potential = Tiered.TIER_DATA.getTiers().get(this.reforgedAttribute);
+			PotentialAttribute potential = Tiered.getAllTiers().get(this.reforgedAttribute);
 			if (RegistryHelper.items().getKey(container.getItem(pIndex).getItem()).equals(new ResourceLocation(potential.getReforgeItem()))) {
 				deleteItem = false;
 				ItemStack hammer = container.getItem(pIndex);

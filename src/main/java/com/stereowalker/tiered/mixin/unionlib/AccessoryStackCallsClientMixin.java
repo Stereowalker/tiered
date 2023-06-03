@@ -42,7 +42,7 @@ public abstract class AccessoryStackCallsClientMixin {
     private static MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting, ItemStack stack, @Nullable Player pPlayer, Multimap<Attribute, AttributeModifier> multimap, List<Component> list, String name) {
         if(stack.hasTag() && stack.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-            PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
+            PotentialAttribute attribute = Tiered.getAllTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {

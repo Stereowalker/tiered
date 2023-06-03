@@ -77,4 +77,7 @@ public class PotentialAttribute implements WeightedObject {
 	public List<AttributeTemplate> getAttributes() {
 		return attributes;
 	}
+	
+	//Remove in a later update
+	public boolean isOld = false;
 }
