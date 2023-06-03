@@ -11,7 +11,7 @@ public class CuriosCompat {
 	public static void load() {
 		if (ModHelper.isCuriosLoaded()) {
 			boolean useCurios = false;
-			try {Class<?> c = Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); System.out.println("Found Curio Class "+c); useCurios = true;} 
+			try {Class<?> c = Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
 			catch (Exception e) {
 				System.err.println(e.getMessage());
 				System.err.println("Something went wrong and as a result, Curios support will not work");

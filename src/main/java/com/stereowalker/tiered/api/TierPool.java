@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class TierPool implements WeightedObject {
 
-	private final String id;
 	private final int weight;
 	private final List<ItemVerifier> verifiers;
 	private final List<ItemVerifier> exclusions;
@@ -16,15 +15,10 @@ public class TierPool implements WeightedObject {
 	private final List<String> tiers;
 
 	public TierPool(String id, int weight, List<ItemVerifier> verifiers, List<ItemVerifier> exclusions, List<String> tiers) {
-		this.id = id;
 		this.weight = weight;
 		this.verifiers = verifiers;
 		this.exclusions = exclusions;
 		this.tiers = tiers;
-	}
-
-	public String getID() {
-		return id;
 	}
 
 	public int getWeight() {

@@ -33,7 +33,7 @@ public class PoolDataLoader extends SimpleJsonResourceReloadListener {
     private Map<ResourceLocation, TierPool> itemPools = new HashMap<>();
 
     public PoolDataLoader() {
-        super(GSON, "tier_pools");
+        super(GSON, "tiered_modifiers/pools");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PoolDataLoader extends SimpleJsonResourceReloadListener {
             try {
             	TierPool itemPool = GSON.fromJson(entry.getValue(), TierPool.class);
             	if (!itemPool.getTiers().isEmpty())
-            		readItemPools.put(new ResourceLocation(itemPool.getID()), itemPool);
+            		readItemPools.put(identifier, itemPool);
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
             }

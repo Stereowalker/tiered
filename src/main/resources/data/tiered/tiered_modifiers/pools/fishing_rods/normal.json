@@ -1,12 +1,11 @@
 {
-  "id": "tiered:bad_fishing_rod",
-  "weight": 2,
+  "weight": 7,
   "verifiers": [
     {
       "id": "minecraft:fishing_rod"
     }
   ],
   "tiers": [
-    "tiered:unlucky"
+    "tiered:common_tool"
   ]
 }
