@@ -57,14 +57,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -80,6 +76,11 @@ public class Tiered extends MinecraftMod implements PacketHolder {
     }
 	public static final TierDataLoader TIER_DATA = new TierDataLoader();
 	public static final PoolDataLoader POOL_DATA = new PoolDataLoader();
+	public static ResourceLocation getKey(PotentialAttribute tier) {
+		return Tiered.getAllTiers().entrySet().stream()
+	      .filter(entry -> tier.equals(entry.getValue()))
+	      .map(Map.Entry::getKey).findFirst().get();
+	}
 
 	public static final UUID[] MODIFIERS = new UUID[] {
 			//Equipment
@@ -196,7 +197,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 						event.setCost(reforgedAttribute.getReforgeExperienceCost());
 					}
 				} else {
-					LOGGER.info(reforgedAttribute.getID()+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
+					LOGGER.info(Tiered.getKey(reforgedAttribute)+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
 				}
 			}
 		}

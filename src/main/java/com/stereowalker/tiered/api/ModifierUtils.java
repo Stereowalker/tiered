@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.google.common.collect.Lists;
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.unionlib.util.GeneralUtilities;
 import com.stereowalker.unionlib.util.RegistryHelper;

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class PotentialAttribute implements WeightedObject {
 
 	private final String id;
+	private final String literal_name;
 	private final int weight;
 
 	private final int reforge_durability_cost;
@@ -20,8 +21,12 @@ public class PotentialAttribute implements WeightedObject {
 	private final Style style;
 	private final List<AttributeTemplate> attributes;
 
-	public PotentialAttribute(String id, int weight, int reforge_durability_cost, int reforge_experience_cost, String reforge_item, List<ItemVerifier> verifiers, List<ItemVerifier> exclusions, Style style, List<AttributeTemplate> attributes) {
+	public PotentialAttribute(String id, String literal_name, 
+			int weight, int reforge_durability_cost, int reforge_experience_cost, 
+			String reforge_item, List<ItemVerifier> verifiers, List<ItemVerifier> exclusions, 
+			Style style, List<AttributeTemplate> attributes) {
 		this.id = id;
+		this.literal_name = literal_name;
 		this.weight = weight;
 		this.reforge_durability_cost = reforge_durability_cost;
 		this.reforge_experience_cost = reforge_experience_cost;
@@ -35,7 +40,11 @@ public class PotentialAttribute implements WeightedObject {
 	public String getID() {
 		return id;
 	}
-
+	
+	public String getLiteralName() {
+		return literal_name;
+	}
+	
 	public int getWeight() {
 		return weight;
 	}

@@ -1,33 +1,33 @@
 {
   "generic.crit_chance": "Kritikal şansı",
 
-  "tiered:common_armor.label": "Yaygın",
-  "tiered:rare_armor.label": "Nadir",
-  "tiered:epic_armor.label": "Epik",
-  "tiered:legendary_armor.label": "Efsanevi",
+  "tier.tiered.common_armor": "Yaygın",
+  "tier.tiered.rare_armor": "Nadir",
+  "tier.tiered.epic_armor": "Epik",
+  "tier.tiered.legendary_armor": "Efsanevi",
 
-  "tiered:common_tool.label": "Yaygın",
-  "tiered:rare_tool.label": "Nadir",
-  "tiered:epic_tool.label": "Epik",
-  "tiered:legendary_tool.label": "Efsanevi",
+  "tier.tiered.common_tool": "Yaygın",
+  "tier.tiered.rare_tool": "Nadir",
+  "tier.tiered.epic_tool": "Epik",
+  "tier.tiered.legendary_tool": "Efsanevi",
 
-  "tiered:dented.label": "Girintili",
-  "tiered:fortified.label": "Takviye edilmiş",
-  "tiered:heavy.label": "Ağır",
-  "tiered:reinforced.label": "Takviyeli",
-  "tiered:resilient.label": "Esnek",
-  "tiered:unchained.label": "Zincirsiz",
+  "tier.tiered.dented": "Girintili",
+  "tier.tiered.fortified": "Takviye edilmiş",
+  "tier.tiered.heavy": "Ağır",
+  "tier.tiered.reinforced": "Takviyeli",
+  "tier.tiered.resilient": "Esnek",
+  "tier.tiered.unchained": "Zincirsiz",
 
-  "tiered:extended.label": "Genişletilmiş",
+  "tier.tiered.extended": "Genişletilmiş",
 
-  "tiered:lucky.label": "Şanslı",
+  "tier.tiered.lucky": "Şanslı",
 
-  "tiered:hasteful.label": "Aceleci",
-  "tiered:swift.label": "Hızlı",
+  "tier.tiered.hasteful": "Aceleci",
+  "tier.tiered.swift": "Hızlı",
 
-  "tiered:berserk.label": "Çılgın",
-  "tiered:critical.label": "Kritikal",
-  "tiered:dull.label": "Donuk",
-  "tiered:keen.label": "Şahane",
-  "tiered:sharp.label": "Keskin"
+  "tier.tiered.berserk": "Çılgın",
+  "tier.tiered.critical": "Kritikal",
+  "tier.tiered.dull": "Donuk",
+  "tier.tiered.keen": "Şahane",
+  "tier.tiered.sharp": "Keskin"
 }

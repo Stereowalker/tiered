@@ -19,6 +19,7 @@ import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.PotentialAttribute;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -92,7 +93,10 @@ public abstract class ItemStackClientMixin {
             PotentialAttribute potentialAttribute = Tiered.getAllTiers().get(tier);
 
             if(potentialAttribute != null) {
-                cir.setReturnValue(Component.translatable(potentialAttribute.getID() + ".label").append(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));
+            	MutableComponent title;
+            	if (potentialAttribute.getLiteralName() != null) title = Component.literal(potentialAttribute.getLiteralName());
+            	else title = Component.translatable(Util.makeDescriptionId("tier", Tiered.getKey(potentialAttribute)));
+                cir.setReturnValue(title.append(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));
             }
         }
     }
