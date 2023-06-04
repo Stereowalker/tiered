@@ -1,21 +1,21 @@
 {
-  "weight": 3,
+  "weight": 1,
   "reforge_experience_cost": 4,
   "reforge_durability_cost": 2,
-  "reforge_item": "tiered:toolsmiths_hammer",
+  "reforge_item": "tiered:armorers_hammer",
   "style": {
-    "color": "aqua"
+    "color": "dark_blue"
   },
   "attributes": [
     {
-      "type": "generic.luck",
+      "type": "generic.armor",
       "modifier": {
-        "name": "tiered:lucky",
+        "name": "tiered:fortified",
         "operation": "MULTIPLY_TOTAL",
         "amount": 0.25
       },
       "optional_equipment_slots": [
-        "MAINHAND"
+        "OFFHAND"
       ]
     }
   ]
