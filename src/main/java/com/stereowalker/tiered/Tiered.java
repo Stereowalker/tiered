@@ -21,6 +21,7 @@ import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.data.PoolDataLoader;
+import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.tiered.forge.Events;
 import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
@@ -151,6 +152,21 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		collector.addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Tiered::attemptToAffixTier);
+		});
+		collector.addInsert(Inserts.LIVING_TICK, (living) -> {
+			if (living instanceof TierAffixer affixer) {
+				 // if items copy is null, set it to player inventory and check each stack
+		        if(affixer.InvCopy() == null) {
+		            affixer.SetInvCopy(affixer.copyDefaultedList(affixer.player().inventory.items));
+		            affixer.player().inventory.items.forEach(Tiered::attemptToAffixTier);
+		        }
+
+		        // if items copy =/= inventory, run check and set mainCopy to inventory
+		        if (!affixer.player().inventory.items.equals(affixer.InvCopy())) {
+		        	affixer.SetInvCopy(affixer.copyDefaultedList(affixer.player().inventory.items));
+		            affixer.player().inventory.items.forEach(Tiered::attemptToAffixTier);
+		        }
+			}
 		});
 	}
 
