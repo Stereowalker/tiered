@@ -6,10 +6,10 @@
   "reforge_item": "tiered:weaponsmiths_hammer",
   "verifiers": [
     {
-      "tag": "forge:swords"
+      "tag": "forge:tools/swords"
     },
     {
-      "tag": "forge:bows"
+      "tag": "forge:tools/bows"
     }
   ],
   "style": {

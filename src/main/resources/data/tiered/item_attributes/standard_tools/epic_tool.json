@@ -6,16 +6,16 @@
   "reforge_item": "tiered:toolsmiths_hammer",
   "verifiers": [
     {
-      "tag": "forge:shovels"
+      "tag": "forge:tools/shovels"
     },
     {
-      "tag": "forge:pickaxes"
+      "tag": "forge:tools/pickaxes"
     },
     {
-      "tag": "forge:hoes"
+      "tag": "forge:tools/hoes"
     },
     {
-      "tag": "forge:axes"
+      "tag": "forge:tools/axes"
     }
   ],
   "style": {

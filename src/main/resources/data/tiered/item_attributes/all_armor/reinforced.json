@@ -6,16 +6,16 @@
   "reforge_item": "tiered:armorers_hammer",
   "verifiers": [
     {
-      "tag": "forge:helmets"
+      "tag": "forge:armors/helmets"
     },
     {
-      "tag": "forge:chestplates"
+      "tag": "forge:armors/chestplates"
     },
     {
-      "tag": "forge:leggings"
+      "tag": "forge:armors/leggings"
     },
     {
-      "tag": "forge:boots"
+      "tag": "forge:armors/boots"
     }
   ],
   "style": {
