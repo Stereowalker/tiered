@@ -1,0 +1,11 @@
+{
+  "weight": 5,
+  "verifiers": [
+    {
+      "tag": "forge:bows"
+    }
+  ],
+  "tiers": [
+    "tiered:common_tool"
+  ]
+}

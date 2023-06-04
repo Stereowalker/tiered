@@ -1,24 +1,18 @@
 {
-  "id": "tiered:rare_bow",
-  "weight": 4,
-  "reforge_experience_cost": 6,
-  "reforge_durability_cost": 3,
+  "weight": 3,
+  "reforge_experience_cost": 3,
+  "reforge_durability_cost": 2,
   "reforge_item": "tiered:toolsmiths_hammer",
-  "verifiers": [
-    {
-      "tag": "forge:bows"
-    }
-  ],
   "style": {
-    "color": "blue"
+    "color": "dark_red"
   },
   "attributes": [
     {
-      "type": "unionlib:generic.arrow_damage",
+      "type": "unionlib:generic.draw_speed",
       "modifier": {
-        "name": "tiered:rare_bow",
+        "name": "tiered:stiff",
         "operation": "ADDITION",
-        "amount": 0.3
+        "amount": -0.5
       },
       "optional_equipment_slots": [
         "MAINHAND"
@@ -27,9 +21,9 @@
     {
       "type": "unionlib:generic.arrow_velocity",
       "modifier": {
-        "name": "tiered:rare_bow",
+        "name": "tiered:stiff",
         "operation": "ADDITION",
-        "amount": 0.1
+        "amount": 0.2
       },
       "optional_equipment_slots": [
         "MAINHAND"

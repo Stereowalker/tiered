@@ -1,24 +1,18 @@
 {
-  "id": "tiered:stiff",
   "weight": 3,
-  "reforge_experience_cost": 3,
+  "reforge_experience_cost": 2,
   "reforge_durability_cost": 2,
   "reforge_item": "tiered:toolsmiths_hammer",
-  "verifiers": [
-    {
-      "tag": "forge:bows"
-    }
-  ],
   "style": {
-    "color": "dark_red"
+    "color": "gray"
   },
   "attributes": [
     {
-      "type": "unionlib:generic.draw_speed",
+      "type": "unionlib:generic.arrow_damage",
       "modifier": {
-        "name": "tiered:stiff",
+        "name": "tiered:stretched",
         "operation": "ADDITION",
-        "amount": -0.5
+        "amount": -0.2
       },
       "optional_equipment_slots": [
         "MAINHAND"
@@ -27,9 +21,9 @@
     {
       "type": "unionlib:generic.arrow_velocity",
       "modifier": {
-        "name": "tiered:stiff",
+        "name": "tiered:stretched",
         "operation": "ADDITION",
-        "amount": 0.2
+        "amount": -0.2
       },
       "optional_equipment_slots": [
         "MAINHAND"
