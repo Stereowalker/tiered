@@ -189,11 +189,11 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	@RegistryHolder(registry = Item.class, namespace = "tiered")
 	public class ItemRegistries {
 		@RegistryObject("armorers_hammer")
-		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().defaultDurability(10));
+		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
 		@RegistryObject("toolsmiths_hammer")
-		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(10));
+		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
 		@RegistryObject("weaponsmiths_hammer")
-		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(10));
+		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
 		public static void trade(VillagerTradesEvent event) {
 			if (event.getType() == VillagerProfession.ARMORER)
 				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(ARMORERS_HAMMER, 64, 1, 1, 10));
