@@ -39,13 +39,13 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[9.0.1, 9.1.0)"
+    versionRange="[9.0.3, 9.1.0)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.tiered]]
     modId="curios"
     mandatory=false
-    versionRange="[1.19.2-5.1.4.0,)"
+    versionRange="[1.19.2-5.1.4.1,)"
     ordering="NONE"
     side="BOTH"
