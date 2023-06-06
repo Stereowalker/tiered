@@ -1,3 +1,6 @@
+[5.1.1]
+- Fixed #49
+
 [5.1.0]
 - Prevented CurioAttributeModifierEvent from attempting to load in 1.19.3
 - Added missing English translations for the common, rare, epic and legendary weapons

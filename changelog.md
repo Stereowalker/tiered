@@ -1,10 +1,1 @@
-- Prevented CurioAttributeModifierEvent from attempting to load in 1.19.3
-- Added missing English translations for the common, rare, epic and legendary weapons
-- Changed the location of the tier folder from "tiem_attributes" to "tiered_modifier/tiers". The old location will continue to work temporarily
-- Tiers can now specify a literal name to circumvent having to use translations
-- Moved all shield tiers to pools and fix shield tiers not having functionality
-- Moved all bow tiers to pools
-- Bow tiers are now re-rolled with the weaponsmiths hammer
-- Used forge provided tags for helmets. chestplates, leggings, boots, swords, axes, pickaxes, shovels, hoes and bows
-- Raised the durability of all reforging hammers to 20
-- Fixed any and all issues preventing the creation of a single jar for 1.19
+- Fixed #49 
