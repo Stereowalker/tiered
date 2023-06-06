@@ -90,6 +90,7 @@ dependencies {
 	implementation fg.deobf("com.stereowalker.unionlib:UnionLib:"+modMinecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
 	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+":api")
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+"")
+	implementation fg.deobf("top.theillusivec4.curios:curios-forge:"+modMinecraftVersion+"-"+curiosVersion+"")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -21,7 +21,7 @@ public class ModifierUtils {
 	 * @return  id of random attribute for item in {@link ResourceLocation} form, or null if there are no valid options
 	 */
 	public static ResourceLocation getRandomAttributeIDFor(Item item) {
-		ResourceLocation itemKey = RegistryHelper.items().getKey(item);
+		ResourceLocation itemKey = RegistryHelper.getItemKey(item);
 		TierPool pool = GeneralUtilities.getRandomFrom(Tiered.POOL_DATA.getPools().values(), (p) -> p.isValid(itemKey));
 		PotentialAttribute chosen_tier;
 		if (pool == null)

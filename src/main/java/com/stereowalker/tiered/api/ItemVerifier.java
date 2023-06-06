@@ -44,7 +44,7 @@ public class ItemVerifier {
             TagKey<Item> itemTag = TagKey.create(RegistryHelper.itemKey(), new ResourceLocation(tag));
 
             if(itemTag != null) {
-                return new ItemStack(RegistryHelper.items().get(new ResourceLocation(itemID))).is(itemTag);
+                return new ItemStack(RegistryHelper.getItem(new ResourceLocation(itemID))).is(itemTag);
             } else {
                 Tiered.LOGGER.error(tag + " was specified as an item verifier tag, but it does not exist!");
             }

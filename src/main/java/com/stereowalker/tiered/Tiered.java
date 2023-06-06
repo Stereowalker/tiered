@@ -206,7 +206,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
 				PotentialAttribute reforgedAttribute = Tiered.getAllTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
 				if (reforgedAttribute.getReforgeItem() != null) {
-					if (RegistryHelper.items().getKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
+					if (RegistryHelper.getItemKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = event.getLeft().copy();
 						copy.removeTagKey(NBT_SUBTAG_KEY);
 						event.setOutput(copy);

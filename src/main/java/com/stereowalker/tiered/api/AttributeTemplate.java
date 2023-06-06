@@ -166,7 +166,7 @@ public class AttributeTemplate {
                 attributeModifier.getOperation()
         );
 
-        Attribute key = RegistryHelper.attributes().get(new ResourceLocation(attributeTypeID));
+        Attribute key = RegistryHelper.getAttribute(new ResourceLocation(attributeTypeID));
         if(key == null) {
             Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {

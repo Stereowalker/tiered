@@ -43,7 +43,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 		boolean deleteItem = true;
 		if (this.reforgedAttribute != null) {
 			PotentialAttribute potential = Tiered.getAllTiers().get(this.reforgedAttribute);
-			if (RegistryHelper.items().getKey(container.getItem(pIndex).getItem()).equals(new ResourceLocation(potential.getReforgeItem()))) {
+			if (RegistryHelper.getItemKey(container.getItem(pIndex).getItem()).equals(new ResourceLocation(potential.getReforgeItem()))) {
 				deleteItem = false;
 				ItemStack hammer = container.getItem(pIndex);
 				// attempt to get a random tier
