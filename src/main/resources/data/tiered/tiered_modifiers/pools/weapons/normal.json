@@ -1,0 +1,17 @@
+{
+  "weight": 5,
+  "verifiers": [
+    {
+      "tag": "minecraft:swords"
+    },
+    {
+      "tag": "minecraft:axes"
+    },
+    {
+      "tag": "forge:tools/bows"
+    }
+  ],
+  "tiers": [
+    "tiered:standard_weapons/common"
+  ]
+}

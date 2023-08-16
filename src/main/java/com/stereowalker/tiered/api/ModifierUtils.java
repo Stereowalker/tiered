@@ -25,10 +25,10 @@ public class ModifierUtils {
 		TierPool pool = GeneralUtilities.getRandomFrom(Tiered.POOL_DATA.getPools().values(), (p) -> p.isValid(itemKey));
 		PotentialAttribute chosen_tier;
 		if (pool == null)
-			chosen_tier = GeneralUtilities.getRandomFrom(Tiered.getAllTiers().values(), (a) -> a.isValid(itemKey));
+			chosen_tier = GeneralUtilities.getRandomFrom(Tiered.TIER_DATA.getTiers().values(), (a) -> a.isValid(itemKey));
 		else {
 			List<PotentialAttribute> attris = new ArrayList<>();
-			pool.getTiers().forEach((t) -> attris.add(Tiered.getAllTiers().get(new ResourceLocation(t))));
+			pool.getTiers().forEach((t) -> attris.add(Tiered.TIER_DATA.getTiers().get(new ResourceLocation(t))));
 			attris.removeIf((attr) -> attr == null);
 			chosen_tier = GeneralUtilities.getRandomFrom(attris, null);
 		}
@@ -41,9 +41,6 @@ public class ModifierUtils {
 		//Fallback if the main system fails
 		List<ResourceLocation> potentialAttributes = new ArrayList<>();
 		// collect all valid attributes for the given item
-		Tiered.ATTR_DATA.getTiers().forEach((id, attribute) -> {
-			if(attribute.isValid(itemKey)) potentialAttributes.add(new ResourceLocation(attribute.getID()));
-		});
 		Tiered.TIER_DATA.getTiers().forEach((id, attribute) -> {
 			if(attribute.isValid(itemKey)) potentialAttributes.add(id);
 		});

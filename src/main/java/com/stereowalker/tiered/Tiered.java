@@ -19,12 +19,9 @@ import com.stereowalker.tiered.api.ForgeTags;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
-import com.stereowalker.tiered.data.AttributeDataLoader;
 import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
-import com.stereowalker.tiered.forge.Events;
-import com.stereowalker.tiered.network.protocol.game.ClientboundAttributeSyncerPacket;
 import com.stereowalker.tiered.network.protocol.game.ClientboundTierSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
@@ -37,6 +34,7 @@ import com.stereowalker.unionlib.core.registries.RegistryObject;
 import com.stereowalker.unionlib.insert.Inserts;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 import com.stereowalker.unionlib.mod.PacketHolder;
+import com.stereowalker.unionlib.mod.ServerSegment;
 import com.stereowalker.unionlib.util.ModHelper;
 import com.stereowalker.unionlib.util.RegistryHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
@@ -44,6 +42,7 @@ import com.stereowalker.unionlib.world.item.AccessoryItem;
 
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -66,19 +65,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
 
-	public static final AttributeDataLoader ATTR_DATA = new AttributeDataLoader();
-    //Please Remove this later
-    @Deprecated
-    public static Map<ResourceLocation, PotentialAttribute> getAllTiers() {
-    	Map<ResourceLocation, PotentialAttribute> map = Maps.newHashMap();
-    	map.putAll(ATTR_DATA.getTiers());
-    	map.putAll(TIER_DATA.getTiers());
-        return map;
-    }
 	public static final TierDataLoader TIER_DATA = new TierDataLoader();
 	public static final PoolDataLoader POOL_DATA = new PoolDataLoader();
 	public static ResourceLocation getKey(PotentialAttribute tier) {
-		return Tiered.getAllTiers().entrySet().stream()
+		return TIER_DATA.getTiers().entrySet().stream()
 	      .filter(entry -> tier.equals(entry.getValue()))
 	      .map(Map.Entry::getKey).findFirst().get();
 	}
@@ -119,7 +109,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public static Tiered instance;
 	public Tiered() 
 	{
-		super("tiered", new ResourceLocation("tiered", "textures/icon.png"), LoadType.BOTH);
+		super("survive", () -> new TieredClientSegment(), () -> new ServerSegment());
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 		instance = this;
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -144,12 +134,15 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public void registerServerRelaodableResources(ReloadListeners reloadListener) {
 		reloadListener.listenTo(TIER_DATA);
 		reloadListener.listenTo(POOL_DATA);
-		reloadListener.listenTo(ATTR_DATA);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void registerInserts(InsertCollector collector) {
-		collector.addInsert(Inserts.LOGGED_IN, Events::onPlayerLoggedIn);
+		collector.addInsert(Inserts.LOGGED_IN, (player -> {
+	        if(player.level().isClientSide) return;
+	        new ClientboundTierSyncerPacket(TIER_DATA.getTiers()).send(((ServerPlayer)player));
+		}));
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Tiered::attemptToAffixTier);
 		});
@@ -179,7 +172,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void populateCreativeTabs(CreativeTabPopulator populator) {
-		if (populator.getTab() == net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES) {
+		if (populator.getTabKey() == net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			populator.addItems(ItemRegistries.ARMORERS_HAMMER);
 			populator.addItems(ItemRegistries.TOOLSMITHS_HAMMER);
 			populator.addItems(ItemRegistries.WEAPONSMITHS_HAMMER);
@@ -204,7 +197,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		}
 		public static void reforge(AnvilUpdateEvent event) {
 			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
-				PotentialAttribute reforgedAttribute = Tiered.getAllTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
+				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.getItemKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = event.getLeft().copy();
@@ -224,7 +217,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	}
 	
 	public static void attemptToAffixTier(ItemStack stack) {
-		if(stack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null) {
+		if(stack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null && !stack.isEmpty()) {
             ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(stack.getItem());
             if(potentialAttributeID != null) {
             	stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
@@ -245,7 +238,8 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlot slot) {
 		if(stack.getItem() instanceof ArmorItem) {
 			ArmorItem item = (ArmorItem) stack.getItem();
-			return item.getSlot().equals(slot);
+			//TODO: Use version helper to make this compatible with older versions
+			return item.getType().getSlot().equals(slot);
 		}
 
 		if(stack.getItem() instanceof ShieldItem) {
@@ -276,16 +270,10 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public static boolean isPreferredCurioSlot(ItemStack stack, String slot) {
 		return stack.is(TagKey.create(RegistryHelper.itemKey(), new ResourceLocation("curios", slot)));
 	}
-
+	
 	@Override
-	public void registerClientboundPackets(PacketCollector collector) {
-		collector.registerPacket(ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
-		collector.registerPacket(ClientboundAttributeSyncerPacket.class, (packetBuffer) -> new ClientboundAttributeSyncerPacket(packetBuffer));
-	}
-
-	@Override
-	public void registerServerboundPackets(PacketCollector collector) {
-
+	public void registerPackets(PacketCollector collector) {
+		collector.registerClientboundPacket(new ResourceLocation("tiered", "tier_sync"), ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
 	}
 
 	public static <T extends Object> Multimap<Attribute, AttributeModifier> AppendAttributesToOriginal(ItemStack stack, T slot, boolean isPreferredSlot, String customAttributes, 
@@ -298,7 +286,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
 			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
-				PotentialAttribute potentialAttribute = Tiered.getAllTiers().get(tier);
+				PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
 
 				if(potentialAttribute != null) {
 					potentialAttribute.getAttributes().forEach(template -> {

@@ -8,7 +8,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.PotentialAttribute;
-import com.stereowalker.tiered.data.AttributeDataLoader;
+import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.unionlib.network.protocol.game.ClientboundUnionPacket;
 
 import net.minecraft.client.player.LocalPlayer;
@@ -32,7 +32,7 @@ public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
 		this.attribute = Maps.newHashMap();
         for (int i = 0; i < this.size; i++) {
             ResourceLocation id = buf.readResourceLocation();
-            PotentialAttribute pa = AttributeDataLoader.GSON.fromJson(buf.readUtf(), PotentialAttribute.class);
+            PotentialAttribute pa = TierDataLoader.GSON.fromJson(buf.readUtf(), PotentialAttribute.class);
             this.attribute.put(id, pa);
         }
 	}
@@ -43,7 +43,7 @@ public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
 
         this.attribute.forEach((id, attribute) -> {
             buf.writeResourceLocation(id);
-            buf.writeUtf(AttributeDataLoader.GSON.toJson(attribute));
+            buf.writeUtf(TierDataLoader.GSON.toJson(attribute));
         });
 	}
 

@@ -1,0 +1,33 @@
+{
+  "weight": 3,
+  "reforge_experience_cost": 4,
+  "reforge_durability_cost": 2,
+  "reforge_item": "tiered:toolsmiths_hammer",
+  "style": {
+    "color": "dark_purple"
+  },
+  "attributes": [
+    {
+      "type": "forge:reach_distance",
+      "modifier": {
+        "name": "tiered:extended",
+        "operation": "ADDITION",
+        "amount": 1
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    },
+    {
+      "type": "forge:attack_range",
+      "modifier": {
+        "name": "tiered:extended",
+        "operation": "ADDITION",
+        "amount": 1
+      },
+      "optional_equipment_slots": [
+        "MAINHAND"
+      ]
+    }
+  ]
+}

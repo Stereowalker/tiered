@@ -13,13 +13,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.api.TierPool;
+import com.stereowalker.unionlib.resource.ReloadListener;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 
-public class PoolDataLoader extends SimpleJsonResourceReloadListener {
+public class PoolDataLoader extends SimpleJsonResourceReloadListener implements ReloadListener {
 
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
@@ -70,4 +71,9 @@ public class PoolDataLoader extends SimpleJsonResourceReloadListener {
     public void replace(Map<ResourceLocation, TierPool> i){
         itemPools = i;
     }
+
+	@Override
+	public ResourceLocation id() {
+		return new ResourceLocation("tiered", "pool_data");
+	}
 }

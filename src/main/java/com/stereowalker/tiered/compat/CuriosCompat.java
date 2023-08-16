@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.stereowalker.tiered.Tiered;
-import com.stereowalker.unionlib.util.ModHelper;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;

@@ -1,0 +1,21 @@
+{
+  "weight": 3,
+  "verifiers": [
+    {
+      "tag": "forge:armors/helmets"
+    },
+    {
+      "tag": "forge:armors/chestplates"
+    },
+    {
+      "tag": "forge:armors/leggings"
+    },
+    {
+      "tag": "forge:armors/boots"
+    }
+  ],
+  "tiers": [
+    "tiered:armors/dented",
+    "tiered:armors/unchained"
+  ]
+}

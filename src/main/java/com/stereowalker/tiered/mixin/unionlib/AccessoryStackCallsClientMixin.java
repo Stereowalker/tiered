@@ -33,7 +33,8 @@ import net.minecraft.world.item.ItemStack;
 public abstract class AccessoryStackCallsClientMixin {
 
     private static boolean isTiered = false;
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "gatherAttributes", locals = LocalCapture.CAPTURE_FAILHARD)
+    @SuppressWarnings("rawtypes")
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "gatherAttributes", locals = LocalCapture.CAPTURE_FAILHARD)
     private static void storeAttributeModifier(ItemStack arg0, Player arg1, Multimap multimap, List list, String name, CallbackInfo ci, Iterator var5, Map.Entry entry, AttributeModifier attributemodifier) {
         isTiered = attributemodifier.getName().contains("tiered:");
     }
@@ -42,7 +43,7 @@ public abstract class AccessoryStackCallsClientMixin {
     private static MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting, ItemStack stack, @Nullable Player pPlayer, Multimap<Attribute, AttributeModifier> multimap, List<Component> list, String name) {
         if(stack.hasTag() && stack.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-            PotentialAttribute attribute = Tiered.getAllTiers().get(tier);
+            PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {

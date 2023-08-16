@@ -1,0 +1,23 @@
+{
+  "weight": 5,
+  "verifiers": [
+    {
+      "tag": "forge:armors/helmets"
+    },
+    {
+      "tag": "forge:armors/chestplates"
+    },
+    {
+      "tag": "forge:armors/leggings"
+    },
+    {
+      "tag": "forge:armors/boots"
+    },
+    {
+      "tag": "forge:shields"
+    }
+  ],
+  "tiers": [
+    "tiered:standard_armors/common"
+  ]
+}

@@ -42,7 +42,8 @@ public abstract class ItemStackClientMixin {
 
     private boolean isTiered = false;
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "getTooltipLines", locals = LocalCapture.CAPTURE_FAILHARD)
+    @SuppressWarnings("rawtypes")
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "getTooltipLines", locals = LocalCapture.CAPTURE_FAILHARD)
     private void storeAttributeModifier(Player player, TooltipFlag context, CallbackInfoReturnable<List> cir, List list, MutableComponent component, int i , EquipmentSlot var6[], int var7, int var8, EquipmentSlot equipmentSlot, Multimap multimap, Iterator var11, Map.Entry entry, AttributeModifier entityAttributeModifier) {
         isTiered = entityAttributeModifier.getName().contains("tiered:");
     }
@@ -51,7 +52,7 @@ public abstract class ItemStackClientMixin {
     private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting) {
         if(this.hasTag() && this.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
             ResourceLocation tier = new ResourceLocation(this.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-            PotentialAttribute attribute = Tiered.getAllTiers().get(tier);
+            PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {
@@ -90,7 +91,7 @@ public abstract class ItemStackClientMixin {
             ResourceLocation tier = new ResourceLocation(getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
 
             // attempt to display attribute if it is valid
-            PotentialAttribute potentialAttribute = Tiered.getAllTiers().get(tier);
+            PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             if(potentialAttribute != null) {
             	MutableComponent title;

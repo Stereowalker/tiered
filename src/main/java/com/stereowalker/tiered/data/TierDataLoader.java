@@ -17,6 +17,7 @@ import com.stereowalker.tiered.gson.AccessorySlotDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierSerializer;
 import com.stereowalker.tiered.gson.EquipmentSlotDeserializer;
+import com.stereowalker.unionlib.resource.ReloadListener;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
 import net.minecraft.network.chat.Style;
@@ -27,7 +28,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public class TierDataLoader extends SimpleJsonResourceReloadListener {
+public class TierDataLoader extends SimpleJsonResourceReloadListener implements ReloadListener {
 
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
@@ -83,4 +84,9 @@ public class TierDataLoader extends SimpleJsonResourceReloadListener {
     public void replace(Map<ResourceLocation, PotentialAttribute> i){
         itemAttributes = i;
     }
+
+	@Override
+	public ResourceLocation id() {
+		return new ResourceLocation("tiered", "data_loader");
+	}
 }
