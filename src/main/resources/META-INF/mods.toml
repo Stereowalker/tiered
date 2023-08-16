@@ -32,14 +32,14 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20)"
+    versionRange="[1.19.2,1.21)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[9.0.3, 9.1.0)"
+    versionRange="[10.1.0, 10.2.0)"
     ordering="NONE"
     side="BOTH"
     
