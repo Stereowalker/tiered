@@ -1,39 +1,5 @@
-[5.1.1]
-- Fixed #49
-
-[5.1.0]
-- Prevented CurioAttributeModifierEvent from attempting to load in 1.19.3
-- Added missing English translations for the common, rare, epic and legendary weapons
-- Changed the location of the tier folder from "tiem_attributes" to "tiered_modifier/tiers". The old location will continue to work temporarily
-- Tiers can now specify a literal name to circumvent having to use translations
-- Moved all shield tiers to pools and fix shield tiers not having functionality
-- Moved all bow tiers to pools
-- Bow tiers are now re-rolled with the weaponsmiths hammer
-- Used forge provided tags for helmets. chestplates, leggings, boots, swords, axes, pickaxes, shovels, hoes and bows
-- Raised the durability of all reforging hammers to 20
-- Fixed any and all issues preventing the creation of a single jar for 1.19
-
-[5.0.4]
-- Used newer UnionLib methods
-- Fix tools not getting common, rare, epic or legendary tiers
-- Certain tags and items can now be excluded using "exclusions"
-- Added fishing rods to the common tier for tools
-- Tierless items now get tiers the moment the player opens a chest with one
-- Added a pool system for the tiers (beta)
-- Added an unlucky tier for fishing rods
-
-[5.0.3]
-- Use UnionLib registry helper to get registries to maintain version compatibility
-- Disabled the curios integration due to the event missing in 1.19.3
-
-[5.0.2]
-- Used newest version of UnionLib
-
-[5.0.1]
-- Fixed tiered attribute tooltips not maintaining their color
-- Used the latest version of UnionLib
-- Added Tiers for Bows
-- Moved some events to UnionLib event system
-
-[5.0.0]
-- Ported to 1.19.3
+[6.0.0]
+- Updated to 1.20.1
+- Basic axe tiers are now reforgeable with the weaponsmiths hammer
+- Removed the "item_attribute" folder
+- Temporarily disabled support for 1.19 versions
