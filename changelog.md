@@ -1,4 +1,1 @@
-- Updated to 1.20.1
-- Basic axe tiers are now reforgeable with the weaponsmiths hammer
-- Removed the "item_attribute" folder
-- Temporarily disabled support for 1.19 versions
+- Restored 1.19 compatibility
