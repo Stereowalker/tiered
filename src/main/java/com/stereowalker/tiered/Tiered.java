@@ -37,6 +37,7 @@ import com.stereowalker.unionlib.mod.PacketHolder;
 import com.stereowalker.unionlib.mod.ServerSegment;
 import com.stereowalker.unionlib.util.ModHelper;
 import com.stereowalker.unionlib.util.RegistryHelper;
+import com.stereowalker.unionlib.util.VersionHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
 
@@ -54,13 +55,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -110,17 +106,12 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public Tiered() 
 	{
 		super("survive", () -> new TieredClientSegment(), () -> new ServerSegment());
-		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 		instance = this;
-		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modEventBus.addListener(this::setup);
-		modEventBus.addListener(this::clientSetup);
-		new ResourceLocation("tiered", "attribute_sync");
 	}
-	private void setup(final FMLCommonSetupEvent event) {}
 
 	@Override
-	public void onModStartup() {
+	public void onModConstruct() {
+		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 		ForgeTags.init();
 		if (ModHelper.isCuriosLoaded()) {
 			boolean useCurios = false;
@@ -161,12 +152,26 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		        }
 			}
 		});
+		collector.addInsert(Inserts.ANVIL_CONTENT_CHANGE, (left,right,name,player,output,cost,materialCost,cancel)->{
+			if (!left.isDamaged() && left.getTagElement(NBT_SUBTAG_KEY) != null) {
+				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(new ResourceLocation(left.getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
+				if (reforgedAttribute.getReforgeItem() != null) {
+					if (RegistryHelper.getItemKey(right.getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
+						ItemStack copy = left.copy();
+						copy.removeTagKey(NBT_SUBTAG_KEY);
+						output.set(copy);
+						cost.set(reforgedAttribute.getReforgeExperienceCost());
+					}
+				} else {
+					LOGGER.info(Tiered.getKey(reforgedAttribute)+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
+				}
+			}
+		});
 	}
 
 	@Override
 	public void setupRegistries(RegistryCollector collector) {
 		collector.addRegistryHolder(ItemRegistries.class);
-		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::reforge);
 		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
 
@@ -195,25 +200,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			if (event.getType() == VillagerProfession.WEAPONSMITH)
 				event.getTrades().get(4).add(new VillagerTrades.ItemsForEmeralds(WEAPONSMITHS_HAMMER, 64, 1, 1, 10));
 		}
-		public static void reforge(AnvilUpdateEvent event) {
-			if (!event.getLeft().isDamaged() && event.getLeft().getTagElement(NBT_SUBTAG_KEY) != null) {
-				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(new ResourceLocation(event.getLeft().getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
-				if (reforgedAttribute.getReforgeItem() != null) {
-					if (RegistryHelper.getItemKey(event.getRight().getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (event.getRight().getMaxDamage() - event.getRight().getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
-						ItemStack copy = event.getLeft().copy();
-						copy.removeTagKey(NBT_SUBTAG_KEY);
-						event.setOutput(copy);
-						event.setCost(reforgedAttribute.getReforgeExperienceCost());
-					}
-				} else {
-					LOGGER.info(Tiered.getKey(reforgedAttribute)+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
-				}
-			}
-		}
-	}
-
-
-	private void clientSetup(final FMLClientSetupEvent event) {
 	}
 	
 	public static void attemptToAffixTier(ItemStack stack) {
@@ -239,7 +225,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		if(stack.getItem() instanceof ArmorItem) {
 			ArmorItem item = (ArmorItem) stack.getItem();
 			//TODO: Use version helper to make this compatible with older versions
-			return item.getType().getSlot().equals(slot);
+			return VersionHelper.isEquippableInSlot(item, slot);
 		}
 
 		if(stack.getItem() instanceof ShieldItem) {
