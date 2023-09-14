@@ -1,3 +1,6 @@
+[6.0.2]
+- Added the forge tool tags to the minecraft tool tags to allow compat with older versions of minecraft
+
 [6.0.1]
 - Restored 1.19 compatibility
 
