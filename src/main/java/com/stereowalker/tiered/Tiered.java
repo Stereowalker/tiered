@@ -177,7 +177,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void populateCreativeTabs(CreativeTabPopulator populator) {
-		if (populator.getTabKey() == net.minecraft.world.item.CreativeModeTabs.TOOLS_AND_UTILITIES) {
+		if (populator.isToolTab()) {
 			populator.addItems(ItemRegistries.ARMORERS_HAMMER);
 			populator.addItems(ItemRegistries.TOOLSMITHS_HAMMER);
 			populator.addItems(ItemRegistries.WEAPONSMITHS_HAMMER);
