@@ -1,1 +1,1 @@
-- Added the forge tool tags to the minecraft tool tags to allow compat with older versions of minecraft
+- Updated UnionLib to 10.2.2
