@@ -39,7 +39,7 @@ This is a forge port of the fabric mod. Here is the link https://www.curseforge.
 [[dependencies.tiered]]
     modId="unionlib"
     mandatory=true
-    versionRange="[10.2.0, 10.3.0)"
+    versionRange="[10.2.2, 10.3.0)"
     ordering="NONE"
     side="BOTH"
     
