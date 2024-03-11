@@ -1,1 +1,1 @@
-- Updated UnionLib to 10.2.2
+- Updated to work with the latest version of Curios
