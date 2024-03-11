@@ -37,7 +37,7 @@ public abstract class ClientEventHandlerMixin {
 
     @SuppressWarnings("rawtypes")
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "onTooltip", locals = LocalCapture.CAPTURE_FAILHARD)
-    private void storeAttributeModifier(ItemTooltipEvent evt, CallbackInfo ci, ItemStack stack, Player player, List tooltip, CompoundTag tag, int i, Set curioTags, List slots, List tagTooltips, MutableComponent slotsTooltip, LazyOptional optionalCurio, List attributeTooltip, Iterator var13, String identifier, Multimap multimap, boolean init, Iterator var17, Map.Entry entry, AttributeModifier attributemodifier) {
+    private void storeAttributeModifier(ItemTooltipEvent evt, CallbackInfo ci, ItemStack stack, Player player, List tooltip, CompoundTag tag, int i, Map map, Set curioTags, List slots, List tagTooltips, MutableComponent slotsTooltip, LazyOptional optionalCurio, List attributeTooltip, Iterator var14, String identifier, Multimap multimap, boolean init, Iterator var18, Map.Entry entry, AttributeModifier attributemodifier) {
         isTiered = attributemodifier.getName().contains("tiered:");
     }
 
@@ -56,7 +56,7 @@ public abstract class ClientEventHandlerMixin {
     @ModifyVariable(remap = false,
             method = "onTooltip",
             at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;isEmpty()Z"),
-            index = 15
+            ordinal = 0
     )
     private Multimap<Attribute, AttributeModifier> sort(Multimap<Attribute, AttributeModifier> map) {
         Multimap<Attribute, AttributeModifier> vanillaFirst = LinkedListMultimap.create();
