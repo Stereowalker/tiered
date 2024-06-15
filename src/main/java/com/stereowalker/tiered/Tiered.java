@@ -45,6 +45,7 @@ import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.tags.TagLoader;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -112,7 +113,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	@Override
 	public void onModConstruct() {
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
-		ForgeTags.init();
+//		ForgeTags.init();
 		if (ModHelper.isCuriosLoaded()) {
 			boolean useCurios = false;
 			try {Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
