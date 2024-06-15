@@ -1,1 +1,2 @@
-- Updated to work with the latest version of Curios
+- Removed unused tags
+- Fix tags breaking
