@@ -1,7 +1,8 @@
 plugins {
 	id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
     id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -15,28 +16,30 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 mixin {
-    add sourceSets.main, modId+".refmap.json"
-    config "${modId}.mixins.json"
+    add sourceSets.main, _mod_id+".refmap.json"
+    config "${_mod_id}.mixins.json"
 }
 
 version = modMinecraftVersion + "-" +modVersion +"-"+modLoader
 group = modGroup // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = modFilename
+archivesBaseName = _mod_name
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+//java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-println('Mod Name: ' + modFilename + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + modMinecraftVersion + ', '+modLoader+' Version: ' + modLoaderVersion)
+println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + modMinecraftVersion + ', '+modLoader+' Version: ' + _loader_version)
 
 minecraft {
     mappings channel: mappingsChannel, version: mappingsVersion
+    reobf = false
+    copyIdeResources = true
     //makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
             workingDirectory project.file('run/client')
             property 'forge.logging.markers', 'REGISTRIES'
-			arg "-mixin.config="+modId+".mixins.json"
+			arg "-mixin.config="+_mod_id+".mixins.json"
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -46,7 +49,7 @@ minecraft {
 			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             mods {
-                "${modId}" {
+                "${_mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -55,7 +58,7 @@ minecraft {
         server {
             workingDirectory project.file('run/server')
             property 'forge.logging.markers', 'REGISTRIES'
-			arg "-mixin.config="+modId+".mixins.json"
+			arg "-mixin.config="+_mod_id+".mixins.json"
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -65,7 +68,7 @@ minecraft {
 			
 
             mods {
-                "${modId}" {
+                "${_mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -83,27 +86,28 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:' + modMinecraftVersion + '-' + modLoaderVersion
+	minecraft 'net.minecraftforge:forge:' + modMinecraftVersion + '-' + _loader_version
 	annotationProcessor "org.spongepowered:mixin:"+modMixinVersion+":processor"
 	implementation "org.spongepowered:mixin:"+modMixinVersion+""
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation fg.deobf("com.stereowalker.unionlib:UnionLib:"+modMinecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}:api")
-	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
-	implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
+	implementation ("com.stereowalker.unionlib:UnionLib:"+modMinecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
+	compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}:api")
+	runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
+	implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
+	implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": modFilename,
+            "Specification-Title": _mod_name,
             "Specification-Vendor": "Stereowalker",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Stereowalker",
-            "MixinConfigs": modId+".mixins.json",
+            "MixinConfigs": _mod_id+".mixins.json",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -127,7 +131,7 @@ curseforge {
       		requiredDependency 'unionlib'
 		}
 		mainArtifact(jar) {
-			displayName = modFilename+"-$project.version"
+			displayName = _mod_name+"-$project.version"
 		}
 	}		
 }
@@ -135,7 +139,7 @@ curseforge {
 
 modrinth {
     token = "$System.env.MODRINTH_TOKEN"
-    projectId = modId
+    projectId = _mod_id
     versionNumber = "${project.version}"
     versionType = "release"
     uploadFile = jar
@@ -152,7 +156,20 @@ task uploadToAllSites {
     uploadToAllSites.dependsOn modrinth
 }
 
-jar.finalizedBy('reobfJar')
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            //minecraft_version: modMinecraftVersion, minecraft_version_range: minecraft_version_range,
+            //forge_version: _loader_version, forge_version_range: forge_version_range,
+            loader_version_range: "[${_loader_version_min},"+_loader_version_max+")",
+            mod_id: _mod_id, mod_name: _mod_name, mod_license: _mod_license, mod_version: modVersion,
+            mod_authors: _mod_authors, mod_description: _mod_description,
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties/* + [project: project]*/
+    }
+}
 
 publishing {
     publications {
@@ -172,4 +189,14 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 artifacts {
+}
+
+eclipse {
+    synchronizationTasks 'genEclipseRuns'
+}
+//Remove later
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }

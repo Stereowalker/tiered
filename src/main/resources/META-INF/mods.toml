@@ -1,51 +1,47 @@
-
 modLoader="javafml"
-loaderVersion="[41,)"
-license="MIT"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 issueTrackerURL="https://github.com/Stereowalker/tiered/issues"
 logoFile="icon.png"
 [[mods]]
-modId="tiered"
-version="${file.jarVersion}"
-displayName="Tiered"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
 updateJSONURL=""
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tiered-forge"
 credits="I'd like to thank all my supporters on Patreon for giving me a reason to continue modding, and you for downloading and playing with this mod"
-authors="Draylar, Stereowalker"
-description='''
-Adds tiers to tools.
-This is a forge port of the fabric mod. Here is the link https://www.curseforge.com/minecraft/mc-mods/tiered
-'''
+authors="${mod_authors}"
+description='''${mod_description}'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.tiered]] #optional
+[[dependencies.${mod_id}]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[41,)" #mandatory
+    versionRange="[50,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.tiered]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.21)"
+    versionRange="[1.20.6,1.21)"
     ordering="NONE"
     side="BOTH"
     
-[[dependencies.tiered]]
+[[dependencies.${mod_id}]]
     modId="unionlib"
     mandatory=true
-    versionRange="[10.2.2, 10.3.0)"
+    versionRange="[11.0.1, 12.0.0)"
     ordering="NONE"
     side="BOTH"
     
-[[dependencies.tiered]]
+[[dependencies.${mod_id}]]
     modId="curios"
     mandatory=false
-    versionRange="[1.19.2-5.1.4.1,)"
+    versionRange="[1.19.2-8.0.0,)"
     ordering="NONE"
     side="BOTH"
