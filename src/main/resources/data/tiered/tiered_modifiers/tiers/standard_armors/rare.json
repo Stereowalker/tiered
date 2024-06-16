@@ -11,7 +11,7 @@
       "type": "generic.max_health",
       "modifier": {
         "name": "tiered:rare_armor",
-        "operation": "ADDITION",
+        "operation": "ADD_VALUE",
         "amount": 4
       },
       "optional_equipment_slots": [
@@ -25,7 +25,7 @@
       "type": "generic.armor",
       "modifier": {
         "name": "tiered:rare_armor",
-        "operation": "ADDITION",
+        "operation": "ADD_VALUE",
         "amount": 1
       },
       "optional_equipment_slots": [

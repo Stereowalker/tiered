@@ -11,7 +11,7 @@
       "type": "generic.attack_damage",
       "modifier": {
         "name": "tiered:sharp",
-        "operation": "MULTIPLY_TOTAL",
+        "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": 0.15
       },
       "optional_equipment_slots": [

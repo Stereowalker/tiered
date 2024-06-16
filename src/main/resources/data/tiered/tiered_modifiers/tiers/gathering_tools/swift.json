@@ -11,7 +11,7 @@
       "type": "unionlib:generic.dig_speed",
       "modifier": {
         "name": "tiered:swift",
-        "operation": "MULTIPLY_TOTAL",
+        "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": 0.10
       },
       "optional_equipment_slots": [
@@ -22,7 +22,7 @@
       "type": "generic.movement_speed",
       "modifier": {
         "name": "tiered:swift",
-        "operation": "MULTIPLY_TOTAL",
+        "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": 0.10
       },
       "optional_equipment_slots": [

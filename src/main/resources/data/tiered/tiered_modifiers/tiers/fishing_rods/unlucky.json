@@ -11,7 +11,7 @@
       "type": "generic.luck",
       "modifier": {
         "name": "tiered:unlucky",
-        "operation": "MULTIPLY_TOTAL",
+        "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": -0.25
       },
       "optional_equipment_slots": [
