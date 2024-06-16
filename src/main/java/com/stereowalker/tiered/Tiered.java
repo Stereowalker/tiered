@@ -5,17 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Function;
-import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.api.AttributeTemplate;
-import com.stereowalker.tiered.api.ForgeTags;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
@@ -42,13 +40,11 @@ import com.stereowalker.unionlib.world.entity.AccessorySlot;
 import com.stereowalker.unionlib.world.item.AccessoryItem;
 
 import net.minecraft.Util;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.tags.TagLoader;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ArmorItem;
@@ -100,20 +96,22 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static final String NBT_SUBTAG_KEY = "Tiered";
-	public static final String NBT_SUBTAG_DATA_KEY = "Tier";
-
 	public static Tiered instance;
 	public Tiered() 
 	{
-		super("survive", () -> new TieredClientSegment(), () -> new ServerSegment());
+		super("tiered", () -> new TieredClientSegment(), () -> new ServerSegment());
 		instance = this;
+		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
+	}
+	
+	//TODO: Copy this over to 1.20.1 >
+	public static boolean hasModifier(ItemStack stack) {
+		//return left.getTagElement(NBT_SUBTAG_KEY) != null;
+		return stack.has(ComponentsRegistry.MODIFIER);
 	}
 
 	@Override
 	public void onModConstruct() {
-		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
-//		ForgeTags.init();
 		if (ModHelper.isCuriosLoaded()) {
 			boolean useCurios = false;
 			try {Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
@@ -154,12 +152,12 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			}
 		});
 		collector.addInsert(Inserts.ANVIL_CONTENT_CHANGE, (left,right,name,player,output,cost,materialCost,cancel)->{
-			if (!left.isDamaged() && left.getTagElement(NBT_SUBTAG_KEY) != null) {
-				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(new ResourceLocation(left.getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
+			if (!left.isDamaged() && hasModifier(left)) {
+				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(left.get(ComponentsRegistry.MODIFIER));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.getItemKey(right.getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = left.copy();
-						copy.removeTagKey(NBT_SUBTAG_KEY);
+						copy.remove(ComponentsRegistry.MODIFIER);
 						output.set(copy);
 						cost.set(reforgedAttribute.getReforgeExperienceCost());
 					}
@@ -172,6 +170,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void setupRegistries(RegistryCollector collector) {
+		collector.addRegistryHolder(ComponentsRegistry.class);
 		collector.addRegistryHolder(ItemRegistries.class);
 		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
@@ -185,14 +184,27 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		}
 	}
 
+
+	@RegistryHolder(namespace = "tiered", registry = DataComponentType.class)
+	public class ComponentsRegistry {
+		@RegistryObject("tiered_modifier")
+		public static final DataComponentType<ResourceLocation> MODIFIER = register(
+				p_333150_ -> p_333150_.persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC)
+				);
+
+		private static <T> DataComponentType<T> register(UnaryOperator<DataComponentType.Builder<T>> pBuilder) {
+			return pBuilder.apply(DataComponentType.builder()).build();
+		}
+	}
+
 	@RegistryHolder(registry = Item.class, namespace = "tiered")
 	public class ItemRegistries {
 		@RegistryObject("armorers_hammer")
-		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
+		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().durability(20));
 		@RegistryObject("toolsmiths_hammer")
-		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
+		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().durability(20));
 		@RegistryObject("weaponsmiths_hammer")
-		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().defaultDurability(20));
+		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().durability(20));
 		public static void trade(VillagerTradesEvent event) {
 			if (event.getType() == VillagerProfession.ARMORER)
 				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(ARMORERS_HAMMER, 64, 1, 1, 10));
@@ -204,12 +216,13 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	}
 	
 	public static void attemptToAffixTier(ItemStack stack) {
-		if(stack.getTagElement(Tiered.NBT_SUBTAG_KEY) == null && !stack.isEmpty()) {
-            ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(stack.getItem());
-            if(potentialAttributeID != null) {
-            	stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
-            }
-        }
+		if(!hasModifier(stack) && !stack.isEmpty()) {
+			ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(stack.getItem());
+			if(potentialAttributeID != null) {
+				System.out.println(stack.get(ComponentsRegistry.MODIFIER)+" "+potentialAttributeID);
+				stack.set(ComponentsRegistry.MODIFIER, potentialAttributeID);
+			}
+		}
 	}
 
 	/**
@@ -263,16 +276,14 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		collector.registerClientboundPacket(new ResourceLocation("tiered", "tier_sync"), ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
 	}
 
-	public static <T extends Object> Multimap<Attribute, AttributeModifier> AppendAttributesToOriginal(ItemStack stack, T slot, boolean isPreferredSlot, String customAttributes, 
-			Multimap<Attribute, AttributeModifier> original, Function<AttributeTemplate,T[]> requiredSlotsArray, 
-			Function<AttributeTemplate,T[]> optionalSlotsArray, BiConsumer<AttributeTemplate,Multimap<Attribute, AttributeModifier>> realize) {
-		Multimap<Attribute, AttributeModifier> newMap = LinkedListMultimap.create();
-		newMap.putAll(original);
+	public static <T> void AppendAttributesToOriginal(ItemStack stack, T slot, boolean isPreferredSlot, String customAttributes, 
+			Function<AttributeTemplate,T[]> requiredSlotsArray, 
+			Function<AttributeTemplate,T[]> optionalSlotsArray, Consumer<AttributeTemplate> realize) {
+		//		Multimap<Attribute, AttributeModifier> newMap = LinkedListMultimap.create();
+		if(hasModifier(stack)) {
+			ResourceLocation tier = stack.get(ComponentsRegistry.MODIFIER);
 
-		if(stack.getTagElement(Tiered.NBT_SUBTAG_KEY) != null) {
-			ResourceLocation tier = new ResourceLocation(stack.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
-
-			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
+//			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
 				PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
 
 				if(potentialAttribute != null) {
@@ -281,7 +292,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 						if(requiredSlotsArray.apply(template) != null) {
 							List<T> requiredSlots = new ArrayList<>(Arrays.asList(requiredSlotsArray.apply(template)));
 							if(requiredSlots.contains(slot))
-								realize.accept(template, newMap);
+								realize.accept(template);
 						}
 
 						// get optional equipment slots
@@ -289,12 +300,11 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 							List<T> optionalSlots = new ArrayList<>(Arrays.asList(optionalSlotsArray.apply(template)));
 							// optional equipment slots are valid ONLY IF the equipment slot is valid for the thing
 							if(optionalSlots.contains(slot) && isPreferredSlot)
-								realize.accept(template, newMap);
+								realize.accept(template);
 						}
 					});
 				}
-			}
+//			}
 		}
-		return newMap;
 	}
 }

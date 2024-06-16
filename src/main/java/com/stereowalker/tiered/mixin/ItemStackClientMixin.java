@@ -1,57 +1,44 @@
 package com.stereowalker.tiered.mixin;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.PotentialAttribute;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentHolder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackClientMixin {
-
-    @Shadow public abstract CompoundTag getOrCreateTagElement(String key);
-
-    @Shadow public abstract boolean hasTag();
-
-    @Shadow public abstract CompoundTag getTagElement(String key);
+public abstract class ItemStackClientMixin implements DataComponentHolder {
 
     private boolean isTiered = false;
 
     @SuppressWarnings("rawtypes")
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;getAmount()D"), method = "getTooltipLines", locals = LocalCapture.CAPTURE_FAILHARD)
-    private void storeAttributeModifier(Player player, TooltipFlag context, CallbackInfoReturnable<List> cir, List list, MutableComponent component, int i , EquipmentSlot var6[], int var7, int var8, EquipmentSlot equipmentSlot, Multimap multimap, Iterator var11, Map.Entry entry, AttributeModifier entityAttributeModifier) {
-        isTiered = entityAttributeModifier.getName().contains("tiered:");
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;amount()D"), method = "addModifierTooltip")
+    private void storeAttributeModifier(Consumer arg0, Player arg1, Holder arg2, AttributeModifier pModfier, CallbackInfo ci) {
+        isTiered = pModfier.name().contains("_tiered_");
     }
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 5), method = "getTooltipLines")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "addModifierTooltip")
     private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting) {
-        if(this.hasTag() && this.getTagElement(Tiered.NBT_SUBTAG_KEY) != null && isTiered) {
-            ResourceLocation tier = new ResourceLocation(this.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
+        if(Tiered.hasModifier((ItemStack)(Object)this) && isTiered) {
+            ResourceLocation tier = get(Tiered.ComponentsRegistry.MODIFIER);
             PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
@@ -60,35 +47,14 @@ public abstract class ItemStackClientMixin {
         }
     }
 
-    @ModifyVariable(
-            method = "getTooltipLines",
-            at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Multimap;isEmpty()Z"),
-            index = 10
-    )
-    private Multimap<Attribute, AttributeModifier> sort(Multimap<Attribute, AttributeModifier> map) {
-        Multimap<Attribute, AttributeModifier> vanillaFirst = LinkedListMultimap.create();
-        Multimap<Attribute, AttributeModifier> remaining = LinkedListMultimap.create();
-
-        map.forEach((entityAttribute, entityAttributeModifier) -> {
-            if (!entityAttributeModifier.getName().contains("tiered")) {
-                vanillaFirst.put(entityAttribute, entityAttributeModifier);
-            } else {
-                remaining.put(entityAttribute, entityAttributeModifier);
-            }
-        });
-
-        vanillaFirst.putAll(remaining);
-        return vanillaFirst;
-    }
-
     @Inject(
             method = "getHoverName",
             at = @At("RETURN"),
             cancellable = true
     )
     private void modifyName(CallbackInfoReturnable<Component> cir) {
-        if(this.hasTag() && this.getTagElement("display") == null && this.getTagElement(Tiered.NBT_SUBTAG_KEY) != null) {
-            ResourceLocation tier = new ResourceLocation(getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).getString(Tiered.NBT_SUBTAG_DATA_KEY));
+        if(this.get(DataComponents.CUSTOM_NAME) == null && Tiered.hasModifier((ItemStack)(Object)this)) {
+            ResourceLocation tier = get(Tiered.ComponentsRegistry.MODIFIER);
 
             // attempt to display attribute if it is valid
             PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);

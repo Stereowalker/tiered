@@ -30,8 +30,8 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
 	@Inject(method = "onTake", at =@At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 0))
 	private void saveReforgedAttribute(Player p_150474_, ItemStack p_150475_, CallbackInfo ci) {
-		if (this.inputSlots.getItem(0).getTagElement(Tiered.NBT_SUBTAG_KEY) != null) {
-			reforgedAttribute = new ResourceLocation(this.inputSlots.getItem(0).getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier"));
+		if (Tiered.hasModifier(this.inputSlots.getItem(0))) {
+			reforgedAttribute = this.inputSlots.getItem(0).get(Tiered.ComponentsRegistry.MODIFIER);
 		}
 	}
 
@@ -55,7 +55,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 				}
 				// found an ID
 				if(potentialAttributeID != null) {
-					p_150475_.getOrCreateTagElement(Tiered.NBT_SUBTAG_KEY).putString(Tiered.NBT_SUBTAG_DATA_KEY, potentialAttributeID.toString());
+					p_150475_.set(Tiered.ComponentsRegistry.MODIFIER, potentialAttributeID);
 				}
 
 				if ((hammer.getMaxDamage() - hammer.getDamageValue()) == potential.getReforgeDurabilityCost())

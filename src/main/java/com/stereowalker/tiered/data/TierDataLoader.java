@@ -17,6 +17,7 @@ import com.stereowalker.tiered.gson.AccessorySlotDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierDeserializer;
 import com.stereowalker.tiered.gson.EntityAttributeModifierSerializer;
 import com.stereowalker.tiered.gson.EquipmentSlotDeserializer;
+import com.stereowalker.tiered.gson.StyleSerializer;
 import com.stereowalker.unionlib.resource.ReloadListener;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
@@ -38,7 +39,7 @@ public class TierDataLoader extends SimpleJsonResourceReloadListener implements 
             .registerTypeAdapter(EquipmentSlot.class, new EquipmentSlotDeserializer())
             .registerTypeAdapter(AccessorySlot.class, new AccessorySlotDeserializer())
             .registerTypeAdapter(AccessorySlot.Group.class, new AccessoryGroupDeserializer())
-            .registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
+            .registerTypeHierarchyAdapter(Style.class, new StyleSerializer())
             .create();
 
     private static final String PARSING_ERROR_MESSAGE = "Parsing error loading recipe {}";

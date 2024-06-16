@@ -15,11 +15,11 @@ public class CuriosCompat {
 			Tiered.AppendAttributesToOriginal(
 					event.getItemStack(), 
 					event.getSlotContext().identifier(), 
-					Tiered.isPreferredCurioSlot(event.getItemStack(), 
-							event.getSlotContext().identifier()), "CurioAttributeModifiers", event.getModifiers(),
+					Tiered.isPreferredCurioSlot(event.getItemStack(), event.getSlotContext().identifier()), 
+					"CurioAttributeModifiers"/* , event.getModifiers() */,
 					template -> template.getRequiredCurioSlot(), 
 					template -> template.getOptionalCurioSlot(), 
-					(template, newMap) -> template.realize(event::addModifier, event.getSlotContext().identifier()));
+					(template) -> template.realize(event::addModifier, event.getSlotContext().identifier()));
 		}
 		;
 		MinecraftForge.EVENT_BUS.addListener(i.get());
