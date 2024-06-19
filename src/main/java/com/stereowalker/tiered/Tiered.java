@@ -51,9 +51,9 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -172,7 +172,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public void setupRegistries(RegistryCollector collector) {
 		collector.addRegistryHolder(ComponentsRegistry.class);
 		collector.addRegistryHolder(ItemRegistries.class);
-		MinecraftForge.EVENT_BUS.addListener(ItemRegistries::trade);
+		NeoForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
 
 	@Override

@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 
 import com.stereowalker.tiered.Tiered;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class CuriosCompat {
 	public static void load() {
@@ -22,6 +22,6 @@ public class CuriosCompat {
 					(template) -> template.realize(event::addModifier, event.getSlotContext().identifier()));
 		}
 		;
-		MinecraftForge.EVENT_BUS.addListener(i.get());
+		NeoForge.EVENT_BUS.addListener(i.get());
 	}
 }

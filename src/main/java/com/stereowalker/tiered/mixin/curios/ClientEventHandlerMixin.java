@@ -26,8 +26,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+//import net.minecraftforge.common.util.LazyOptional;
+//import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import top.theillusivec4.curios.client.ClientEventHandler;
 
 @Mixin(ClientEventHandler.class)

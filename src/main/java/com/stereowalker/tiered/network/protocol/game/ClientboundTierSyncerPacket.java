@@ -22,13 +22,13 @@ public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
     public static final Map<ResourceLocation, PotentialAttribute> CACHED_ATTRIBUTES = new HashMap<>();
 
     public ClientboundTierSyncerPacket(Map<ResourceLocation, PotentialAttribute> attribute) {
-    	super(Tiered.instance.channel);
+    	super(null);
     	this.attribute = attribute;
         this.size = attribute.size();
     }
 
 	public ClientboundTierSyncerPacket(RegistryFriendlyByteBuf buf) {
-		super(buf, Tiered.instance.channel);
+		super(buf);
 		this.size = buf.readInt();
 		this.attribute = Maps.newHashMap();
         for (int i = 0; i < this.size; i++) {

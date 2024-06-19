@@ -12,14 +12,18 @@ displayURL="https://www.curseforge.com/minecraft/mc-mods/tiered-forge"
 credits="I'd like to thank all my supporters on Patreon for giving me a reason to continue modding, and you for downloading and playing with this mod"
 authors="${mod_authors}"
 description='''${mod_description}'''
+[[mixins]]
+config="${mod_id}.mixins.json"
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.${mod_id}]] #optional
     # the modid of the dependency
-    modId="forge" #mandatory
+    modId="neoforge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[50,)" #mandatory
+    versionRange="[20,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

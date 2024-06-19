@@ -1,79 +1,55 @@
 plugins {
-	id 'eclipse'
+	id 'java-library'
+    id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.142'
     id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.+"
-}
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'org.spongepowered.mixin'
-
-mixin {
-    add sourceSets.main, _mod_id+".refmap.json"
-    config "${_mod_id}.mixins.json"
 }
 
 version = _minecraft_version + "-" +modVersion +"-"+modLoader
 group = modGroup // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = _mod_name
+base {
+    archivesName = _mod_name
+}
 
-//java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + _minecraft_version + ', '+modLoader+' Version: ' + _loader_version)
 
 minecraft {
-    mappings channel: mappingsChannel, version: mappingsVersion
-    reobf = false
-    copyIdeResources = true
-    //makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    runs {
-        client {
-            workingDirectory project.file('run/client')
-            property 'forge.logging.markers', 'REGISTRIES'
-			arg "-mixin.config="+_mod_id+".mixins.json"
+  accessTransformers {
+    file('src/main/resources/META-INF/accesstransformer.cfg')
+  }
+}
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-			
-			
-            property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-
-            mods {
-                "${_mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run/server')
-            property 'forge.logging.markers', 'REGISTRIES'
-			arg "-mixin.config="+_mod_id+".mixins.json"
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-			
-			
-            property 'mixin.env.disableRefMap', 'true'
-			
-
-            mods {
-                "${_mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
     }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project._mod_id
+        workingDirectory project.file('run/Neo-Client')
+    }
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project._mod_id
+        workingDirectory project.file('run/Neo-Server')
+        programArgument '--nogui'
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 repositories {
@@ -86,15 +62,11 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:' + _minecraft_version + '-' + _loader_version
-	annotationProcessor "org.spongepowered:mixin:"+modMixinVersion+":processor"
-	implementation "org.spongepowered:mixin:"+modMixinVersion+""
-	implementation fileTree(include: ['*.jar'], dir: 'libs')
+	implementation "net.neoforged:neoforge:${_loader_version}"
 	implementation ("com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}:api")
-	runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
-	implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
-	implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+	compileOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}:api")
+	runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
+	implementation ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -107,7 +79,6 @@ jar {
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"Stereowalker",
-            "MixinConfigs": _mod_id+".mixins.json",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -166,7 +137,7 @@ tasks.named('processResources', ProcessResources).configure {
             mod_authors: _mod_authors, mod_description: _mod_description,
     ]
     inputs.properties replaceProperties
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
         expand replaceProperties/* + [project: project]*/
     }
 }
@@ -189,14 +160,4 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 artifacts {
-}
-
-eclipse {
-    synchronizationTasks 'genEclipseRuns'
-}
-//Remove later
-sourceSets.each {
-    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
-    it.output.resourcesDir = dir
-    it.java.destinationDirectory = dir
 }
