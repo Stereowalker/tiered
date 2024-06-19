@@ -1,1 +1,4 @@
-- Ported to 1.20.6
+- Ported to NeoForge
+- Added ids to packets
+- Fix Berserk tier
+- Fix mod crashing randomly

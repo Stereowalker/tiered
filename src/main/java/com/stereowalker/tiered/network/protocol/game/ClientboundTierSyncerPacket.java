@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.unionlib.network.protocol.game.ClientboundUnionPacket;
