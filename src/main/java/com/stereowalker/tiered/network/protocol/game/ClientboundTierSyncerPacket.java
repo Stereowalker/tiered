@@ -59,4 +59,10 @@ public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
         }
 		return true;
 	}
+
+	public static ResourceLocation id = new ResourceLocation("tiered", "tier_sync");
+	@Override
+	public ResourceLocation id() {
+		return id;
+	}
 }
