@@ -30,7 +30,7 @@
       ]
     },
     {
-      "type": "forge:reach_distance",
+      "type": "minecraft:player.block_interaction_range",
       "modifier": {
         "name": "tiered:berserk",
         "operation": "ADD_VALUE",
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "type": "forge:attack_range",
+      "type": "minecraft:player.entity_interaction_range",
       "modifier": {
         "name": "tiered:berserk",
         "operation": "ADD_VALUE",
