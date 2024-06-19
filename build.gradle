@@ -20,14 +20,14 @@ mixin {
     config "${_mod_id}.mixins.json"
 }
 
-version = modMinecraftVersion + "-" +modVersion +"-"+modLoader
+version = _minecraft_version + "-" +modVersion +"-"+modLoader
 group = modGroup // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = _mod_name
 
 //java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + modMinecraftVersion + ', '+modLoader+' Version: ' + _loader_version)
+println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + _minecraft_version + ', '+modLoader+' Version: ' + _loader_version)
 
 minecraft {
     mappings channel: mappingsChannel, version: mappingsVersion
@@ -86,14 +86,14 @@ repositories {
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:' + modMinecraftVersion + '-' + _loader_version
+	minecraft 'net.minecraftforge:forge:' + _minecraft_version + '-' + _loader_version
 	annotationProcessor "org.spongepowered:mixin:"+modMixinVersion+":processor"
 	implementation "org.spongepowered:mixin:"+modMixinVersion+""
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation ("com.stereowalker.unionlib:UnionLib:"+modMinecraftVersion+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}:api")
-	runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
-	implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${modMinecraftVersion}")
+	implementation ("com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+"")
+	compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}:api")
+	runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
+	implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
 	implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
@@ -119,7 +119,7 @@ curseforge {
 		apiKey = "$System.env.CURSEFORGEKEY"
 		changelog = file('changelog.md')
 		releaseType = 'release'
-		addGameVersion(modMinecraftVersion)
+		addGameVersion(_minecraft_version)
 		/*addGameVersion("1.20")
 		addGameVersion("1.19.4")
 		addGameVersion("1.19.3")
@@ -143,7 +143,7 @@ modrinth {
     versionNumber = "${project.version}"
     versionType = "release"
     uploadFile = jar
-    gameVersions = [modMinecraftVersion/*, "1.20", "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19"*/]
+    gameVersions = [_minecraft_version/*, "1.20", "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19"*/]
     loaders = ["${project.modLoader}".toLowerCase()]
 	changelog = file('changelog.md').text
     dependencies {
@@ -159,7 +159,7 @@ task uploadToAllSites {
 
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            //minecraft_version: modMinecraftVersion, minecraft_version_range: minecraft_version_range,
+            minecraft_version: _minecraft_version, //minecraft_version_range: minecraft_version_range,
             //forge_version: _loader_version, forge_version_range: forge_version_range,
             loader_version_range: "[${_loader_version_min},"+_loader_version_max+")",
             mod_id: _mod_id, mod_name: _mod_name, mod_license: _mod_license, mod_version: modVersion,
