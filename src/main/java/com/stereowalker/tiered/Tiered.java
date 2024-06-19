@@ -273,7 +273,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	
 	@Override
 	public void registerPackets(PacketCollector collector) {
-		collector.registerClientboundPacket(new ResourceLocation("tiered", "tier_sync"), ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
+		collector.registerClientboundPacket(ClientboundTierSyncerPacket.id, ClientboundTierSyncerPacket.class, ClientboundTierSyncerPacket::new);
 	}
 
 	public static <T> void AppendAttributesToOriginal(ItemStack stack, T slot, boolean isPreferredSlot, String customAttributes, 
