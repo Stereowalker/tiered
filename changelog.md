@@ -1,2 +1,1 @@
-- Removed unused tags
-- Fix tags breaking
+- Fix inconsistent armor values when multiple tiered armor are equipped 
