@@ -1,3 +1,2 @@
-- Added ids to packets
-- Fix Berserk tier
-- Fix mod crashing randomly
+- Fix mixin errors
+- Fix inconsistent armor values when multiple tiered armor are equipped

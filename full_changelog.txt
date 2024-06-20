@@ -1,3 +1,7 @@
+[7.0.2]
+- Fix mixin errors
+- Fix inconsistent armor values when multiple tiered armor are equipped
+
 [7.0.1]
 - Added ids to packets
 - Fix Berserk tier
