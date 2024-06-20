@@ -68,10 +68,10 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final UUID[] MODIFIERS = new UUID[] {
 			//Equipment
-			UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"),
-			UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),
-			UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"),
-			UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"),
+			UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6C"),
+			UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0E"),
+			UUID.fromString("9F3D476D-C118-4544-8365-64846904B48F"),
+			UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB151"),
 			UUID.fromString("4a88bc27-9563-4eeb-96d5-fe50917cc24f"),
 			UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7a"),
 			//Accessory slots 
@@ -219,7 +219,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		if(!hasModifier(stack) && !stack.isEmpty()) {
 			ResourceLocation potentialAttributeID = ModifierUtils.getRandomAttributeIDFor(stack.getItem());
 			if(potentialAttributeID != null) {
-				System.out.println(stack.get(ComponentsRegistry.MODIFIER)+" "+potentialAttributeID);
 				stack.set(ComponentsRegistry.MODIFIER, potentialAttributeID);
 			}
 		}
