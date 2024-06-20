@@ -1,2 +1,7 @@
+[7.0.1]
+- Added ids to packets
+- Fix Berserk tier
+- Fix mod crashing randomly
+
 [7.0.0]
 - Ported to 1.20.6
