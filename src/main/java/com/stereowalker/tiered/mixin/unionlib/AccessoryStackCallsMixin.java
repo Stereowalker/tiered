@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(AccessoryStackCalls.class)
 public abstract class AccessoryStackCallsMixin {
 	@Inject(method = "forEachModifier", at = @At("TAIL"), remap = false)
-    public void go(ItemStack thisStack, AccessorySlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> pAction, CallbackInfo ci) {
+    private static void go(ItemStack thisStack, AccessorySlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> pAction, CallbackInfo ci) {
     	Tiered.AppendAttributesToOriginal(thisStack, slot, Tiered.isPreferredAccessorySlot(thisStack, slot), "",
 				template -> template.getRequiredAccessorySlot(), 
 				template -> template.getOptionalAccessorySlot(), 

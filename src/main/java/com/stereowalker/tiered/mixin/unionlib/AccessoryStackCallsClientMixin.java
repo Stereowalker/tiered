@@ -31,13 +31,13 @@ public abstract class AccessoryStackCallsClientMixin {
 
     @SuppressWarnings("rawtypes")
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;amount()D"), method = "gatherAttributes")
-    private void storeAttributeModifier(ItemStack stack, Consumer arg0, Player arg1, Holder arg2, AttributeModifier pModfier, CallbackInfo ci) {
+    private static void storeAttributeModifier(ItemStack stack, Consumer arg0, Player arg1, Holder arg2, AttributeModifier pModfier, CallbackInfo ci) {
         isTiered = pModfier.name().contains("_tiered_");
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "gatherAttributes")
-    private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting, ItemStack stack, Consumer<Component> pTooltipAdder, @Nullable Player pPlayer, Holder<Attribute> pAttribute, AttributeModifier pModfier) {
-        if(Tiered.hasModifier((ItemStack)(Object)this) && isTiered) {
+    private static MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting, ItemStack stack, Consumer<Component> pTooltipAdder, @Nullable Player pPlayer, Holder<Attribute> pAttribute, AttributeModifier pModfier) {
+        if(Tiered.hasModifier(stack) && isTiered) {
             ResourceLocation tier = stack.get(Tiered.ComponentsRegistry.MODIFIER);
             PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
 
