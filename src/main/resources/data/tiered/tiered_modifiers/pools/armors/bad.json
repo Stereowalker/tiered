@@ -2,16 +2,16 @@
   "weight": 3,
   "verifiers": [
     {
-      "tag": "forge:armors/helmets"
+      "tag": "minecraft:head_armor"
     },
     {
-      "tag": "forge:armors/chestplates"
+      "tag": "minecraft:chest_armor"
     },
     {
-      "tag": "forge:armors/leggings"
+      "tag": "minecraft:leg_armor"
     },
     {
-      "tag": "forge:armors/boots"
+      "tag": "minecraft:foot_armor"
     }
   ],
   "tiers": [
