@@ -16,7 +16,6 @@ import com.google.common.collect.Maps;
 import com.stereowalker.tiered.api.AttributeTemplate;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
-import com.stereowalker.tiered.compat.CuriosCompat;
 import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
@@ -51,9 +50,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
-import net.neoforged.fml.common.Mod;
 
-@Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final TierDataLoader TIER_DATA = new TierDataLoader();
@@ -114,7 +111,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			boolean useCurios = false;
 			try {Class.forName("top.theillusivec4.curios.api.event.CurioAttributeModifierEvent"); useCurios = true;} 
 			catch (Exception e) {System.err.println("Curios support was disabled because the modifier event was not present");}
-			if (useCurios) CuriosCompat.load();
+//			if (useCurios) CuriosCompat.load();
 		}
 	}
 	

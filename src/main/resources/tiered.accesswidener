@@ -1,0 +1,3 @@
+accessWidener v1 named
+accessible field net/minecraft/world/entity/player/Player inventory Lnet/minecraft/world/entity/player/Inventory;
+accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds

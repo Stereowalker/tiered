@@ -12,8 +12,7 @@
   ],
   "client": [
     "ItemStackClientMixin",
-    "unionlib.AccessoryStackCallsClientMixin",
-    "curios.ClientEventHandlerMixin"
+    "unionlib.AccessoryStackCallsClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

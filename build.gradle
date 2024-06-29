@@ -1,12 +1,12 @@
 plugins {
-	id 'java-library'
-    id 'eclipse'
-    id 'idea'
-    id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'maven-publish'
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.+"
 }
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 version = _minecraft_version + "-" +modVersion +"-"+modLoader
 group = modGroup // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -14,74 +14,61 @@ base {
     archivesName = _mod_name
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + _minecraft_version + ', '+modLoader+' Version: ' + _loader_version)
 
-minecraft {
-  accessTransformers {
-    file('src/main/resources/META-INF/accesstransformer.cfg')
-  }
-}
-
-runs {
-    configureEach {
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-        modSource project.sourceSets.main
-    }
-    client {
-        systemProperty 'forge.enabledGameTestNamespaces', project._mod_id
-        workingDirectory project.file('run/Neo-Client')
-    }
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', project._mod_id
-        workingDirectory project.file('run/Neo-Server')
-        programArgument '--nogui'
-    }
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-// Sets up a dependency configuration called 'localRuntime'.
-// This configuration should be used instead of 'runtimeOnly' to declare
-// a dependency that will be present for runtime testing but that is
-// "optional", meaning it will not be pulled by dependents of this mod.
-configurations {
-    runtimeClasspath.extendsFrom localRuntime
+loom {
+    accessWidenerPath = file("src/main/resources/"+_mod_id+".accesswidener")
 }
 
 repositories {
-	maven {url "https://modmaven.dev/" }// UnionLib
-	maven {
-		url = "https://maven.theillusivec4.top/"
-	}
-	maven {url "https://www.cursemaven.com"}
-    maven {url = "https://repo.spongepowered.org/maven"} // mixin
+	mavenCentral()
+	maven { url = "https://maven.terraformersmc.com/releases/" }
+	maven {url = "https://repo.spongepowered.org/maven"} // mixin
+	maven {url "https://www.cursemaven.com"} //cursemaven
+	maven {url "https://modmaven.dev/" } //UnionLib
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
 }
 
 dependencies {
-	implementation "net.neoforged:neoforge:${_loader_version}"
-	implementation ("com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}:api")
-	runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
-	implementation ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project._minecraft_version}"
+	mappings loom.layered() {
+  		officialMojangMappings()
+  		//parchment("org.parchmentmc.data:parchment-"+mappingsVersion+"@zip")
+	}
+	modImplementation "net.fabricmc:fabric-loader:${project._loader_version}"
+	modImplementation "curse.maven:forge-config-api-port-fabric-547434:5397254"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+""
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project._loader_api_version}"
+	implementation 'com.electronwill.night-config:core:3.6.3'
+	implementation 'com.electronwill.night-config:toml:3.6.3'
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
 jar {
-    manifest {
-        attributes([
-            "Specification-Title": _mod_name,
-            "Specification-Vendor": "Stereowalker",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"Stereowalker",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
 }
 
 curseforge {
@@ -89,31 +76,32 @@ curseforge {
     	id = modCurseId
 		apiKey = "$System.env.CURSEFORGEKEY"
 		changelog = file('changelog.md')
+		changelogType = "markdown"
 		releaseType = 'release'
 		addGameVersion(_minecraft_version)
-		/*addGameVersion("1.20")
-		addGameVersion("1.19.4")
-		addGameVersion("1.19.3")
-		addGameVersion("1.19.2")
-		addGameVersion("1.19.1")
-		addGameVersion("1.19")*/
-        addGameVersion("Forge")
-		relations {
-      		requiredDependency 'unionlib'
+        addGameVersion("${project.modLoader}")
+        relations {
+        	requiredDependency "unionlib"
+        }
+		mainArtifact(remapJar) {
+			displayName = _mod_name+"-${project.version}"
 		}
-		mainArtifact(jar) {
-			displayName = _mod_name+"-$project.version"
+		afterEvaluate {
+			uploadTask.dependsOn(remapJar)
 		}
-	}		
+	}
+	options {
+    	debug = false // defaults to false
+    	forgeGradleIntegration = false
+  	}	
 }
 
-
 modrinth {
-    token = "$System.env.MODRINTH_TOKEN"
+    token = System.getenv("MODRINTH_TOKEN")
     projectId = _mod_id
     versionNumber = "${project.version}"
     versionType = "release"
-    uploadFile = jar
+    uploadFile = remapJar
     gameVersions = [_minecraft_version/*, "1.20", "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19"*/]
     loaders = ["${project.modLoader}".toLowerCase()]
 	changelog = file('changelog.md').text
@@ -132,12 +120,13 @@ tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version: _minecraft_version, //minecraft_version_range: minecraft_version_range,
             //forge_version: _loader_version, forge_version_range: forge_version_range,
-            loader_version_range: "[${_loader_version_min},"+_loader_version_max+")",
+            loader_version_range: "[\">=${_loader_version_min}\", \"<"+_loader_version_max+"\"]",
             mod_id: _mod_id, mod_name: _mod_name, mod_license: _mod_license, mod_version: modVersion,
             mod_authors: _mod_authors, mod_description: _mod_description,
     ]
     inputs.properties replaceProperties
-    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
         expand replaceProperties/* + [project: project]*/
     }
 }
