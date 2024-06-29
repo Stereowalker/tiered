@@ -52,8 +52,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
 @Mod("tiered")
 public class Tiered extends MinecraftMod implements PacketHolder {
@@ -136,6 +134,14 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Tiered::attemptToAffixTier);
 		});
+		collector.addInsert(Inserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
+			if (profession == VillagerProfession.ARMORER)
+				trades.get(3).add(new VillagerTrades.ItemsForEmeralds(ItemRegistries.ARMORERS_HAMMER, 64, 1, 1, 10));
+			if (profession == VillagerProfession.TOOLSMITH)
+				trades.get(3).add(new VillagerTrades.ItemsForEmeralds(ItemRegistries.TOOLSMITHS_HAMMER, 64, 1, 1, 10));
+			if (profession == VillagerProfession.WEAPONSMITH)
+				trades.get(4).add(new VillagerTrades.ItemsForEmeralds(ItemRegistries.WEAPONSMITHS_HAMMER, 64, 1, 1, 10));
+		});
 		collector.addInsert(Inserts.LIVING_TICK, (living) -> {
 			if (living instanceof TierAffixer affixer) {
 				 // if items copy is null, set it to player inventory and check each stack
@@ -172,7 +178,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	public void setupRegistries(RegistryCollector collector) {
 		collector.addRegistryHolder(ComponentsRegistry.class);
 		collector.addRegistryHolder(ItemRegistries.class);
-		NeoForge.EVENT_BUS.addListener(ItemRegistries::trade);
 	}
 
 	@Override
@@ -205,14 +210,6 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		public static final Item TOOLSMITHS_HAMMER = new Item(new Item.Properties().durability(20));
 		@RegistryObject("weaponsmiths_hammer")
 		public static final Item WEAPONSMITHS_HAMMER = new Item(new Item.Properties().durability(20));
-		public static void trade(VillagerTradesEvent event) {
-			if (event.getType() == VillagerProfession.ARMORER)
-				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(ARMORERS_HAMMER, 64, 1, 1, 10));
-			if (event.getType() == VillagerProfession.TOOLSMITH)
-				event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeralds(TOOLSMITHS_HAMMER, 64, 1, 1, 10));
-			if (event.getType() == VillagerProfession.WEAPONSMITH)
-				event.getTrades().get(4).add(new VillagerTrades.ItemsForEmeralds(WEAPONSMITHS_HAMMER, 64, 1, 1, 10));
-		}
 	}
 	
 	public static void attemptToAffixTier(ItemStack stack) {
