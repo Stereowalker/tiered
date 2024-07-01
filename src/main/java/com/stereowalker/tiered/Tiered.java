@@ -30,6 +30,7 @@ import com.stereowalker.unionlib.api.registries.RegistryCollector;
 import com.stereowalker.unionlib.core.registries.RegistryHolder;
 import com.stereowalker.unionlib.core.registries.RegistryObject;
 import com.stereowalker.unionlib.insert.Inserts;
+import com.stereowalker.unionlib.insert.ServerInserts;
 import com.stereowalker.unionlib.mod.MinecraftMod;
 import com.stereowalker.unionlib.mod.PacketHolder;
 import com.stereowalker.unionlib.mod.ServerSegment;
@@ -134,7 +135,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Tiered::attemptToAffixTier);
 		});
-		collector.addInsert(Inserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
+		collector.addInsert(ServerInserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
 			if (profession == VillagerProfession.ARMORER)
 				trades.get(3).add(new VillagerTrades.ItemsForEmeralds(ItemRegistries.ARMORERS_HAMMER, 64, 1, 1, 10));
 			if (profession == VillagerProfession.TOOLSMITH)
