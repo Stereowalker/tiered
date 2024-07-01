@@ -1,2 +1,5 @@
-- Fix mixin errors
-- Fix inconsistent armor values when multiple tiered armor are equipped
+- Ported to Fabric
+- Updated UnionLib to 11.0.5
+- Create ko_kr.json (smoong)
+- Used an insert for villager trades
+- Use new minecraft armor tags for armor tiers

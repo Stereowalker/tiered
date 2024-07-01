@@ -1,12 +1,3 @@
-[7.0.2]
-- Fix mixin errors
-- Fix inconsistent armor values when multiple tiered armor are equipped
-
-[7.0.1]
-- Ported to NeoForge
-- Added ids to packets
-- Fix Berserk tier
-- Fix mod crashing randomly
-
-[7.0.0]
-- Ported to 1.20.6
+[7.0.3]
+- Ported to Fabric
+- Updated UnionLib to 11.0.5
