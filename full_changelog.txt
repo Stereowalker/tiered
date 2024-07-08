@@ -1,3 +1,7 @@
+[7.0.4]
+- Fix tiers not appearing on shields and bows
+- Add tiers to tridents, has no effect when thrown
+
 [7.0.3]
 - Updated UnionLib to 11.0.5
 - Create ko_kr.json (smoong)
