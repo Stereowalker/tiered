@@ -8,6 +8,9 @@
       "tag": "minecraft:axes"
     },
     {
+      "tag": "c:tools/spears"
+    },
+    {
       "tag": "forge:tools/bows"
     }
   ],
