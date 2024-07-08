@@ -18,10 +18,6 @@ base {
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + _minecraft_version + ', '+modLoader+' Version: ' + _loader_version)
 
-loom {
-    accessWidenerPath = file("src/main/resources/"+_mod_id+".accesswidener")
-}
-
 repositories {
 	mavenCentral()
 	maven { url = "https://maven.terraformersmc.com/releases/" }
@@ -52,6 +48,8 @@ dependencies {
 }
 
 loom {
+	mixin.defaultRefmapName.set("${_mod_id}.refmap.json")
+	accessWidenerPath = file("src/main/resources/"+_mod_id+".accesswidener")
 	runs { 
 		client { 
 			runDir "run/Fabric-Client" 
