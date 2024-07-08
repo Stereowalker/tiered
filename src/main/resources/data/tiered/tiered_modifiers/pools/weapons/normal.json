@@ -8,6 +8,9 @@
       "tag": "minecraft:axes"
     },
     {
+      "tag": "forge:tools/tridents"
+    },
+    {
       "tag": "forge:tools/bows"
     }
   ],
