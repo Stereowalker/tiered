@@ -1,5 +1,3 @@
-- Ported to Fabric
-- Updated UnionLib to 11.0.5
-- Create ko_kr.json (smoong)
-- Used an insert for villager trades
-- Use new minecraft armor tags for armor tiers
+- Fix tiers not appearing on shields and bows
+- Add tiers to tridents, has no effect when thrown
+- Fix incorrect refmap file being generated
