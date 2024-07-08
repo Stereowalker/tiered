@@ -84,47 +84,8 @@ jar {
     }
 }
 
-curseforge {
-    project {
-    	id = modCurseId
-		apiKey = "$System.env.CURSEFORGEKEY"
-		changelog = file('changelog.md')
-		releaseType = 'release'
-		addGameVersion(_minecraft_version)
-		/*addGameVersion("1.20")
-		addGameVersion("1.19.4")
-		addGameVersion("1.19.3")
-		addGameVersion("1.19.2")
-		addGameVersion("1.19.1")
-		addGameVersion("1.19")*/
-        addGameVersion("Forge")
-		relations {
-      		requiredDependency 'unionlib'
-		}
-		mainArtifact(jar) {
-			displayName = _mod_name+"-$project.version"
-		}
-	}		
-}
-
-
-modrinth {
-    token = "$System.env.MODRINTH_TOKEN"
-    projectId = _mod_id
-    versionNumber = "${project.version}"
-    versionType = "release"
-    uploadFile = jar
-    gameVersions = [_minecraft_version/*, "1.20", "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19"*/]
-    loaders = ["${project.modLoader}".toLowerCase()]
-	changelog = file('changelog.md').text
-    dependencies {
-        required.project "unionlib"
-    }
-}
-
-task uploadToAllSites {
-    uploadToAllSites.dependsOn curseforge
-    uploadToAllSites.dependsOn modrinth
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
 
@@ -155,9 +116,39 @@ publishing {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+curseforge {
+    project {
+    	id = modCurseId
+		apiKey = "$System.env.CURSEFORGEKEY"
+		changelog = file('changelog.md')
+		releaseType = 'release'
+		addGameVersion(_minecraft_version)
+        addGameVersion("${project.modLoader}")
+		relations {
+      		requiredDependency 'unionlib'
+		}
+		mainArtifact(jar) {
+			displayName = _mod_name+"-$project.version"
+		}
+	}		
 }
 
-artifacts {
+modrinth {
+    token = "$System.env.MODRINTH_TOKEN"
+    projectId = _mod_id
+    versionNumber = "${project.version}"
+    versionType = "release"
+    uploadFile = jar
+    gameVersions = [_minecraft_version]
+    loaders = ["${project.modLoader}".toLowerCase()]
+	changelog = file('changelog.md').text
+    dependencies {
+        required.project "unionlib"
+    }
+}
+
+task uploadToAllSites {
+    dependsOn "curseforge"
+    dependsOn "modrinth"
+    group = "publishing"
 }
