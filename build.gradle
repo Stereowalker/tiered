@@ -82,6 +82,39 @@ jar {
 	}
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: _minecraft_version, //minecraft_version_range: minecraft_version_range,
+            //forge_version: _loader_version, forge_version_range: forge_version_range,
+            loader_version_range: "[\">=${_loader_version_min}\", \"<"+_loader_version_max+"\"]",
+            mod_id: _mod_id, mod_name: _mod_name, mod_license: _mod_license, mod_version: modVersion,
+            mod_authors: _mod_authors, mod_description: _mod_description,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+        expand replaceProperties/* + [project: project]*/
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
 curseforge {
     project {
     	id = modCurseId
@@ -114,7 +147,7 @@ modrinth {
     versionNumber = "${project.version}"
     versionType = "release"
     uploadFile = remapJar
-    gameVersions = [_minecraft_version/*, "1.20", "1.19.4", "1.19.3", "1.19.2", "1.19.1", "1.19"*/]
+    gameVersions = [_minecraft_version]
     loaders = ["${project.modLoader}".toLowerCase(), "quilt"]
 	changelog = file('changelog.md').text
     dependencies {
@@ -123,42 +156,7 @@ modrinth {
 }
 
 task uploadToAllSites {
-    uploadToAllSites.dependsOn curseforge
-    uploadToAllSites.dependsOn modrinth
-}
-
-
-tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [
-            minecraft_version: _minecraft_version, //minecraft_version_range: minecraft_version_range,
-            //forge_version: _loader_version, forge_version_range: forge_version_range,
-            loader_version_range: "[\">=${_loader_version_min}\", \"<"+_loader_version_max+"\"]",
-            mod_id: _mod_id, mod_name: _mod_name, mod_license: _mod_license, mod_version: modVersion,
-            mod_authors: _mod_authors, mod_description: _mod_description,
-    ]
-    inputs.properties replaceProperties
-
-    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
-        expand replaceProperties/* + [project: project]*/
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
-
-artifacts {
+    dependsOn "curseforge"
+    dependsOn "modrinth"
+    group = "publishing"
 }
