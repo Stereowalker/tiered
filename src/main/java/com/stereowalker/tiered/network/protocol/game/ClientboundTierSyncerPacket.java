@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.unionlib.network.protocol.game.ClientboundUnionPacket;
+import com.stereowalker.unionlib.util.VersionHelper;
 
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -59,7 +60,7 @@ public class ClientboundTierSyncerPacket extends ClientboundUnionPacket {
 		return true;
 	}
 
-	public static ResourceLocation id = new ResourceLocation("tiered", "tier_sync");
+	public static ResourceLocation id = VersionHelper.toLoc("tiered", "tier_sync");
 	@Override
 	public ResourceLocation id() {
 		return id;
