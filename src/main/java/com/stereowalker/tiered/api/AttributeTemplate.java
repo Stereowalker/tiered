@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
 import com.stereowalker.tiered.Tiered;
 import com.stereowalker.unionlib.util.RegistryHelper;
+import com.stereowalker.unionlib.util.VersionHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
 import net.minecraft.core.Holder;
@@ -170,7 +171,7 @@ public class AttributeTemplate {
                 attributeModifier.operation()
         );
 
-        Optional<Reference<Attribute>> key = BuiltInRegistries.ATTRIBUTE.getHolder((new ResourceLocation(attributeTypeID)));
+        Optional<Reference<Attribute>> key = BuiltInRegistries.ATTRIBUTE.getHolder((VersionHelper.toLoc(attributeTypeID)));
 //        Holder<Attribute> key = RegistryHelper.getAttribute(new ResourceLocation(attributeTypeID));
         if(key == null || key.isEmpty()) {
             Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));

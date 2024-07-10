@@ -12,10 +12,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
+import com.stereowalker.unionlib.util.VersionHelper;
 
 import net.minecraft.ResourceLocationException;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
@@ -54,7 +53,7 @@ public class StyleSerializer implements JsonDeserializer<Style>, JsonSerializer<
         if (json.has("font")) {
             String string = GsonHelper.getAsString(json, "font");
             try {
-                return new ResourceLocation(string);
+                return VersionHelper.toLoc(string);
             }
             catch (ResourceLocationException resourceLocationException) {
                 throw new JsonSyntaxException("Invalid font name: " + string);
