@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
     id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.+"
 }
@@ -18,6 +18,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 println('Mod Name: ' + _mod_name + ', Mod Version: ' + modVersion + ', Minecraft Version: ' + _minecraft_version + ', '+modLoader+' Version: ' + _loader_version)
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
 
 minecraft {
   accessTransformers {
@@ -64,9 +68,9 @@ repositories {
 dependencies {
 	implementation "net.neoforged:neoforge:${_loader_version}"
 	implementation ("com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}:api")
-	runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
-	implementation ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
+	//compileOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}:api")
+	//runtimeOnly ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
+	//implementation ("top.theillusivec4.curios:curios-neoforge:${curiosVersion}+${_minecraft_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
