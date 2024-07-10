@@ -10,7 +10,7 @@
     {
       "type": "unionlib:generic.dig_speed",
       "modifier": {
-        "name": "tiered:swift",
+        "id": "tiered:swift_0",
         "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": 0.10
       },
@@ -21,7 +21,7 @@
     {
       "type": "generic.movement_speed",
       "modifier": {
-        "name": "tiered:swift",
+        "id": "tiered:swift_1",
         "operation": "ADD_MULTIPLIED_TOTAL",
         "amount": 0.10
       },

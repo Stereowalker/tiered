@@ -23,7 +23,7 @@ file="META-INF/accesstransformer.cfg"
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[20,)" #mandatory
+    versionRange="[21.0.0-beta,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -32,7 +32,7 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.6,1.21)"
+    versionRange="[1.21,1.22)"
     ordering="NONE"
     side="BOTH"
     
@@ -41,11 +41,4 @@ file="META-INF/accesstransformer.cfg"
     mandatory=true
     versionRange="[11.0.6, 12.0.0)"
     ordering="BEFORE"
-    side="BOTH"
-    
-[[dependencies.${mod_id}]]
-    modId="curios"
-    mandatory=false
-    versionRange="[1.19.2-8.0.0,)"
-    ordering="NONE"
     side="BOTH"

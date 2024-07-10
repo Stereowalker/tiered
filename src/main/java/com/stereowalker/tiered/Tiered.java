@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
@@ -46,6 +45,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ArmorItem;
@@ -67,30 +67,34 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final UUID[] MODIFIERS = new UUID[] {
 			//Equipment
-			UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6C"),
-			UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0E"),
-			UUID.fromString("9F3D476D-C118-4544-8365-64846904B48F"),
-			UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB151"),
-			UUID.fromString("4a88bc27-9563-4eeb-96d5-fe50917cc24f"),
-			UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7a"),
+			VersionHelper.toLoc("tiered","any"),
+			VersionHelper.toLoc("tiered","mainhand"),
+			VersionHelper.toLoc("tiered","offhand"),
+			VersionHelper.toLoc("tiered","hand"),
+			VersionHelper.toLoc("tiered","boots"),
+			VersionHelper.toLoc("tiered","leggings"),
+			VersionHelper.toLoc("tiered","chestplates"),
+			VersionHelper.toLoc("tiered","helmets"),
+			VersionHelper.toLoc("tiered","armor"),
+			VersionHelper.toLoc("tiered","body"),
 			//Accessory slots 
-			UUID.fromString("3ac44786-fd3d-43db-8283-6822f7d62ea4"),
-			UUID.fromString("2671f9f5-4ca6-4d09-b4bb-b958ac6d31e7"),
-			UUID.fromString("31a9945e-2c8d-4894-86b6-87ba416c2e18"),
-			UUID.fromString("63360860-88b6-4395-a561-151cd51dc91b"),
-			UUID.fromString("7ec914a0-7b1d-4bec-ba17-d435ffa49eb4"),
-			UUID.fromString("2dcd3ee4-cadb-4fa4-9bd4-b90b67ab77ff"),
-			UUID.fromString("031de3a3-4368-4021-a6b1-42e8c454cfc1"),
-			UUID.fromString("62c90c65-0f18-4d8d-afb2-340e5ff17fc5"),
-			UUID.fromString("b8c433d5-1ae0-4ab1-9a40-000a6aab3f29"),
+			VersionHelper.toLoc("tiered","accessory1"),
+			VersionHelper.toLoc("tiered","accessory2"),
+			VersionHelper.toLoc("tiered","accessory3"),
+			VersionHelper.toLoc("tiered","accessory4"),
+			VersionHelper.toLoc("tiered","accessory5"),
+			VersionHelper.toLoc("tiered","accessory6"),
+			VersionHelper.toLoc("tiered","accessory7"),
+			VersionHelper.toLoc("tiered","accessory8"),
+			VersionHelper.toLoc("tiered","accessory9"),
 			//Accessory groups
-			UUID.fromString("b340cc35-ef8e-4fa6-b21f-9a60e5d4e4b3"),
-			UUID.fromString("24cf925c-bfac-4729-9bad-57e1dc4502f7"),
-			UUID.fromString("1732e8f1-8c5e-4f1f-aa34-b2489b4259c9")
+			VersionHelper.toLoc("tiered","neclaces"),
+			VersionHelper.toLoc("tiered","backs"),
+			VersionHelper.toLoc("tiered","rings")
 	};
 
-	public static final Map<String, UUID> CURIO_MODIFIERS = Util.make(Maps.newHashMap(), (map) -> {
-		map.put("ring", UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7b"));
+	public static final Map<String, ResourceLocation> CURIO_MODIFIERS = Util.make(Maps.newHashMap(), (map) -> {
+		map.put("ring", VersionHelper.toLoc("tiered","curio_rings"));
 	});
 
 	public static final Logger LOGGER = LogManager.getLogger();
