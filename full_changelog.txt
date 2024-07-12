@@ -1,21 +1,7 @@
-[7.0.4]
-- Fix tiers not appearing on shields
-- Add tiers to tridents, has no effect when thrown
-
-[7.0.3]
-- Updated UnionLib to 11.0.5
-- Create ko_kr.json (smoong)
-- Used an insert for villager trades
-- Use new minecraft armor tags for armor tiers
-
-[7.0.2]
-- Fix mixin errors
-- Fix inconsistent armor values when multiple tiered armor are equipped
-
-[7.0.1]
-- Added ids to packets
-- Fix Berserk tier
-- Fix mod crashing randomly
-
-[7.0.0]
-- Ported to 1.20.6
+[1.0.0]
+- Changed mod name to Reforged
+- Bow tiers now work in both hands
+- Disabled curios compatibility temporarily
+- Used equipment slot groups instead of just slots
+- Use VersionHelper to create new ResourceLocations
+- Ported to 1.21
