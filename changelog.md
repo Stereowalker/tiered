@@ -1,2 +1,6 @@
-- Fix tiers not appearing on shields and bows
-- Add tiers to tridents, has no effect when thrown
+- Changed mod name to Reforged
+- Bow tiers now work in both hands
+- Disabled curios compatibility temporarily
+- Used equipment slot groups instead of just slots
+- Use VersionHelper to create new ResourceLocations
+- Ported to 1.21
