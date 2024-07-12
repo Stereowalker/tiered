@@ -15,7 +15,7 @@
         "amount": -0.2
       },
       "optional_equipment_slots": [
-        "MAINHAND"
+        "HAND"
       ]
     },
     {
@@ -26,7 +26,7 @@
         "amount": -0.2
       },
       "optional_equipment_slots": [
-        "MAINHAND"
+        "HAND"
       ]
     }
   ]
