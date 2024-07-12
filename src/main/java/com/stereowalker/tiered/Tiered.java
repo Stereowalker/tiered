@@ -65,7 +65,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	      .map(Map.Entry::getKey).findFirst().get();
 	}
 
-	public static final UUID[] MODIFIERS = new UUID[] {
+	public static final ResourceLocation[] MODIFIERS = new ResourceLocation[] {
 			//Equipment
 			VersionHelper.toLoc("tiered","any"),
 			VersionHelper.toLoc("tiered","mainhand"),
@@ -234,6 +234,21 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	 */
 	public static ResourceLocation id(String path) {
 		return VersionHelper.toLoc("tiered", path);
+	}
+
+	public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlotGroup slot) {
+		if(stack.getItem() instanceof ArmorItem) {
+			ArmorItem item = (ArmorItem) stack.getItem();
+			//TODO: Use version helper to make this compatible with older versions
+			return slot.test(item.getEquipmentSlot());
+//			return VersionHelper.isEquippableInSlot(item, slot);
+		}
+
+		if(stack.getItem() instanceof ShieldItem) {
+			return slot.test(EquipmentSlot.MAINHAND) || slot.test(EquipmentSlot.OFFHAND);
+		}
+
+		return slot.test(EquipmentSlot.MAINHAND);
 	}
 
 	public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlot slot) {

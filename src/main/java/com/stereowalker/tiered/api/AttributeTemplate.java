@@ -1,7 +1,10 @@
 package com.stereowalker.tiered.api;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+
+import org.apache.commons.compress.utils.Lists;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
@@ -14,6 +17,7 @@ import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
@@ -38,10 +42,10 @@ public class AttributeTemplate {
     private final AttributeModifier attributeModifier;
 
     @SerializedName("required_equipment_slots")
-    private final EquipmentSlot[] requiredEquipmentSlotTypes;
+    private final EquipmentSlotGroup[] requiredEquipmentSlotTypes;
 
     @SerializedName("optional_equipment_slots")
-    private final EquipmentSlot[] optionalEquipmentSlotTypes;
+    private final EquipmentSlotGroup[] optionalEquipmentSlotTypes;
 
     @SerializedName("required_accessory_slots")
     private final AccessorySlot[] requiredAccessorySlotTypes;
@@ -62,7 +66,7 @@ public class AttributeTemplate {
     private final String[] optionalCurioSlotTypes;
 
     public AttributeTemplate(String attributeTypeID, AttributeModifier AttributeModifier, 
-    		EquipmentSlot[]  requiredEquipmentSlotTypes, EquipmentSlot[]  optionalEquipmentSlotTypes, 
+    		EquipmentSlotGroup[]  requiredEquipmentSlotTypes, EquipmentSlotGroup[]  optionalEquipmentSlotTypes, 
     		AccessorySlot[] requiredAccessorySlotTypes, AccessorySlot[] optionalAccessorySlotTypes, 
     		AccessorySlot.Group[] requiredAccessoryGroupTypes, AccessorySlot.Group[] optionalAccessoryGroupTypes, 
     		String[] requiredCurioSlotTypes, String[] optionalCurioSlotTypes) {
@@ -78,12 +82,38 @@ public class AttributeTemplate {
         this.optionalCurioSlotTypes = optionalCurioSlotTypes;
     }
 
-    public EquipmentSlot[]  getRequiredEquipmentSlot() {
+    public EquipmentSlotGroup[]  getRequiredEquipmentSlot() {
         return requiredEquipmentSlotTypes;
     }
 
-    public EquipmentSlot[]  getOptionalEquipmentSlot() {
+    public EquipmentSlotGroup[]  getOptionalEquipmentSlot() {
         return optionalEquipmentSlotTypes;
+    }
+
+    public EquipmentSlot[]  getRequiredLiteralEquipmentSlot() {
+    	List<EquipmentSlot> slots = Lists.newArrayList();
+    	if (requiredEquipmentSlotTypes != null)
+        	for (EquipmentSlot slot : EquipmentSlot.values()) {
+        		if (!slots.contains(slot)) {
+        			for (EquipmentSlotGroup group : requiredEquipmentSlotTypes) {
+        				if (group.test(slot)) slots.add(slot);
+        			}
+        		}
+        	}
+        return slots.toArray(new EquipmentSlot[0]);
+    }
+
+    public EquipmentSlot[]  getOptionalLiteralEquipmentSlot() {
+    	List<EquipmentSlot> slots = Lists.newArrayList();
+    	if (optionalEquipmentSlotTypes != null)
+        	for (EquipmentSlot slot : EquipmentSlot.values()) {
+        		if (!slots.contains(slot)) {
+        			for (EquipmentSlotGroup group : optionalEquipmentSlotTypes) {
+        				if (group.test(slot)) slots.add(slot);
+        			}
+        		}
+        	}
+        return slots.toArray(new EquipmentSlot[0]);
     }
 
     public AccessorySlot[] getRequiredAccessorySlot() {
@@ -117,8 +147,19 @@ public class AttributeTemplate {
      * @param actions  map to add {@link AttributeTemplate}
      * @param slot
      */
+    public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, EquipmentSlotGroup slot) {
+        realize(actions, Tiered.MODIFIERS[slot.ordinal()]);
+    }
+
+    /**
+     * Uses this {@link AttributeTemplate} to create an {@link AttributeModifier}, which is placed into the given {@link Multimap}.
+     * <p>Note that this method assumes the given {@link Multimap} is mutable.
+     *
+     * @param actions  map to add {@link AttributeTemplate}
+     * @param slot
+     */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, EquipmentSlot slot) {
-        realize(actions, Tiered.MODIFIERS[slot.getFilterFlag()], slot.getName());
+        realize(actions, Tiered.MODIFIERS[slot.ordinal()]);
     }
 
     /**
@@ -163,7 +204,7 @@ public class AttributeTemplate {
      */
     private void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, ResourceLocation id) {
     	AttributeModifier cloneModifier = new AttributeModifier(
-    			id.withPath("tiered_"+id.getPath()),
+    			id.withPath("tiered_"+attributeModifier.id().getPath()),
                 attributeModifier.amount(),
                 attributeModifier.operation()
         );
