@@ -1,2 +1,1 @@
-- Fix tiers not appearing on shields
-- Add tiers to tridents, has no effect when thrown
+- Backported 1.21 changes besides the attributes on bows affecting the offhand
