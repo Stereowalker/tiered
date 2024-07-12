@@ -28,6 +28,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class TierDataLoader extends SimpleJsonResourceReloadListener implements ReloadListener {
@@ -37,7 +38,7 @@ public class TierDataLoader extends SimpleJsonResourceReloadListener implements 
             .disableHtmlEscaping()
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierSerializer())
-            .registerTypeAdapter(EquipmentSlot.class, new EquipmentSlotDeserializer())
+            .registerTypeAdapter(EquipmentSlotGroup.class, new EquipmentSlotDeserializer())
             .registerTypeAdapter(AccessorySlot.class, new AccessorySlotDeserializer())
             .registerTypeAdapter(AccessorySlot.Group.class, new AccessoryGroupDeserializer())
             .registerTypeHierarchyAdapter(Style.class, new StyleSerializer())
