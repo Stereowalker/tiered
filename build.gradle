@@ -91,9 +91,9 @@ dependencies {
 	implementation "org.spongepowered:mixin:"+modMixinVersion+""
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation ("com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+"")
-	compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}:api")
-	runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
-	implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
+	//compileOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}:api")
+	//runtimeOnly ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
+	//implementation ("top.theillusivec4.curios:curios-forge:${curiosVersion}+${_minecraft_version}")
 	implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
