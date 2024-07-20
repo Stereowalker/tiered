@@ -32,7 +32,7 @@ public abstract class ItemStackClientMixin implements DataComponentHolder {
     @SuppressWarnings("rawtypes")
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;amount()D"), method = "addModifierTooltip")
     private void storeAttributeModifier(Consumer arg0, Player arg1, Holder arg2, AttributeModifier pModfier, CallbackInfo ci) {
-        isTiered = pModfier.name().contains("_tiered_");
+        isTiered = pModfier.id().toString().contains("tiered_");
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "addModifierTooltip")

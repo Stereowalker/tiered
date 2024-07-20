@@ -10,7 +10,7 @@
     {
       "type": "generic.attack_damage",
       "modifier": {
-        "name": "tiered:epic_tool",
+        "id": "tiered:epic_tool_1",
         "operation": "ADD_VALUE",
         "amount": 0.375
       },
@@ -21,7 +21,7 @@
     {
       "type": "generic.armor",
       "modifier": {
-        "name": "tiered:epic_tool",
+        "id": "tiered:epic_tool_2",
         "operation": "ADD_VALUE",
         "amount": 2
       },
@@ -32,7 +32,7 @@
     {
       "type": "generic.armor_toughness",
       "modifier": {
-        "name": "tiered:legendary_tool",
+        "id": "tiered:epic_tool_3",
         "operation": "ADD_VALUE",
         "amount": 1
       },
