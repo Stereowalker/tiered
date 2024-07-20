@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.tiered.api.PotentialAttribute;
 
 import net.minecraft.ChatFormatting;
@@ -37,9 +37,9 @@ public abstract class ItemStackClientMixin implements DataComponentHolder {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1), method = "addModifierTooltip")
     private MutableComponent getTextFormatting(MutableComponent translatableText, ChatFormatting formatting) {
-        if(Tiered.hasModifier((ItemStack)(Object)this) && isTiered) {
-            ResourceLocation tier = get(Tiered.ComponentsRegistry.MODIFIER);
-            PotentialAttribute attribute = Tiered.TIER_DATA.getTiers().get(tier);
+        if(Reforged.hasModifier((ItemStack)(Object)this) && isTiered) {
+            ResourceLocation tier = get(Reforged.ComponentsRegistry.MODIFIER);
+            PotentialAttribute attribute = Reforged.TIER_DATA.getTiers().get(tier);
 
             return translatableText.setStyle(attribute.getStyle());
         } else {
@@ -53,16 +53,16 @@ public abstract class ItemStackClientMixin implements DataComponentHolder {
             cancellable = true
     )
     private void modifyName(CallbackInfoReturnable<Component> cir) {
-        if(this.get(DataComponents.CUSTOM_NAME) == null && Tiered.hasModifier((ItemStack)(Object)this)) {
-            ResourceLocation tier = get(Tiered.ComponentsRegistry.MODIFIER);
+        if(this.get(DataComponents.CUSTOM_NAME) == null && Reforged.hasModifier((ItemStack)(Object)this)) {
+            ResourceLocation tier = get(Reforged.ComponentsRegistry.MODIFIER);
 
             // attempt to display attribute if it is valid
-            PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
+            PotentialAttribute potentialAttribute = Reforged.TIER_DATA.getTiers().get(tier);
 
             if(potentialAttribute != null) {
             	MutableComponent title;
             	if (potentialAttribute.getLiteralName() != null) title = Component.literal(potentialAttribute.getLiteralName());
-            	else title = Component.translatable(Util.makeDescriptionId("tier", Tiered.getKey(potentialAttribute)));
+            	else title = Component.translatable(Util.makeDescriptionId("tier", Reforged.getKey(potentialAttribute)));
                 cir.setReturnValue(title.append(" ").append(cir.getReturnValue()).setStyle(potentialAttribute.getStyle()));
             }
         }
