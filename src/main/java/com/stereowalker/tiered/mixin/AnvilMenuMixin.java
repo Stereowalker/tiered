@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.unionlib.util.RegistryHelper;
@@ -30,8 +30,8 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
 	@Inject(method = "onTake", at =@At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 0))
 	private void saveReforgedAttribute(Player p_150474_, ItemStack p_150475_, CallbackInfo ci) {
-		if (Tiered.hasModifier(this.inputSlots.getItem(0))) {
-			reforgedAttribute = this.inputSlots.getItem(0).get(Tiered.ComponentsRegistry.MODIFIER);
+		if (Reforged.hasModifier(this.inputSlots.getItem(0))) {
+			reforgedAttribute = this.inputSlots.getItem(0).get(Reforged.ComponentsRegistry.MODIFIER);
 		}
 	}
 
@@ -42,7 +42,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 	private void onTake_redirect(Container container, int pIndex, ItemStack pStack, Player p_150474_, ItemStack p_150475_) {
 		boolean deleteItem = true;
 		if (this.reforgedAttribute != null) {
-			PotentialAttribute potential = Tiered.TIER_DATA.getTiers().get(this.reforgedAttribute);
+			PotentialAttribute potential = Reforged.TIER_DATA.getTiers().get(this.reforgedAttribute);
 			if (RegistryHelper.getItemKey(container.getItem(pIndex).getItem()).equals(new ResourceLocation(potential.getReforgeItem()))) {
 				deleteItem = false;
 				ItemStack hammer = container.getItem(pIndex);
@@ -55,7 +55,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 				}
 				// found an ID
 				if(potentialAttributeID != null) {
-					p_150475_.set(Tiered.ComponentsRegistry.MODIFIER, potentialAttributeID);
+					p_150475_.set(Reforged.ComponentsRegistry.MODIFIER, potentialAttributeID);
 				}
 
 				if ((hammer.getMaxDamage() - hammer.getDamageValue()) == potential.getReforgeDurabilityCost())
