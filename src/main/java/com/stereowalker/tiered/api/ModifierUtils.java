@@ -8,6 +8,7 @@ import java.util.Random;
 import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.util.GeneralUtilities;
 import com.stereowalker.unionlib.util.RegistryHelper;
+import com.stereowalker.unionlib.util.VersionHelper;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -28,13 +29,13 @@ public class ModifierUtils {
 			chosen_tier = GeneralUtilities.getRandomFrom(Reforged.TIER_DATA.getTiers().values(), (a) -> a.isValid(itemKey));
 		else {
 			List<PotentialAttribute> attris = new ArrayList<>();
-			pool.getTiers().forEach((t) -> attris.add(Reforged.TIER_DATA.getTiers().get(new ResourceLocation(t))));
+			pool.getTiers().forEach((t) -> attris.add(Reforged.TIER_DATA.getTiers().get(VersionHelper.toLoc(t))));
 			attris.removeIf((attr) -> attr == null);
 			chosen_tier = GeneralUtilities.getRandomFrom(attris, null);
 		}
 		if (chosen_tier != null) {
 			if (chosen_tier.isOld)
-				return new ResourceLocation(chosen_tier.getID());
+				return VersionHelper.toLoc(chosen_tier.getID());
 			else for (Entry<ResourceLocation, PotentialAttribute> cho : Reforged.TIER_DATA.getTiers().entrySet())
 				if (cho.getValue() == chosen_tier) return cho.getKey();
 		}

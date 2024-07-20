@@ -166,7 +166,7 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 			if ((Config.canReforgeBroken || !left.isDamaged()) && hasModifier(left)) {
 				PotentialAttribute reforgedAttribute = Reforged.TIER_DATA.getTiers().get(left.get(ComponentsRegistry.MODIFIER));
 				if (reforgedAttribute.getReforgeItem() != null) {
-					if (RegistryHelper.getItemKey(right.getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
+					if (RegistryHelper.getItemKey(right.getItem()).equals(VersionHelper.toLoc(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = left.copy();
 						copy.remove(ComponentsRegistry.MODIFIER);
 						output.set(copy);
@@ -233,7 +233,7 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 	 * @return  ResourceLocation created with a namespace of this mod's modid ("tiered") and provided path
 	 */
 	public static ResourceLocation id(String path) {
-		return new ResourceLocation("tiered", path);
+		return VersionHelper.toLoc("tiered", path);
 	}
 
 	public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlot slot) {
@@ -269,7 +269,7 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 	}
 
 	public static boolean isPreferredCurioSlot(ItemStack stack, String slot) {
-		return stack.is(TagKey.create(RegistryHelper.itemKey(), new ResourceLocation("curios", slot)));
+		return stack.is(TagKey.create(RegistryHelper.itemKey(), VersionHelper.toLoc("curios", slot)));
 	}
 	
 	@Override
