@@ -8,7 +8,7 @@ import org.apache.commons.compress.utils.Lists;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.util.VersionHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
@@ -147,7 +147,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, EquipmentSlotGroup slot) {
-        realize(actions, Tiered.MODIFIERS[slot.ordinal()]);
+        realize(actions, Reforged.MODIFIERS[slot.ordinal()]);
     }
 
     /**
@@ -158,7 +158,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, EquipmentSlot slot) {
-        realize(actions, Tiered.MODIFIERS[slot.ordinal()]);
+        realize(actions, Reforged.MODIFIERS[slot.ordinal()]);
     }
 
     /**
@@ -169,7 +169,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, AccessorySlot slot) {
-        realize(actions, Tiered.MODIFIERS[slot.getIndex()+6]);
+        realize(actions, Reforged.MODIFIERS[slot.getIndex()+6]);
     }
 
     /**
@@ -180,7 +180,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, AccessorySlot.Group slot) {
-        realize(actions, Tiered.MODIFIERS[slot.ordinal()+15]);
+        realize(actions, Reforged.MODIFIERS[slot.ordinal()+15]);
     }
 
     /**
@@ -191,7 +191,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, String slot) {
-        realize(actions, Tiered.CURIO_MODIFIERS.getOrDefault(slot, VersionHelper.toLoc("tiered","curio_rings")));
+        realize(actions, Reforged.CURIO_MODIFIERS.getOrDefault(slot, VersionHelper.toLoc("tiered","curio_rings")));
     }
 
     /**
@@ -211,7 +211,7 @@ public class AttributeTemplate {
         Optional<Reference<Attribute>> key = BuiltInRegistries.ATTRIBUTE.getHolder((VersionHelper.toLoc(attributeTypeID)));
 //        Holder<Attribute> key = RegistryHelper.getAttribute(VersionHelper.toLoc(attributeTypeID));
         if(key == null || key.isEmpty()) {
-            Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
+            Reforged.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {
             actions.accept(key.get(), cloneModifier);
         }
