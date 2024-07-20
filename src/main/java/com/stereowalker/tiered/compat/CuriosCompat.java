@@ -5,8 +5,6 @@ import java.util.function.Supplier;
 
 import com.stereowalker.tiered.Reforged;
 
-import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.common.NeoForge;
 
 public class CuriosCompat {
 	public static void load() {
