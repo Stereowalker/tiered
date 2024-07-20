@@ -1,1 +1,1 @@
-- Fix inconsistent armor values when multiple tiered armor are equipped 
+- Added a config option to allow reforging a broken item
