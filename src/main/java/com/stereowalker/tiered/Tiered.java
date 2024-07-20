@@ -15,15 +15,16 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.stereowalker.tiered.api.AttributeTemplate;
-import com.stereowalker.tiered.api.ForgeTags;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
+import com.stereowalker.tiered.config.Config;
 import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.tiered.network.protocol.game.ClientboundTierSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.unionlib.api.collectors.ConfigCollector;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
 import com.stereowalker.unionlib.api.collectors.PacketCollector;
 import com.stereowalker.unionlib.api.collectors.ReloadListeners;
@@ -45,7 +46,6 @@ import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.tags.TagLoader;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -111,6 +111,11 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	}
 
 	@Override
+	public void setupConfigs(ConfigCollector collector) {
+		collector.registerConfig(Config.class);
+	}
+
+	@Override
 	public void onModConstruct() {
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 //		ForgeTags.init();
@@ -154,7 +159,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			}
 		});
 		collector.addInsert(Inserts.ANVIL_CONTENT_CHANGE, (left,right,name,player,output,cost,materialCost,cancel)->{
-			if (!left.isDamaged() && left.getTagElement(NBT_SUBTAG_KEY) != null) {
+			if ((Config.canReforgeBroken || !left.isDamaged()) && left.getTagElement(NBT_SUBTAG_KEY) != null) {
 				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(new ResourceLocation(left.getTagElement(Tiered.NBT_SUBTAG_KEY).getString("Tier")));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.getItemKey(right.getItem()).equals(new ResourceLocation(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
