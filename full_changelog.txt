@@ -1,8 +1,2 @@
-[7.0.4]
-- Fix tiers not appearing on shields and bows
-- Add tiers to tridents, has no effect when thrown
-- Fix incorrect refmap file being generated
-
-[7.0.3]
-- Ported to Fabric
-- Updated UnionLib to 11.0.5
+[1.0.1]
+- Added a config option to allow reforging a damaged item
