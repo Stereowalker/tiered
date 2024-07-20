@@ -28,6 +28,10 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
 }
 
 dependencies {
@@ -38,13 +42,13 @@ dependencies {
   		//parchment("org.parchmentmc.data:parchment-"+mappingsVersion+"@zip")
 	}
 	modImplementation "net.fabricmc:fabric-loader:${project._loader_version}"
-	modImplementation "curse.maven:forge-config-api-port-fabric-547434:5397254"
+	modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.0.1"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "com.stereowalker.unionlib:UnionLib:"+_minecraft_version+"-"+unionLibVersion+"-"+modLoader+""
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project._loader_api_version}"
-	implementation 'com.electronwill.night-config:core:3.6.3'
-	implementation 'com.electronwill.night-config:toml:3.6.3'
+	implementation 'com.electronwill.night-config:core:3.7.4'
+	implementation 'com.electronwill.night-config:toml:3.7.4'
 }
 
 loom {
