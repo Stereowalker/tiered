@@ -17,11 +17,13 @@ import com.stereowalker.tiered.api.AttributeTemplate;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
+import com.stereowalker.tiered.config.Config;
 import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.tiered.network.protocol.game.ClientboundTierSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.unionlib.api.collectors.ConfigCollector;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
 import com.stereowalker.unionlib.api.collectors.PacketCollector;
 import com.stereowalker.unionlib.api.collectors.ReloadListeners;
@@ -55,7 +57,7 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod("tiered")
-public class Tiered extends MinecraftMod implements PacketHolder {
+public class Reforged extends MinecraftMod implements PacketHolder {
 
 	public static final TierDataLoader TIER_DATA = new TierDataLoader();
 	public static final PoolDataLoader POOL_DATA = new PoolDataLoader();
@@ -95,12 +97,17 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static Tiered instance;
-	public Tiered() 
+	public static Reforged instance;
+	public Reforged() 
 	{
 		super("tiered", () -> new TieredClientSegment(), () -> new ServerSegment());
 		instance = this;
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
+	}
+	
+	@Override
+	public void setupConfigs(ConfigCollector collector) {
+		collector.registerConfig(Config.class);
 	}
 	
 	//TODO: Copy this over to 1.20.1 >
@@ -133,7 +140,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	        new ClientboundTierSyncerPacket(TIER_DATA.getTiers()).send(((ServerPlayer)player));
 		}));
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
-			menu.getItems().forEach(Tiered::attemptToAffixTier);
+			menu.getItems().forEach(Reforged::attemptToAffixTier);
 		});
 		collector.addInsert(ServerInserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
 			if (profession == VillagerProfession.ARMORER)
@@ -148,19 +155,19 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 				 // if items copy is null, set it to player inventory and check each stack
 		        if(affixer.InvCopy() == null) {
 		            affixer.SetInvCopy(affixer.copyDefaultedList(affixer.player().inventory.items));
-		            affixer.player().inventory.items.forEach(Tiered::attemptToAffixTier);
+		            affixer.player().inventory.items.forEach(Reforged::attemptToAffixTier);
 		        }
 
 		        // if items copy =/= inventory, run check and set mainCopy to inventory
 		        if (!affixer.player().inventory.items.equals(affixer.InvCopy())) {
 		        	affixer.SetInvCopy(affixer.copyDefaultedList(affixer.player().inventory.items));
-		            affixer.player().inventory.items.forEach(Tiered::attemptToAffixTier);
+		            affixer.player().inventory.items.forEach(Reforged::attemptToAffixTier);
 		        }
 			}
 		});
 		collector.addInsert(Inserts.ANVIL_CONTENT_CHANGE, (left,right,name,player,output,cost,materialCost,cancel)->{
-			if (!left.isDamaged() && hasModifier(left)) {
-				PotentialAttribute reforgedAttribute = Tiered.TIER_DATA.getTiers().get(left.get(ComponentsRegistry.MODIFIER));
+			if ((Config.canReforgeBroken || !left.isDamaged()) && hasModifier(left)) {
+				PotentialAttribute reforgedAttribute = Reforged.TIER_DATA.getTiers().get(left.get(ComponentsRegistry.MODIFIER));
 				if (reforgedAttribute.getReforgeItem() != null) {
 					if (RegistryHelper.getItemKey(right.getItem()).equals(VersionHelper.toLoc(reforgedAttribute.getReforgeItem())) && (right.getMaxDamage() - right.getDamageValue()) >= reforgedAttribute.getReforgeDurabilityCost()) {
 						ItemStack copy = left.copy();
@@ -169,7 +176,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 						cost.set(reforgedAttribute.getReforgeExperienceCost());
 					}
 				} else {
-					LOGGER.info(Tiered.getKey(reforgedAttribute)+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
+					LOGGER.info(Reforged.getKey(reforgedAttribute)+" cannot be reforged because it either does not provide any reforging info or the info it provides is not complete");
 				}
 			}
 		});
@@ -281,7 +288,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 			ResourceLocation tier = stack.get(ComponentsRegistry.MODIFIER);
 
 //			if(!stack.hasTag() || !stack.getTag().contains(customAttributes, 9)) {
-				PotentialAttribute potentialAttribute = Tiered.TIER_DATA.getTiers().get(tier);
+				PotentialAttribute potentialAttribute = Reforged.TIER_DATA.getTiers().get(tier);
 
 				if(potentialAttribute != null) {
 					potentialAttribute.getAttributes().forEach(template -> {
