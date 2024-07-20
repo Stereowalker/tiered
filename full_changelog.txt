@@ -1,3 +1,6 @@
+[1.0.1]
+- Added a config option to allow reforging a damaged item
+
 [1.0.0]
 - Changed mod name to Reforged
 - Bow tiers now work in both hands
