@@ -1,1 +1,2 @@
-- Backported 1.21 changes besides the attributes on bows affecting the offhand
+- Added a config option to allow reforging a damaged item
+- Ported to 1.21
