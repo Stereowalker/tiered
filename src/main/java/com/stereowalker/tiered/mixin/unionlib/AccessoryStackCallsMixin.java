@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.hook.AccessoryStackCalls;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 public abstract class AccessoryStackCallsMixin {
 	@Inject(method = "forEachModifier", at = @At("TAIL"), remap = false)
     private static void go(ItemStack thisStack, AccessorySlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> pAction, CallbackInfo ci) {
-    	Tiered.AppendAttributesToOriginal(thisStack, slot, Tiered.isPreferredAccessorySlot(thisStack, slot), "",
+    	Reforged.AppendAttributesToOriginal(thisStack, slot, Reforged.isPreferredAccessorySlot(thisStack, slot), "",
 				template -> template.getRequiredAccessorySlot(), 
 				template -> template.getOptionalAccessorySlot(), 
 				(template) -> template.realize(pAction, slot));
@@ -31,7 +31,7 @@ public abstract class AccessoryStackCallsMixin {
 //			at = @At(value = "INVOKE", target = "Lcom/stereowalker/unionlib/world/item/AccessoryItem;getAttributeModifiers(Lcom/stereowalker/unionlib/world/entity/AccessorySlot$Group;Lnet/minecraft/world/item/ItemStack;)Lcom/google/common/collect/Multimap;")
 //			)
 //	private static Multimap<Attribute, AttributeModifier> go2(AccessoryItem item, AccessorySlot.Group group, ItemStack stack) {
-//		return Tiered.AppendAttributesToOriginal(stack, group, Tiered.isPreferredAccessorySlot(stack, group), "AccessoryAttributeModifiers", item.getAttributeModifiers(group, stack),
+//		return Reforged.AppendAttributesToOriginal(stack, group, Reforged.isPreferredAccessorySlot(stack, group), "AccessoryAttributeModifiers", item.getAttributeModifiers(group, stack),
 //				template -> template.getRequiredAccessoryGroup(), 
 //				template -> template.getOptionalAccessoryGroup(), 
 //				(template, newMap) -> template.realize(newMap, group));

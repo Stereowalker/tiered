@@ -1,6 +1,6 @@
 package com.stereowalker.tiered.api;
 
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.util.RegistryHelper;
 import com.stereowalker.unionlib.util.VersionHelper;
 
@@ -47,7 +47,7 @@ public class ItemVerifier {
             if(itemTag != null) {
                 return new ItemStack(RegistryHelper.getItem(VersionHelper.toLoc(itemID))).is(itemTag);
             } else {
-                Tiered.LOGGER.error(tag + " was specified as an item verifier tag, but it does not exist!");
+                Reforged.LOGGER.error(tag + " was specified as an item verifier tag, but it does not exist!");
             }
         }
 
