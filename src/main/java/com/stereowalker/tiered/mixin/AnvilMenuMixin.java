@@ -10,6 +10,7 @@ import com.stereowalker.tiered.Tiered;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.unionlib.util.RegistryHelper;
+import com.stereowalker.unionlib.util.VersionHelper;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -43,7 +44,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 		boolean deleteItem = true;
 		if (this.reforgedAttribute != null) {
 			PotentialAttribute potential = Tiered.TIER_DATA.getTiers().get(this.reforgedAttribute);
-			if (RegistryHelper.getItemKey(container.getItem(pIndex).getItem()).equals(new ResourceLocation(potential.getReforgeItem()))) {
+			if (RegistryHelper.getItemKey(container.getItem(pIndex).getItem()).equals(VersionHelper.toLoc(potential.getReforgeItem()))) {
 				deleteItem = false;
 				ItemStack hammer = container.getItem(pIndex);
 				// attempt to get a random tier
