@@ -1,10 +1,9 @@
 package com.stereowalker.tiered.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-
-import org.apache.commons.compress.utils.Lists;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
@@ -91,7 +90,7 @@ public class AttributeTemplate {
     }
 
     public EquipmentSlot[]  getRequiredLiteralEquipmentSlot() {
-    	List<EquipmentSlot> slots = Lists.newArrayList();
+    	List<EquipmentSlot> slots = new ArrayList<EquipmentSlot>();
     	if (requiredEquipmentSlotTypes != null)
         	for (EquipmentSlot slot : EquipmentSlot.values()) {
         		if (!slots.contains(slot)) {
@@ -104,7 +103,7 @@ public class AttributeTemplate {
     }
 
     public EquipmentSlot[]  getOptionalLiteralEquipmentSlot() {
-    	List<EquipmentSlot> slots = Lists.newArrayList();
+    	List<EquipmentSlot> slots = new ArrayList<EquipmentSlot>();
     	if (optionalEquipmentSlotTypes != null)
         	for (EquipmentSlot slot : EquipmentSlot.values()) {
         		if (!slots.contains(slot)) {
