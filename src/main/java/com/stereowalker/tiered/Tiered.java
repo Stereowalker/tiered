@@ -42,6 +42,7 @@ import com.stereowalker.unionlib.world.item.AccessoryItem;
 
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -177,8 +178,8 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 
 	@Override
 	public void setupRegistries(RegistryCollector collector) {
-		collector.addRegistryHolder(ComponentsRegistry.class);
-		collector.addRegistryHolder(ItemRegistries.class);
+		collector.addRegistryHolder(Registries.DATA_COMPONENT_TYPE, ComponentsRegistry.class);
+		collector.addRegistryHolder(Registries.ITEM, ItemRegistries.class);
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 	}
 
 
-	@RegistryHolder(namespace = "tiered", registry = DataComponentType.class)
+	@RegistryHolder(namespace = "tiered")
 	public class ComponentsRegistry {
 		@RegistryObject("tiered_modifier")
 		public static final DataComponentType<ResourceLocation> MODIFIER = register(
@@ -203,7 +204,7 @@ public class Tiered extends MinecraftMod implements PacketHolder {
 		}
 	}
 
-	@RegistryHolder(registry = Item.class, namespace = "tiered")
+	@RegistryHolder(namespace = "tiered")
 	public class ItemRegistries {
 		@RegistryObject("armorers_hammer")
 		public static final Item ARMORERS_HAMMER = new Item(new Item.Properties().durability(20));
