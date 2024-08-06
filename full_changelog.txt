@@ -1,2 +1,6 @@
+[1.0.2]
+- Fix NPE when re rolling tiers
+- Updated UnionLib
+
 [1.0.1]
 - Added a config option to allow reforging a damaged item
