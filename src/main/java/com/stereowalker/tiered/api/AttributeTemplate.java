@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.annotations.SerializedName;
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.util.RegistryHelper;
 import com.stereowalker.unionlib.util.VersionHelper;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
@@ -120,7 +120,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, EquipmentSlot slot) {
-        realize(actions, Tiered.MODIFIERS[slot.getFilterFlag()], slot.getName());
+        realize(actions, Reforged.MODIFIERS[slot.getFilterFlag()], slot.getName());
     }
 
     /**
@@ -131,7 +131,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, AccessorySlot slot) {
-        realize(actions, Tiered.MODIFIERS[slot.getIndex()+6], slot.getName());
+        realize(actions, Reforged.MODIFIERS[slot.getIndex()+6], slot.getName());
     }
 
     /**
@@ -142,7 +142,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, AccessorySlot.Group slot) {
-        realize(actions, Tiered.MODIFIERS[slot.ordinal()+15], slot.getName());
+        realize(actions, Reforged.MODIFIERS[slot.ordinal()+15], slot.getName());
     }
 
     /**
@@ -153,7 +153,7 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(BiConsumer<Holder<Attribute>, AttributeModifier> actions, String slot) {
-        realize(actions, Tiered.CURIO_MODIFIERS.getOrDefault(slot, UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7c")), slot);
+        realize(actions, Reforged.CURIO_MODIFIERS.getOrDefault(slot, UUID.fromString("fee48d8c-1b51-4c46-9f4b-c58162623a7c")), slot);
     }
 
     /**
@@ -174,7 +174,7 @@ public class AttributeTemplate {
         Optional<Reference<Attribute>> key = BuiltInRegistries.ATTRIBUTE.getHolder((VersionHelper.toLoc(attributeTypeID)));
 //        Holder<Attribute> key = RegistryHelper.getAttribute(new ResourceLocation(attributeTypeID));
         if(key == null || key.isEmpty()) {
-            Tiered.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
+            Reforged.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {
             actions.accept(key.get(), cloneModifier);
         }

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.stereowalker.tiered.Tiered;
+import com.stereowalker.tiered.Reforged;
 import com.stereowalker.unionlib.hook.AccessoryStackCalls;
 import com.stereowalker.unionlib.world.entity.AccessorySlot;
 
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 public abstract class AccessoryStackCallsMixin {
 	@Inject(method = "forEachModifier", at = @At("TAIL"), remap = false)
     private static void go(ItemStack thisStack, AccessorySlot slot, BiConsumer<Holder<Attribute>, AttributeModifier> pAction, CallbackInfo ci) {
-    	Tiered.AppendAttributesToOriginal(thisStack, slot, Tiered.isPreferredAccessorySlot(thisStack, slot), "",
+    	Reforged.AppendAttributesToOriginal(thisStack, slot, Reforged.isPreferredAccessorySlot(thisStack, slot), "",
 				template -> template.getRequiredAccessorySlot(), 
 				template -> template.getOptionalAccessorySlot(), 
 				(template) -> template.realize(pAction, slot));
