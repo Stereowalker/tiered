@@ -39,7 +39,7 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId="unionlib"
     mandatory=true
-    versionRange="[12.0.0, 13.0.0)"
+    versionRange="[12.0.4, 12.1.0)"
     ordering="BEFORE"
     side="BOTH"
     
