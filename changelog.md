@@ -1,1 +1,3 @@
-- Added a config option to allow reforging a damaged item
+- Fix NPE when re rolling tiers
+- Fix crashes when running on certain servers
+- Updated UnionLib
