@@ -6,6 +6,9 @@
     },
     {
       "tag": "minecraft:axes"
+    },
+    {
+      "tag": "c:tools/mace"
     }
   ],
   "tiers": [
