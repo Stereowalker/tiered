@@ -1,3 +1,1 @@
-- Fix NPE when re rolling tiers
-- Fix crashes when running on certain servers
-- Updated UnionLib
+- The mace can now receive tiers
