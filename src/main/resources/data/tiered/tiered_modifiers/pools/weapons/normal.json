@@ -12,6 +12,9 @@
     },
     {
       "tag": "c:tools/bows"
+    },
+    {
+      "id": "minecraft:mace"
     }
   ],
   "tiers": [
