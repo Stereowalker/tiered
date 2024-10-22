@@ -1,2 +1,1 @@
-- Fix NPE when re rolling tiers
-- Updated UnionLib
+- The mace can now receive tiers
