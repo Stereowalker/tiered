@@ -12,6 +12,9 @@
     },
     {
       "tag": "forge:tools/bows"
+    },
+    {
+      "id": "minecraft:mace"
     }
   ],
   "tiers": [
