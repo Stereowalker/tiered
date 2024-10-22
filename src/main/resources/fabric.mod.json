@@ -9,7 +9,8 @@
     "${mod_authors}"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/tiered-forge"
+    "homepage": "${mod_page}",
+    "issues": "${mod_issue_tracker}"
   },
 
   "license": "${mod_license}",
@@ -25,17 +26,17 @@
     ]
   },
   "mixins": [
-    "tiered.mixins.json"
+    "${mod_id}.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ${loader_version_range},
+    "fabricloader": [">=${loader_version_min}", "<${loader_version_max}"],
     "fabric": "*",
-    "minecraft": "1.21",
+    "minecraft": [">=${minecraft_version_min}", "<${minecraft_version_max}"],
     "java": ">=17",
-	"unionlib": [">=12.0.4", "<12.1.0"]
+	"unionlib": [">=${unionlib_version_min}", "<${unionlib_version_max}"]
   },
-  "accessWidener": "tiered.accesswidener",
+  "accessWidener": "${mod_id}.accesswidener",
   "suggests": {
     "another-mod": "*"
   }
