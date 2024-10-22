@@ -1,3 +1,6 @@
+[1.0.3]
+- The mace can now receive tiers
+
 [1.0.2]
 - Fix NPE when re rolling tiers
 - Fix crashes when running on certain servers
