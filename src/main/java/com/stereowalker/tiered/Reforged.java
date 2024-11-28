@@ -17,11 +17,13 @@ import com.stereowalker.tiered.api.AttributeTemplate;
 import com.stereowalker.tiered.api.ModifierUtils;
 import com.stereowalker.tiered.api.PotentialAttribute;
 import com.stereowalker.tiered.compat.CuriosCompat;
+import com.stereowalker.tiered.config.Config;
 import com.stereowalker.tiered.data.PoolDataLoader;
 import com.stereowalker.tiered.data.TierAffixer;
 import com.stereowalker.tiered.data.TierDataLoader;
 import com.stereowalker.tiered.network.protocol.game.ClientboundTierSyncerPacket;
 import com.stereowalker.unionlib.UnionLib;
+import com.stereowalker.unionlib.api.collectors.ConfigCollector;
 import com.stereowalker.unionlib.api.collectors.InsertCollector;
 import com.stereowalker.unionlib.api.collectors.PacketCollector;
 import com.stereowalker.unionlib.api.collectors.ReloadListeners;
@@ -99,9 +101,14 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 	public static Reforged instance;
 	public Reforged() 
 	{
-		super("tiered", () -> new TieredClientSegment(), () -> new ServerSegment());
+		super("tiered", () -> new ReforgedClientSegment(), () -> new ServerSegment());
 		instance = this;
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
+	}
+	
+	@Override
+	public void setupConfigs(ConfigCollector collector) {
+		collector.registerConfig(Config.class);
 	}
 	
 	//TODO: Copy this over to 1.20.1 >
@@ -135,6 +142,11 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 		}));
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Reforged::attemptToAffixTier);
+		});
+		collector.addInsert(Inserts.ITEM_CRAFTED, (player, stack, matrix, slot) -> {
+			if (!Config.canCraftedReceiveTier) {
+				stack.set(ComponentsRegistry.MODIFIER, ModifierUtils.getBlankAttributeIDFor(stack.getItem()));
+			}
 		});
 		collector.addInsert(ServerInserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
 			if (profession == VillagerProfession.ARMORER)
