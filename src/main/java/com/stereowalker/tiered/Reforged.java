@@ -98,7 +98,7 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 	public static Reforged instance;
 	public Reforged() 
 	{
-		super("tiered", () -> new TieredClientSegment(), () -> new ServerSegment());
+		super("tiered", () -> new ReforgedClientSegment(), () -> new ServerSegment());
 		instance = this;
 		UnionLib.Modulo.Default_Bow_Draw_Speed.enable();
 	}
@@ -139,6 +139,11 @@ public class Reforged extends MinecraftMod implements PacketHolder {
 		}));
 		collector.addInsert(Inserts.MENU_OPEN, (player, menu) -> {
 			menu.getItems().forEach(Reforged::attemptToAffixTier);
+		});
+		collector.addInsert(Inserts.ITEM_CRAFTED, (player, stack, matrix, slot) -> {
+			if (!Config.canCraftedReceiveTier) {
+				stack.set(ComponentsRegistry.MODIFIER, ModifierUtils.getBlankAttributeIDFor(stack.getItem()));
+			}
 		});
 		collector.addInsert(ServerInserts.VILLAGER_TRADES, (profession, trades, experimental) -> {
 			if (profession == VillagerProfession.ARMORER)
