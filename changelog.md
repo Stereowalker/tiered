@@ -1,1 +1,1 @@
-- The mace can now receive tiers
+- Added a config option to prevent crafted items from getting tiers with attributes
