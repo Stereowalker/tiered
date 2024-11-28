@@ -60,7 +60,6 @@ publishMods {
         if ("${_mod_release}" == "beta") type = BETA
         if ("${_mod_release}" == "alpha") type = ALPHA
         minecraftVersions.add("${_minecraft_version}")
-		minecraftVersions.add("1.21")
         modLoaders.add("${_loader}")
         requires('unionlib')
         optional("curios")
@@ -81,7 +80,7 @@ modrinth {
     versionNumber = "${project.version}"
     versionType = "${_mod_release}"
     uploadFile = project._mod_jar
-    gameVersions = ["${_minecraft_version}", "1.21"]
+    gameVersions = ["${_minecraft_version}"]
     loaders = ["${_loader}".toLowerCase()]
 	changelog = file('changelog.md').text
     dependencies {
