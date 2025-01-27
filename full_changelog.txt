@@ -1,3 +1,6 @@
+[1.0.5]
+- Replaced armor with attack speed on certain tool and weapon tiers
+
 [1.0.4]
 - Added a config option to prevent crafted items from getting tiers with attributes
 
