@@ -19,11 +19,11 @@
       ]
     },
     {
-      "type": "generic.armor",
+      "type": "generic.attack_speed",
       "modifier": {
         "id": "tiered:rare_weapon_1",
         "operation": "ADD_VALUE",
-        "amount": 1
+        "amount": 0.1
       },
       "optional_equipment_slots": [
         "MAINHAND"
