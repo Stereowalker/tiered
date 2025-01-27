@@ -1,1 +1,1 @@
-- Added a config option to prevent crafted items from getting tiers with attributes
+- Replaced armor with attack speed on certain tool and weapon tiers
